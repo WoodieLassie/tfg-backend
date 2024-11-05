@@ -1,9 +1,6 @@
 package es.alten.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -45,6 +42,6 @@ public class Character extends Audit {
   @NotNull
   private Integer age;
 
-  @OneToMany
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "character")
   private List<Actor> actors;
 }

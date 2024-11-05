@@ -31,7 +31,7 @@ tomcat-compression: true
 tomcat-compression-mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
 
 # Rest module
-rest-context-path: /@project.parent.artifactId@-rest
+#rest-context-path: /@project.parent.artifactId@-rest
 
 # Log config
 logging-path: /opt/tomcat/logs

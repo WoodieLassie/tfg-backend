@@ -25,7 +25,7 @@ server.compression.enabled: @tomcat-compression@
 server.compression.mime-types: @tomcat-compression-mime-types@
 
 # Rest module
-server.servlet.contextPath: @rest-context-path@
+#server.servlet.contextPath: @rest-context-path@
 
 # FLYWAY (FlywayProperties)
 spring.flyway.baseline-version: @flyway-baseline-version@ # Version to start migration

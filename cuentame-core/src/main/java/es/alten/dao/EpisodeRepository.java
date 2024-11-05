@@ -1,0 +1,14 @@
+package es.alten.dao;
+
+import es.alten.domain.Episode;
+import es.alten.domain.QEpisode;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+
+public interface EpisodeRepository
+    extends ElvisBaseRepository<Episode, Long, QEpisode>,
+        JpaSpecificationExecutor<Episode>,
+        QuerydslPredicateExecutor<Episode>,
+        QuerydslBinderCustomizer<QEpisode> {
+}
