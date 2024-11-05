@@ -1,0 +1,3 @@
+# skeletor-stack
+
+Base project

@@ -1,0 +1,46 @@
+# Active default profile
+spring.profiles.active: @profile-active@
+
+# Disable banner at project start
+spring.main.banner-mode: @spring-banner@
+
+# Data source config
+spring.datasource.url: @datasource-url@
+spring.datasource.username: @datasource-username@
+spring.datasource.password: @datasource-password@
+spring.datasource.driver-class-name: @datasource-driver@
+
+spring.jpa.database-platform: @spring-jpa-database-platform@
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
+spring.jpa.properties.hibernate.default_schema: @spring-jpa-hibernate-default-schema@
+spring.jpa.open-in-view: false
+
+# HikariCP settings (pool datasource)
+spring.datasource.hikari.connection-timeout: @datasource-pool-timeout@
+spring.datasource.hikari.maximum-pool-size: @datasource-pool-max-size@
+
+#Tomcat config
+server.port: @tomcat-port@
+server.compression.enabled: @tomcat-compression@
+server.compression.mime-types: @tomcat-compression-mime-types@
+
+# Rest module
+server.servlet.contextPath: @rest-context-path@
+
+# FLYWAY (FlywayProperties)
+spring.flyway.baseline-version: @flyway-baseline-version@ # Version to start migration
+spring.flyway.check-location: @flyway-check-location@ # Whether to check that migration scripts location exists.
+spring.flyway.enabled: @flyway-enabled@ # Whether to enable flyway.
+spring.flyway.encoding: @flyway-encoding@ #
+spring.flyway.locations: @flyway-locations@ # The locations of migrations scripts.
+spring.flyway.schemas: @flyway-schemas@
+spring.flyway.validate-on-migrate: @flyway-validateOnMigrate@
+spring.flyway.out-of-order: @flyway-out-of-order@
+spring.flyway.placeholders.sch: @flyway-schemaDefault@
+
+# Log config
+logging.path: @logging-path@
+logging.file: @logging-file@
+logging.level.ROOT: @logging-level-root@
+logging.level.org.hibernate.SQL: @logging-level-hibernate-sql@
+logging.level.org.hibernate.type.descriptor.sql: @logging-level-hibernate-descriptor@

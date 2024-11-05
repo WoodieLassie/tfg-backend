@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--Artifact information-->
+    <groupId>es.alten</groupId>
+    <artifactId>cuentame</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <!--Spring boot parent-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.0</version>
+    </parent>
+
+    <!-- Project modules -->
+
+    <!-- Project information -->
+    <name>cuentame</name>
+    <url>http://.../</url>
+    <inceptionYear>2019</inceptionYear>
+    <description>Description</description>
+    <organization>
+        <url>https://www.alten.es</url>
+    </organization>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>https://nexus.alten.es/repository/delivery-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus-repository</id>
+            <url>https://nexus.alten.es/repository/delivery-releases/</url>
+        </repository>
+    </distributionManagement>
+
+    <profiles>
+        <!-- Sonarqube profile -->
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <sonar.projectName>cuentame</sonar.projectName>
+                <sonar.host.url>https://sonar.sdos.es/</sonar.host.url>
+                <sonar.exclusions>**/*Config*.java,
+                    **/*Base*.java,
+                    **/CustomReloadableResourceBundleMessageSource.java,
+                    **/Detail*.java,
+                    **/*Generic*.java,
+                    **/ListController*.java,
+                    **/Rest*.java,
+                    **/CustomUserAuthentication.java,
+                    **/ApplicationRest.java,
+                    **/Constants.java</sonar.exclusions>
+                <packaging.type>war</packaging.type>
+                <tomcat.scope>provided</tomcat.scope>
+                <jacoco.outputDir>${project.build.directory}</jacoco.outputDir>
+            </properties>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <environment>dev</environment>
+                <packaging.type>jar</packaging.type>
+                <tomcat.scope>compile</tomcat.scope>
+            </properties>
+        </profile>
+        <profile>
+            <id>devDocker</id>
+            <properties>
+                <environment>devDocker</environment>
+                <packaging.type>jar</packaging.type>
+                <tomcat.scope>compile</tomcat.scope>
+            </properties>
+        </profile>
+        <profile>
+            <id>devLocal01</id>
+            <properties>
+                <environment>devLocal01</environment>
+                <packaging.type>war</packaging.type>
+                <tomcat.scope>provided</tomcat.scope>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+
+    </profiles>
+
+    <build>
+        <filters>
+            <!-- Environment filter files -->
+            <filter>../src/main/filters/application-${environment}.yml</filter>
+        </filters>
+
+        <testResources>
+            <testResource>
+                <filtering>true</filtering>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-scanner-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>                
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--FLYWAY-->
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-mysql</artifactId>
+                <version>${flyway.version}</version>
+            </dependency>
+            
+            <!--QUERYDSL-->
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jpa</artifactId>
+                <version>${querydsl.version}</version>
+                <classifier>jakarta</classifier>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-apt</artifactId>
+                <version>${querydsl.version}</version>
+                <classifier>jakarta</classifier>
+            </dependency>
+            <!--DOZER-->
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>${dozer.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${hikari.version}</version>
+            </dependency>
+            <!--SWAGGER UI-->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!--Lombok-->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <!-- Sonar -->
+            <dependency>
+                <groupId>org.codehaus.sonar</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven-plugin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>                
+            </dependency>
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>3.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>8.0.1.Final</version>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
+
+
+    <properties>
+        <java.version>17</java.version>
+        <querydsl.version>5.0.0</querydsl.version>
+        <flyway.version>9.17.0</flyway.version>
+        <dozer.version>5.5.1</dozer.version>
+        <hikari.version>2.7.9</hikari.version>
+        <swagger.version>2.2.0</swagger.version>
+        <lombok.version>1.18.24</lombok.version>
+        <sonar-scanner-maven-plugin.version>3.3.0.603</sonar-scanner-maven-plugin.version>
+        <sonar-maven-plugin.version>5.1</sonar-maven-plugin.version>
+    </properties>
+    
+    <modules>
+        <module>cuentame-core</module>
+        <module>cuentame-rest</module>
+    </modules>
+</project>

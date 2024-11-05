@@ -1,0 +1,41 @@
+# Active default profile
+profile-active: dev
+
+# Disable banner at start project
+spring-banner: "off"
+
+# Data source config
+datasource-url: jdbc:mysql://localhost:3306/@project.parent.artifactId@?trustServerCertificate=true
+datasource-username: root 
+datasource-password: password
+datasource-driver: com.mysql.cj.jdbc.Driver
+datasource-pool-timeout: 60000
+datasource-pool-max-size: 5
+spring-jpa-database-platform: org.hibernate.dialect.MySQLDialect 
+spring-jpa-hibernate-default-schema: @project.parent.artifactId@
+
+# Flyway - data base cvs
+flyway-enabled: true
+flyway-baseline-version: 1
+flyway-check-location: true
+flyway-encoding: UTF-8
+flyway-locations: "classpath:/db/migration/, classpath:/db/migrationDEV/"
+flyway-schemas: @project.parent.artifactId@
+flyway-validateOnMigrate: true
+flyway-out-of-order: true
+flyway-schemaDefault: @project.parent.artifactId@
+
+#Tomcat config
+tomcat-port: 8080
+tomcat-compression: true
+tomcat-compression-mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+
+# Rest module
+rest-context-path: /@project.parent.artifactId@-rest
+
+# Log config
+logging-path: /opt/tomcat/logs
+logging-file: @logging-path@/@project.parent.artifactId@.log
+logging-level-root: INFO
+logging-level-hibernate-sql: DEBUG
+logging-level-hibernate-descriptor: DEBUG
