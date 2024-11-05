@@ -2,12 +2,13 @@ package es.alten.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @XmlRootElement
@@ -17,23 +18,28 @@ import java.util.Date;
 public class Actor extends Audit {
   @Serial private static final long serialVersionUID = 1887096612684365214L;
 
-  @Column(name = "name", nullable = false)
+  @Column(name = "name", nullable = false, length = 100)
   @NotNull
+  @Size(max = 100)
   private String name;
 
   @Column(name = "birth_date", nullable = false)
   @NotNull
   private Date birthDate;
 
-  @Column(name = "nationality", nullable = false)
+  @Column(name = "nationality", nullable = false, length = 100)
   @NotNull
+  @Size(max = 100)
   private String nationality;
 
-  @Column(name = "gender", nullable = false)
+  @Column(name = "gender", nullable = false, length = 100)
   @NotNull
+  @Size(max = 100)
   private String gender;
 
-  @Column(name = "birth_location", nullable = false)
+  @Column(name = "birth_location", nullable = false, length = 100)
+  @NotNull
+  @Size(max = 100)
   private String birthLocation;
 
   @ManyToOne

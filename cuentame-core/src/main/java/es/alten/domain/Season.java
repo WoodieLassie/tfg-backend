@@ -25,8 +25,9 @@ public class Season extends Audit {
   @NotNull
   private Integer seasonNum;
 
-  @Column(name = "description", nullable = false)
+  @Column(name = "description", nullable = false, length = 100)
   @NotNull
+  @Size(max = 100)
   private String description;
 
   @OneToMany

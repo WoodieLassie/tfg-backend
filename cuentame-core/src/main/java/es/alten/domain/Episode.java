@@ -2,6 +2,7 @@ package es.alten.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,12 +22,14 @@ public class Episode extends Audit {
   @NotNull
   private Integer episodeNum;
 
-  @Column(name = "title", nullable = false)
+  @Column(name = "title", nullable = false, length = 100)
   @NotNull
+  @Size(max = 100)
   private String title;
 
-  @Column(name = "summary", nullable = false)
+  @Column(name = "summary", nullable = false, length = 100)
   @NotNull
+  @Size(max = 100)
   private String summary;
 
   @ManyToOne
