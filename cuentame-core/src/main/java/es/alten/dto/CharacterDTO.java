@@ -1,5 +1,7 @@
 package es.alten.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
 import es.alten.domain.Character;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -20,5 +22,8 @@ public class CharacterDTO extends ElvisBaseDTO<Character> {
   @NotNull private String gender;
   @NotNull private String nationality;
   @NotNull private Integer age;
+
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @JsonView(View.ShowActor.class)
   private List<ActorDTO> actors;
 }

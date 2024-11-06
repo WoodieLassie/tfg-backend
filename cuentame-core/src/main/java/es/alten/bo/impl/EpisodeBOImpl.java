@@ -6,6 +6,7 @@ import es.alten.bo.SeasonBO;
 import es.alten.dao.EpisodeRepository;
 import es.alten.domain.*;
 import es.alten.domain.Character;
+import es.alten.dto.EpisodeDTO;
 import es.alten.dto.EpisodeFilterDTO;
 import es.alten.exceptions.NotExistingIdException;
 import org.slf4j.Logger;
@@ -30,22 +31,40 @@ public class EpisodeBOImpl
   private static final long serialVersionUID = -4565303369232666607L;
   private static final Logger LOG = LoggerFactory.getLogger(EpisodeBOImpl.class);
 
-  public EpisodeBOImpl(EpisodeRepository repository, CharacterBO characterBO) {
+  public EpisodeBOImpl(EpisodeRepository repository) {
     super(repository);
   }
 
+
   @Override
-  @Transactional
+  public List<Episode> findAll() {
+    List<Episode> episodes = repository.findAll();
+    for (Episode episode : episodes) {
+      List<Character> characters = episode.getCharacters();
+      for (Character character : characters) {
+        Integer actors = character.getActors().size(); //Inicializar entidades Lazy
+      }
+    }
+    return episodes;
+  }
+
+  @Override
   public List<Episode> findAllSortedAndPaged(
       Long seasonId, String title, Integer episodeNum) {
     List<Episode> episodes = repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
     for (Episode episode : episodes) {
       List<Character> characters = episode.getCharacters();
       for (Character character : characters) {
-        List<Actor> actors = character.getActors();
-        actors.size();
+        Integer actors = character.getActors().size(); //Inicializar entidades Lazy
       }
     }
     return episodes;
+  }
+
+  @Override
+  public Episode findOne(Long id) {
+    Episode episode = repository.findById(id).orElse(null);
+    episode.getCharacters().size();
+    return episode;
   }
 }

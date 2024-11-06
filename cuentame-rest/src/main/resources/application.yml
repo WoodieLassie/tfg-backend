@@ -44,3 +44,8 @@ logging.file: @logging-file@
 logging.level.ROOT: @logging-level-root@
 logging.level.org.hibernate.SQL: @logging-level-hibernate-sql@
 logging.level.org.hibernate.type.descriptor.sql: @logging-level-hibernate-descriptor@
+
+spring:
+  jackson:
+    mapper:
+      default-view-inclusion: true
