@@ -1,5 +1,6 @@
 package es.alten.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import es.alten.domain.Actor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -26,6 +27,8 @@ public class ActorDTO extends ElvisBaseDTO<Actor>{
     @NotNull
     private String birthLocation;
     @NotNull
+    //USAR JSONVIEW PARA EVITAR RECURSION?
+    @JsonIgnore
     private CharacterDTO character;
 
 }

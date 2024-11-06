@@ -27,6 +27,6 @@ public class Season extends Audit {
   @Size(max = 100)
   private String description;
 
-  @OneToMany(mappedBy = "season")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "season")
   private List<Episode> episodes;
 }

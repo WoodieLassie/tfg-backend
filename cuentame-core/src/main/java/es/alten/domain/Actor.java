@@ -1,5 +1,6 @@
 package es.alten.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -42,7 +43,7 @@ public class Actor extends Audit {
   @Size(max = 100)
   private String birthLocation;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "character_id", nullable = false)
   private Character character;
 }

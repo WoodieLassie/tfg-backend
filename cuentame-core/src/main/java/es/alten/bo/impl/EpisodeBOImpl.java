@@ -4,9 +4,8 @@ import es.alten.bo.CharacterBO;
 import es.alten.bo.EpisodeBO;
 import es.alten.bo.SeasonBO;
 import es.alten.dao.EpisodeRepository;
-import es.alten.domain.Episode;
-import es.alten.domain.QEpisode;
-import es.alten.domain.Season;
+import es.alten.domain.*;
+import es.alten.domain.Character;
 import es.alten.dto.EpisodeFilterDTO;
 import es.alten.exceptions.NotExistingIdException;
 import org.slf4j.Logger;
@@ -19,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class EpisodeBOImpl
@@ -28,17 +29,23 @@ public class EpisodeBOImpl
 
   private static final long serialVersionUID = -4565303369232666607L;
   private static final Logger LOG = LoggerFactory.getLogger(EpisodeBOImpl.class);
-  private final CharacterBO characterBO;
 
   public EpisodeBOImpl(EpisodeRepository repository, CharacterBO characterBO) {
     super(repository);
-    this.characterBO = characterBO;
   }
 
   @Override
   @Transactional
-  public Page<Episode> findAllSortedAndPaged(
-      Long seasonNum, String title, Integer episodeNum, Pageable pageable) {
-    return repository.findBySeason_SeasonNumAndTitleAndEpisodeNum(seasonNum, title, episodeNum, pageable);
+  public List<Episode> findAllSortedAndPaged(
+      Long seasonId, String title, Integer episodeNum) {
+    List<Episode> episodes = repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
+    for (Episode episode : episodes) {
+      List<Character> characters = episode.getCharacters();
+      for (Character character : characters) {
+        List<Actor> actors = character.getActors();
+        actors.size();
+      }
+    }
+    return episodes;
   }
 }

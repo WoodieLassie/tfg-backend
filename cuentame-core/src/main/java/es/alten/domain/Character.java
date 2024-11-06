@@ -1,11 +1,12 @@
 package es.alten.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serial;
 import java.util.List;
@@ -42,6 +43,6 @@ public class Character extends Audit {
   @NotNull
   private Integer age;
 
-  @OneToMany(mappedBy = "character")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "character")
   private List<Actor> actors;
 }
