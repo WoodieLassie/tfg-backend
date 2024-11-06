@@ -1,23 +1,14 @@
 package es.alten.bo.impl;
 
-import es.alten.bo.CharacterBO;
 import es.alten.bo.EpisodeBO;
-import es.alten.bo.SeasonBO;
 import es.alten.dao.EpisodeRepository;
 import es.alten.domain.*;
-import es.alten.domain.Character;
-import es.alten.dto.EpisodeDTO;
 import es.alten.dto.EpisodeFilterDTO;
-import es.alten.exceptions.NotExistingIdException;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -40,10 +31,7 @@ public class EpisodeBOImpl
   public List<Episode> findAll() {
     List<Episode> episodes = repository.findAll();
     for (Episode episode : episodes) {
-      List<Character> characters = episode.getCharacters();
-      for (Character character : characters) {
-        Integer actors = character.getActors().size(); //Inicializar entidades Lazy
-      }
+      Hibernate.initialize(episode.getCharacters());
     }
     return episodes;
   }
@@ -53,10 +41,7 @@ public class EpisodeBOImpl
       Long seasonId, String title, Integer episodeNum) {
     List<Episode> episodes = repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
     for (Episode episode : episodes) {
-      List<Character> characters = episode.getCharacters();
-      for (Character character : characters) {
-        Integer actors = character.getActors().size(); //Inicializar entidades Lazy
-      }
+      Hibernate.initialize(episode.getCharacters());
     }
     return episodes;
   }
@@ -64,7 +49,9 @@ public class EpisodeBOImpl
   @Override
   public Episode findOne(Long id) {
     Episode episode = repository.findById(id).orElse(null);
-    episode.getCharacters().size();
+    if (episode != null) {
+      Hibernate.initialize(episode.getCharacters());
+    }
     return episode;
   }
 }

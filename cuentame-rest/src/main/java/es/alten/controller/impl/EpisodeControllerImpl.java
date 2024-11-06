@@ -5,7 +5,7 @@ import es.alten.bo.EpisodeBO;
 import es.alten.controller.EpisodeController;
 import es.alten.domain.Episode;
 import es.alten.dto.EpisodeDTO;
-import es.alten.dto.View;
+import es.alten.utils.View;
 import es.alten.rest.impl.RestControllerImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//TODO: Ajustar el tamaño de pagina para que sea adecuado
 @RestController
 @RequestMapping("/api/episodes")
 @Tag(name = "episodes")
