@@ -1,5 +1,6 @@
 package es.alten.bo.impl;
 
+import es.alten.bo.CharacterBO;
 import es.alten.bo.EpisodeBO;
 import es.alten.bo.SeasonBO;
 import es.alten.dao.EpisodeRepository;
@@ -11,6 +12,8 @@ import es.alten.exceptions.NotExistingIdException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +28,17 @@ public class EpisodeBOImpl
 
   private static final long serialVersionUID = -4565303369232666607L;
   private static final Logger LOG = LoggerFactory.getLogger(EpisodeBOImpl.class);
+  private final CharacterBO characterBO;
 
-  public EpisodeBOImpl(EpisodeRepository repository, SeasonBO seasonBO) {
+  public EpisodeBOImpl(EpisodeRepository repository, CharacterBO characterBO) {
     super(repository);
+    this.characterBO = characterBO;
+  }
+
+  @Override
+  @Transactional
+  public Page<Episode> findAllSortedAndPaged(
+      Long seasonNum, String title, Integer episodeNum, Pageable pageable) {
+    return repository.findBySeason_SeasonNumAndTitleAndEpisodeNum(seasonNum, title, episodeNum, pageable);
   }
 }

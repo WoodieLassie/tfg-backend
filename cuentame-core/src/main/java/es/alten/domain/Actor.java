@@ -42,7 +42,7 @@ public class Actor extends Audit {
   @Size(max = 100)
   private String birthLocation;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "character_id", nullable = false)
   private Character character;
 }

@@ -1,6 +1,9 @@
 package es.alten.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import es.alten.domain.Episode;
+import es.alten.domain.Season;
+import es.alten.utils.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

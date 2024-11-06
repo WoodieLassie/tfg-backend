@@ -32,11 +32,11 @@ public class Episode extends Audit {
   @Size(max = 100)
   private String summary;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "season_id", nullable = false)
   private Season season;
 
-  @ManyToMany(fetch = FetchType.LAZY)
+  @ManyToMany
   @JoinTable(
       name = "episode_character",
       joinColumns = {@JoinColumn(name = "episode_id")},
