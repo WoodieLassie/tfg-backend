@@ -32,6 +32,7 @@ public class EpisodeBOImpl
     List<Episode> episodes = repository.findAll();
     for (Episode episode : episodes) {
       Hibernate.initialize(episode.getCharacters());
+      Hibernate.initialize(episode.getSeason());
     }
     return episodes;
   }
@@ -42,6 +43,7 @@ public class EpisodeBOImpl
     List<Episode> episodes = repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
     for (Episode episode : episodes) {
       Hibernate.initialize(episode.getCharacters());
+      Hibernate.initialize(episode.getSeason());
     }
     return episodes;
   }
@@ -51,6 +53,7 @@ public class EpisodeBOImpl
     Episode episode = repository.findById(id).orElse(null);
     if (episode != null) {
       Hibernate.initialize(episode.getCharacters());
+      Hibernate.initialize(episode.getSeason());
     }
     return episode;
   }
