@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface EpisodeBO extends GenericCRUDService<Episode, Long, QEpisode, EpisodeFilterDTO> {
+  List<Episode> findAll();
   List<Episode> findAllSortedAndPaged(
       Long seasonId, String title, Integer episodeNum);
 }
