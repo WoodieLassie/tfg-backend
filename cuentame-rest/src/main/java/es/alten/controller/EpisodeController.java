@@ -10,5 +10,5 @@ public interface EpisodeController extends BaseController {
   ResponseEntity<Page<EpisodeDTO>> findAllSortedAndPaged(
       Long seasonId, String title, Integer episodeNum, Integer page, Integer size, Pageable pageable);
 
-  ResponseEntity<EpisodeDTO> findOne(Long id);
+//  ResponseEntity<EpisodeDTO> findOne(Long id);
 }

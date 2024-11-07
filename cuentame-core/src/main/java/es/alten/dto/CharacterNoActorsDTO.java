@@ -6,20 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.io.Serial;
-import java.util.List;
-
-@Schema(name = "CharacterDTO", description = "Data transfer object. Character")
+@Schema(name = "CharacterDTO", description = "Data transfer object. Character without actor data")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class CharacterDTO extends ElvisBaseDTO<Character> {
-  @Serial private static final long serialVersionUID = -7112078588141267975L;
-
+public class CharacterNoActorsDTO extends ElvisBaseDTO<Character> {
   @NotNull private String name;
   @NotNull private String description;
   @NotNull private String gender;
   @NotNull private String nationality;
   @NotNull private Integer age;
-
-  private List<ActorNoCharacterDTO> actors;
 }

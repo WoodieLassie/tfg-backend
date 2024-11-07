@@ -3,6 +3,7 @@ package es.alten.bo.impl;
 import es.alten.bo.EpisodeBO;
 import es.alten.dao.EpisodeRepository;
 import es.alten.domain.*;
+import es.alten.domain.Character;
 import es.alten.dto.EpisodeFilterDTO;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -25,36 +26,10 @@ public class EpisodeBOImpl
   public EpisodeBOImpl(EpisodeRepository repository) {
     super(repository);
   }
-
-
-  @Override
-  public List<Episode> findAll() {
-    List<Episode> episodes = repository.findAll();
-    for (Episode episode : episodes) {
-      Hibernate.initialize(episode.getCharacters());
-      Hibernate.initialize(episode.getSeason());
-    }
-    return episodes;
-  }
-
   @Override
   public List<Episode> findAllSortedAndPaged(
       Long seasonId, String title, Integer episodeNum) {
     List<Episode> episodes = repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
-    for (Episode episode : episodes) {
-      Hibernate.initialize(episode.getCharacters());
-      Hibernate.initialize(episode.getSeason());
-    }
     return episodes;
-  }
-
-  @Override
-  public Episode findOne(Long id) {
-    Episode episode = repository.findById(id).orElse(null);
-    if (episode != null) {
-      Hibernate.initialize(episode.getCharacters());
-      Hibernate.initialize(episode.getSeason());
-    }
-    return episode;
   }
 }

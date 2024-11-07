@@ -5,7 +5,6 @@ import es.alten.bo.EpisodeBO;
 import es.alten.controller.EpisodeController;
 import es.alten.domain.Episode;
 import es.alten.dto.EpisodeDTO;
-import es.alten.utils.View;
 import es.alten.rest.impl.RestControllerImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
@@ -25,22 +24,20 @@ import java.util.List;
 public class EpisodeControllerImpl extends RestControllerImpl<Episode, EpisodeDTO, Long, EpisodeBO>
     implements EpisodeController {
 
-    @Override
-    @GetMapping
-    @JsonView({View.ShowActor.class})
-    public ResponseEntity<List<EpisodeDTO>> findAll() {
-        List<Episode> episodeList = bo.findAll();
-        List<EpisodeDTO> convertedEpisodeList = new ArrayList<>();
-        for (Episode episode : episodeList) {
-            EpisodeDTO episodeDTO = new EpisodeDTO();
-            episodeDTO.loadFromDomain(episode);
-            convertedEpisodeList.add(episodeDTO);
-        }
-        return ResponseEntity.ok(convertedEpisodeList);
-    }
-
+//    @Override
+//    @GetMapping
+//    public ResponseEntity<List<EpisodeDTO>> findAll() {
+//        List<Episode> episodeList = bo.findAll();
+//        List<EpisodeDTO> convertedEpisodeList = new ArrayList<>();
+//        for (Episode episode : episodeList) {
+//            EpisodeDTO episodeDTO = new EpisodeDTO();
+//            episodeDTO.loadFromDomain(episode);
+//            convertedEpisodeList.add(episodeDTO);
+//        }
+//        return ResponseEntity.ok(convertedEpisodeList);
+//    }
+//
     @GetMapping(value = "/sorted/{seasonNum}", params = {"title", "episodeNum"})
-    @JsonView({View.ShowActor.class})
     public ResponseEntity<Page<EpisodeDTO>> findAllSortedAndPaged(
             @PathVariable Long seasonNum,
             @RequestParam String title,
@@ -59,14 +56,13 @@ public class EpisodeControllerImpl extends RestControllerImpl<Episode, EpisodeDT
     Page<EpisodeDTO> episodes = new PageImpl<>(convertedEpisodeList.subList(page,pageEnd), pageable, convertedEpisodeList.size());
     return ResponseEntity.ok(episodes);
   }
-
-  @Override
-  @GetMapping("/{id}")
-  @JsonView({View.ShowActor.class})
-  public ResponseEntity<EpisodeDTO> findOne(@PathVariable Long id) {
-      Episode episode = bo.findOne(id);
-      EpisodeDTO convertedEpisode = new EpisodeDTO();
-      convertedEpisode.loadFromDomain(episode);
-      return ResponseEntity.ok(convertedEpisode);
-  }
+//
+//  @Override
+//  @GetMapping("/{id}")
+//  public ResponseEntity<EpisodeDTO> findOne(@PathVariable Long id) {
+//      Episode episode = bo.findOne(id);
+//      EpisodeDTO convertedEpisode = new EpisodeDTO();
+//      convertedEpisode.loadFromDomain(episode);
+//      return ResponseEntity.ok(convertedEpisode);
+//  }
 }

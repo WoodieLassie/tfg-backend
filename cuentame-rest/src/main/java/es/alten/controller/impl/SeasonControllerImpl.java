@@ -13,4 +13,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/seasons")
 @Tag(name = "seasons")
 public class SeasonControllerImpl extends RestControllerImpl<Season, SeasonDTO, Long, SeasonBO>
-    implements SeasonController {}
+    implements SeasonController {
+}

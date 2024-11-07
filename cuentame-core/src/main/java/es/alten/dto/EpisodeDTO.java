@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 import java.util.List;
 
-@Schema(name = "SeasonDTO", description = "Data transfer object. Episode")
+@Schema(name = "EpisodeDTO", description = "Data transfer object. Episode")
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class EpisodeDTO extends ElvisBaseDTO<Episode> {
@@ -20,9 +20,8 @@ public class EpisodeDTO extends ElvisBaseDTO<Episode> {
   @NotNull private String title;
   @NotNull private String summary;
 
-  @JsonInclude(JsonInclude.Include.NON_NULL)
   @NotNull
-  private SeasonDTO season;
+  private SeasonNoEpisodesDTO season;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   @NotNull

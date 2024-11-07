@@ -1,9 +1,6 @@
 package es.alten.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonView;
 import es.alten.domain.Season;
-import es.alten.utils.View;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -21,7 +18,6 @@ public class SeasonDTO extends ElvisBaseDTO<Season> {
   @NotNull private Integer seasonNum;
   @NotNull private String description;
 
-  @JsonInclude(JsonInclude.Include.NON_NULL)
   @NotNull
-  private List<EpisodeDTO> episodes;
+  private List<EpisodeNoSeasonDTO> episodes;
 }
