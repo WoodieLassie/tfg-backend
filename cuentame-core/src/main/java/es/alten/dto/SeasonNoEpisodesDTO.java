@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
-import java.util.List;
 
 @Schema(name = "SeasonNoEpisodesDTO", description = "Data transfer object. Season without episode data")
 @EqualsAndHashCode(callSuper = true)

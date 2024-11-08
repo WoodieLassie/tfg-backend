@@ -15,7 +15,7 @@ public class OpenApiConfig {
   }
 
   private Info apiInfo() {
-    return new Info().title("REST API").description("REST API documentation")
+    return new Info().title("REST API of Cuéntame").description("REST API that fetches data from Cuéntame TV series")
         .termsOfService("http://en.wikipedia.org/wiki/Terms_of_service")
         .license(new License().name("Apache License Version 2.0")
             .url("http://www.apache.org/licenses/LICENSE-2.0.html"))

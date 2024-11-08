@@ -2,10 +2,11 @@ package es.alten.dao;
 
 import es.alten.domain.Character;
 import es.alten.domain.QCharacter;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +16,8 @@ public interface CharacterRepository
         JpaSpecificationExecutor<Character>,
         QuerydslPredicateExecutor<Character>,
         QuerydslBinderCustomizer<QCharacter> {
-    @EntityGraph(attributePaths = {"actors"})
+    @Query("SELECT c from Character c JOIN FETCH c.actors a")
     List<Character> findAll();
-    @EntityGraph(attributePaths = {"actors"})
-    Optional<Character> findById(Long id);
+    @Query("SELECT c from Character c JOIN FETCH c.actors a WHERE c.id = :id")
+    Optional<Character> findById(@Param("id") Long id);
 }

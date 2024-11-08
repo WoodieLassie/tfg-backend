@@ -15,9 +15,12 @@ import java.util.List;
 public class SeasonDTO extends ElvisBaseDTO<Season> {
   @Serial private static final long serialVersionUID = -8617926782001985439L;
 
+  @Schema(description = "Season number")
   @NotNull private Integer seasonNum;
+  @Schema(description = "Season description")
   @NotNull private String description;
 
+  @Schema(description = "Season episodes")
   @NotNull
   private List<EpisodeNoSeasonDTO> episodes;
 }

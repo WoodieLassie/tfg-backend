@@ -10,19 +10,28 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 import java.util.List;
 
-@Schema(name = "EpisodeNoSeasonDTO", description = "Data transfer object. Episode without season info")
+@Schema(
+    name = "EpisodeNoSeasonDTO",
+    description = "Data transfer object. Episode without season info")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class EpisodeNoSeasonDTO extends ElvisBaseDTO<Episode>{
-    @Serial
-    private static final long serialVersionUID = -637798618800399514L;
+public class EpisodeNoSeasonDTO extends ElvisBaseDTO<Episode> {
+  @Serial private static final long serialVersionUID = -637798618800399514L;
 
-    @NotNull
-    private Integer episodeNum;
-    @NotNull private String title;
-    @NotNull private String summary;
+  @Schema(description = "Episode number")
+  @NotNull
+  private Integer episodeNum;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @NotNull
-    private List<CharacterDTO> characters;
+  @Schema(description = "Episode title")
+  @NotNull
+  private String title;
+
+  @Schema(description = "Episode summary")
+  @NotNull
+  private String summary;
+
+  @Schema(hidden = true)
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @NotNull
+  private List<CharacterDTO> characters;
 }
