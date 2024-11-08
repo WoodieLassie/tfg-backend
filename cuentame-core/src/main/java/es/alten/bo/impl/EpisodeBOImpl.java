@@ -55,7 +55,8 @@ public class EpisodeBOImpl
       for (Character character : episode.getCharacters()) {
         for (Character characterWithActor : charactersWithActors) {
           // Revisa si el personaje sin datos de actor es el mismo que el personaje con datos de
-          // actor, y si lo es, le inserta los datos de actor
+          // actor, y si lo es, le inserta los datos de actor. Si no se hace este check, provocará un
+          // error de "found shared references in a collecion"
           if (character.getId().equals(characterWithActor.getId())) {
             character.setActors(characterWithActor.getActors());
           }
@@ -72,7 +73,9 @@ public class EpisodeBOImpl
     List<Character> charactersWithActors = repository.findByIdWithCharacters(characterIds);
     for (Character character : episode.getCharacters()) {
       for (Character characterWithActor : charactersWithActors) {
-        character.setActors(characterWithActor.getActors());
+        if (character.getId().equals(characterWithActor.getId())) {
+          character.setActors(characterWithActor.getActors());
+        }
       }
     }
     return episode;
