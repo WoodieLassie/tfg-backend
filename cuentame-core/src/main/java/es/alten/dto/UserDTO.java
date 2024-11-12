@@ -2,6 +2,7 @@ package es.alten.dto;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import es.alten.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -17,13 +18,6 @@ public class UserDTO extends ElvisBaseDTO<User> {
 
   @NotNull
   private String email;
-
-  @JsonIgnore
-  private Date createDate;
-  @JsonIgnore
-  private Date updateDate;
-  @JsonIgnore
-  private Long createdBy;
-  @JsonIgnore
-  private Long updatedBy;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private String password;
 }

@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS ${sch}.users;
+
+CREATE TABLE ${sch}.users (
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(100) NOT NULL,
+  password VARCHAR(100) NOT NULL,
+  CONSTRAINT users_unq_01 UNIQUE (email)
+);
+
+

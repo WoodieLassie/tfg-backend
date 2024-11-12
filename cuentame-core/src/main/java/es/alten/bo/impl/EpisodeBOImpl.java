@@ -28,41 +28,8 @@ public class EpisodeBOImpl
   }
 
   @Override
-  public List<Episode> findAll() {
-    List<Episode> episodes = repository.findAll();
-    List<Character> characters = repository.findAllWithCharacters();
-    for (Episode episode : episodes) {
-      for (Character character : characters) {
-        character.getActors();
-      }
-    }
-    return episodes;
-  }
-
-  @Override
   public List<Episode> findAllSortedAndPaged(Long seasonId, String title, Integer episodeNum) {
-    List<Episode> episodes =
-        repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
-    // Recorre las IDs de cada personaje que aparece en un episodio y lo convierte en una lista de
-    // Long
-    List<Long> characterIds =
-        episodes.stream()
-            .flatMap(e -> e.getCharacters().stream())
-            .map(Character::getId)
-            .collect(Collectors.toList());
-    List<Character> charactersWithActors = repository.findByIdWithCharacters(characterIds);
-    for (Episode episode : episodes)
-      for (Character character : episode.getCharacters()) {
-        for (Character characterWithActor : charactersWithActors) {
-          // Revisa si el personaje sin datos de actor es el mismo que el personaje con datos de
-          // actor, y si lo es, le inserta los datos de actor. Si no se hace este check, provocará un
-          // error de "found shared references in a collecion"
-          if (character.getId().equals(characterWithActor.getId())) {
-            character.setActors(characterWithActor.getActors());
-          }
-        }
-      }
-    return episodes;
+    return repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
   }
 
   @Override
@@ -70,9 +37,14 @@ public class EpisodeBOImpl
     Episode episode = repository.findById(id).get();
     List<Long> characterIds =
         episode.getCharacters().stream().map(Character::getId).collect(Collectors.toList());
+    // Recorre las IDs de cada personaje que aparece en un episodio y lo convierte en una lista de
+    // Long
     List<Character> charactersWithActors = repository.findByIdWithCharacters(characterIds);
     for (Character character : episode.getCharacters()) {
       for (Character characterWithActor : charactersWithActors) {
+        // Revisa si el personaje sin datos de actor es el mismo que el personaje con datos de
+        // actor, y si lo es, le inserta los datos de actor. Si no se hace este check, provocará un
+        // error de "found shared references in a collecion"
         if (character.getId().equals(characterWithActor.getId())) {
           character.setActors(characterWithActor.getActors());
         }

@@ -17,7 +17,7 @@ public interface EpisodeRepository
         JpaSpecificationExecutor<Episode>,
         QuerydslPredicateExecutor<Episode>,
         QuerydslBinderCustomizer<QEpisode> {
-  @Query("SELECT e FROM Episode e " + "JOIN FETCH e.season s " + "JOIN FETCH e.characters c")
+  @Query("SELECT e FROM Episode e " + "JOIN FETCH e.season s")
   List<Episode> findAll();
 
   @Query(
@@ -39,11 +39,6 @@ public interface EpisodeRepository
 
   // Hace fetch de los actores de cada personaje en una query aparte para evitar
   // MultipleBagFetchException
-  @Query("SELECT c FROM Character c " + "JOIN FETCH c.actors a")
-  List<Character> findAllWithCharacters();
-
-  // Igual que findAllWithCharacters, pero selectivo según las IDs de personaje que aparece en una
-  // búsqueda específica
   @Query("SELECT c FROM Character c " + "JOIN FETCH c.actors a " + "WHERE c.id IN :ids")
   List<Character> findByIdWithCharacters(@Param("ids") List<Long> ids);
 }
