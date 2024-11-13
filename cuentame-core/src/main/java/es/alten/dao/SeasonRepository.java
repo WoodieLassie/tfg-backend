@@ -1,5 +1,6 @@
 package es.alten.dao;
 
+import es.alten.domain.Episode;
 import es.alten.domain.QSeason;
 import es.alten.domain.Season;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -20,4 +21,6 @@ public interface SeasonRepository
     List<Season> findAll();
     @Query("SELECT s FROM Season s JOIN FETCH s.episodes e WHERE s.id = :id")
     Optional<Season> findById(@Param("id") Long id);
+    @Query("SELECT e FROM Episode e JOIN FETCH e.characters c WHERE c.name LIKE LOWER(CONCAT('%', :name, '%')) ORDER BY e.id")
+    List<Episode> findAllByCharacter(@Param("name") String name);
 }

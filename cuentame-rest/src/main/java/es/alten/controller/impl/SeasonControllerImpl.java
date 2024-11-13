@@ -11,11 +11,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,5 +41,18 @@ public class SeasonControllerImpl extends RestControllerImpl<Season, SeasonDTO, 
   @GetMapping
   public ResponseEntity<List<SeasonDTO>> findAll() {
     return super.findAll();
+  }
+
+  @GetMapping(value = "/sorted", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<SeasonDTO>> findAllByCharacters(
+      @RequestParam(required = false, defaultValue = "") String characterName) {
+    List<Season> seasonList = bo.findAllByCharacters(characterName);
+    List<SeasonDTO> convertedSeasonList = new ArrayList<>();
+    for (Season season : seasonList) {
+      SeasonDTO seasonDTO = new SeasonDTO();
+      seasonDTO.loadFromDomain(season);
+      convertedSeasonList.add(seasonDTO);
+    }
+    return ResponseEntity.ok(convertedSeasonList);
   }
 }

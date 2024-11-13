@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS ${sch}.episode_character;
+DROP TABLE IF EXISTS ${sch}.actors;
 DROP TABLE IF EXISTS ${sch}.characters;
 DROP TABLE IF EXISTS ${sch}.episodes;
-DROP TABLE IF EXISTS ${sch}.actors;
 DROP TABLE IF EXISTS ${sch}.seasons;
 
 CREATE TABLE ${sch}.seasons (

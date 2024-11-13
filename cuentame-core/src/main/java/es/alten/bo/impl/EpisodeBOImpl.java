@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -34,9 +34,13 @@ public class EpisodeBOImpl
 
   @Override
   public Episode findOne(Long id) {
-    Episode episode = repository.findById(id).get();
+    Optional<Episode> episodeOptional = repository.findById(id);
+    Episode episode = new Episode();
+    if (episodeOptional.isPresent()) {
+      episode = episodeOptional.get();
+    }
     List<Long> characterIds =
-        episode.getCharacters().stream().map(Character::getId).collect(Collectors.toList());
+        episode.getCharacters().stream().map(Character::getId).toList();
     // Recorre las IDs de cada personaje que aparece en un episodio y lo convierte en una lista de
     // Long
     List<Character> charactersWithActors = repository.findByIdWithCharacters(characterIds);
