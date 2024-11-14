@@ -13,5 +13,5 @@ public interface ActorController extends BaseController {
     ResponseEntity<ActorDTO> findById(Long id);
     ResponseEntity<byte[]> findImageById(Long id);
     ResponseEntity<ActorDTO> updateImageById(Long id, MultipartFile file);
-    ResponseEntity<ActorDTO> add(Actor actor);
+    ResponseEntity<Actor> add(ActorDTO actorDTO);
 }

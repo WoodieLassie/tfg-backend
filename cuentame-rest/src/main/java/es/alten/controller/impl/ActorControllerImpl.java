@@ -61,10 +61,10 @@ public class ActorControllerImpl implements ActorController {
 
   @Override
   @PostMapping
-  public ResponseEntity<ActorDTO> add(@RequestBody Actor actor) {
+  public ResponseEntity<Actor> add(@RequestBody ActorDTO actorDTO) {
+    Actor actor = actorDTO.obtainDomainObject();
     Character character = characterBO.findOne(actor.getCharacter().getId());
     actor.setCharacter(character);
-    actor.setImageData(null);
     bo.save(actor);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
@@ -82,6 +82,6 @@ public class ActorControllerImpl implements ActorController {
       throw new BadInputException(e);
     }
     bo.save(actor);
-    return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    return ResponseEntity.noContent().build();
   }
 }

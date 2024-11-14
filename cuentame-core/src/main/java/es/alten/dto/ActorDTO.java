@@ -1,5 +1,6 @@
 package es.alten.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import es.alten.domain.Actor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -24,5 +25,6 @@ public class ActorDTO extends ElvisBaseDTO<Actor> {
   @NotNull
   private CharacterNoActorsDTO character;
 
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private byte[] imageData;
 }
