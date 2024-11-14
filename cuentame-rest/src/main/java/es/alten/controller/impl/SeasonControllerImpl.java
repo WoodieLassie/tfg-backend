@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,8 @@ import java.util.List;
 @Tag(name = "seasons")
 public class SeasonControllerImpl extends RestControllerImpl<Season, SeasonDTO, Long, SeasonBO>
     implements SeasonController {
+
+  private static final Logger LOG = LoggerFactory.getLogger(SeasonControllerImpl.class);
 
   @Override
   @ApiResponses(
@@ -46,6 +50,7 @@ public class SeasonControllerImpl extends RestControllerImpl<Season, SeasonDTO, 
   @GetMapping(value = "/sorted", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<SeasonDTO>> findAllByCharacters(
       @RequestParam(required = false, defaultValue = "") String characterName) {
+    LOG.info("Fetching results with character name {}", characterName);
     List<Season> seasonList = bo.findAllByCharacters(characterName);
     List<SeasonDTO> convertedSeasonList = new ArrayList<>();
     for (Season season : seasonList) {
