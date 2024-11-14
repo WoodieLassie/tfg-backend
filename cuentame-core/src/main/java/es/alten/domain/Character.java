@@ -14,8 +14,13 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "characters")
-public class Character extends Audit {
+public class Character extends ElvisEntity {
   @Serial private static final long serialVersionUID = -4530630569431995861L;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", unique = true, nullable = false)
+  private Long id;
 
   @Column(name = "name", nullable = false, length = 100)
   @NotNull

@@ -3,8 +3,11 @@ package es.alten.bo;
 import es.alten.domain.Image;
 import es.alten.dto.ImageDTO;
 
+import java.util.List;
+
 public interface ImageBO {
+    List<Image> findAll();
+    List<Image> findByName(String name);
     byte[] findById(Long id);
-    byte[] findByName(String name);
     Image save(ImageDTO imageDTO);
 }

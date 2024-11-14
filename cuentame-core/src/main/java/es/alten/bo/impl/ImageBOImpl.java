@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,15 +26,19 @@ public class ImageBOImpl
         this.repository = repository;
     }
 
+    public List<Image> findAll() {
+        return repository.findAll();
+    }
+
+    public List<Image> findByName(String name) {
+        return repository.findByName(name);
+    }
+
     public byte[] findById(Long id) {
         Optional<Image> dbImage = repository.findById(id);
         return dbImage.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
     }
 
-    public byte[] findByName(String name) {
-        Optional<Image> dbImage = repository.findByName(name);
-        return dbImage.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
-    }
     public Image save(ImageDTO imageDTO) {
         Image image = imageDTO.obtainDomainObject();
         repository.save(image);
