@@ -2,6 +2,8 @@ package es.alten.dao;
 
 import es.alten.domain.Image;
 import es.alten.domain.QImage;
+import jakarta.annotation.Nullable;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;

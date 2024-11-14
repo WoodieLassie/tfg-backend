@@ -21,23 +21,35 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/images")
 @Tag(name = "images")
-public class ImageControllerImpl extends RestControllerImpl<Image, ImageDTO, Long, ImageBO>
-    implements ImageController {
+public class ImageControllerImpl implements ImageController {
   private static final Logger LOG = LoggerFactory.getLogger(ImageControllerImpl.class);
+  private final ImageBO bo;
 
-  @Override
+  public ImageControllerImpl(ImageBO bo) {
+    this.bo = bo;
+  }
+
+  @GetMapping(produces = MediaType.IMAGE_PNG_VALUE, value = "/{id}")
+  public ResponseEntity<byte[]> findById(@PathVariable Long id) {
+      return ResponseEntity.ok(bo.findById(id));
+  }
+
   @GetMapping(produces = MediaType.IMAGE_PNG_VALUE, params = {"name"})
   public ResponseEntity<byte[]> findByName(@RequestParam String name) {
     return ResponseEntity.ok(bo.findByName(name));
   }
 
   @PostMapping
-  public ResponseEntity<Image> add(@RequestParam("image") MultipartFile file) throws IOException {
-      Image image = new Image();
-      image.setName(file.getOriginalFilename());
-      image.setType(file.getContentType());
-      image.setImageData(ImageUtil.compressImage(file.getBytes()));
-      bo.save(image);
-    return ResponseEntity.ok(image);
+  public ResponseEntity<ImageDTO> add(@RequestParam("image") MultipartFile file) {
+    ImageDTO imageDTO = new ImageDTO();
+    imageDTO.setName(file.getOriginalFilename());
+    imageDTO.setType(file.getContentType());
+    try {
+      imageDTO.setImageData(ImageUtil.compressImage(file.getBytes()));
+    } catch (IOException e) {
+      throw new BadInputException(e);
+    }
+    bo.save(imageDTO);
+    return ResponseEntity.ok(imageDTO);
   }
 }

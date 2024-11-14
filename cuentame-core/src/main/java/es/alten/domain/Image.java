@@ -24,6 +24,6 @@ public class Image extends Audit {
     @Column(name = "type", nullable = false)
     private String type;
     @Lob
-    @Column(name = "image_data", nullable = false, length = 10000000)
+    @Column(name = "image_data", nullable = false, length = 10000)
     private byte[] imageData;
 }

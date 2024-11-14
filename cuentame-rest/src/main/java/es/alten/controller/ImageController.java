@@ -4,5 +4,6 @@ import es.alten.web.BaseController;
 import org.springframework.http.ResponseEntity;
 
 public interface ImageController extends BaseController {
+    ResponseEntity<byte[]> findById(Long id);
     ResponseEntity<byte[]> findByName(String name);
 }

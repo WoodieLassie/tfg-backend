@@ -1,10 +1,10 @@
 package es.alten.bo;
 
 import es.alten.domain.Image;
-import es.alten.domain.QImage;
-import es.alten.dto.ImageFilterDTO;
+import es.alten.dto.ImageDTO;
 
-public interface ImageBO extends GenericCRUDService<Image, Long, QImage, ImageFilterDTO> {
+public interface ImageBO {
+    byte[] findById(Long id);
     byte[] findByName(String name);
-    Image save(Image image);
+    Image save(ImageDTO imageDTO);
 }
