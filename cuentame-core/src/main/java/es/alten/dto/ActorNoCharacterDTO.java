@@ -17,4 +17,5 @@ public class ActorNoCharacterDTO extends ElvisBaseDTO<Actor> {
   @NotNull private String nationality;
   @NotNull private String gender;
   @NotNull private String birthLocation;
+  private byte[] imageData;
 }

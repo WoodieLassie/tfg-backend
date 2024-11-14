@@ -50,4 +50,8 @@ public class Actor extends ElvisEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "character_id", nullable = false)
   private Character character;
+
+  @Lob
+  @Column(name = "image_data", nullable = true, length = 10000)
+  private byte[] imageData;
 }

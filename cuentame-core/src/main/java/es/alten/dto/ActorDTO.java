@@ -23,4 +23,6 @@ public class ActorDTO extends ElvisBaseDTO<Actor> {
 
   @NotNull
   private CharacterNoActorsDTO character;
+
+  private byte[] imageData;
 }

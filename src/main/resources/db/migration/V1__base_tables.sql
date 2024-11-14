@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS ${sch}.images;
+DROP TABLE IF EXISTS ${sch}.users;
 DROP TABLE IF EXISTS ${sch}.episode_character;
 DROP TABLE IF EXISTS ${sch}.actors;
 DROP TABLE IF EXISTS ${sch}.characters;

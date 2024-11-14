@@ -1,0 +1,1 @@
+ALTER TABLE actors ADD image_data BLOB(1000);
