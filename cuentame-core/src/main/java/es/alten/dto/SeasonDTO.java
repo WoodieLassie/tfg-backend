@@ -1,5 +1,6 @@
 package es.alten.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import es.alten.domain.Season;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +9,8 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Schema(name = "SeasonDTO", description = "Data transfer object. Season")
 @EqualsAndHashCode(callSuper = true)
@@ -21,6 +24,13 @@ public class SeasonDTO extends ElvisBaseDTO<Season> {
   @NotNull private String description;
 
   @Schema(description = "Season episodes")
-  @NotNull
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private List<EpisodeNoSeasonDTO> episodes;
+
+  public boolean allFieldsArePresent() {
+    return Stream.of(
+                    this.seasonNum,
+                    this.description)
+            .allMatch(Objects::nonNull);
+  }
 }

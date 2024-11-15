@@ -16,8 +16,8 @@ public interface CharacterRepository
         JpaSpecificationExecutor<Character>,
         QuerydslPredicateExecutor<Character>,
         QuerydslBinderCustomizer<QCharacter> {
-    @Query("SELECT c from Character c JOIN FETCH c.actors a")
+    @Query("SELECT c from Character c LEFT JOIN FETCH c.actors a")
     List<Character> findAll();
-    @Query("SELECT c from Character c JOIN FETCH c.actors a WHERE c.id = :id")
+    @Query("SELECT c from Character c LEFT JOIN FETCH c.actors a WHERE c.id = :id")
     Optional<Character> findById(@Param("id") Long id);
 }

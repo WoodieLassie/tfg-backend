@@ -1,5 +1,6 @@
 package es.alten.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,5 +34,6 @@ public class Season extends ElvisEntity {
   private String description;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "season")
+  @JsonProperty()
   private List<Episode> episodes;
 }

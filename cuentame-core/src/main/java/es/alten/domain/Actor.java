@@ -52,6 +52,7 @@ public class Actor extends ElvisEntity {
   private Character character;
 
   @Lob
-  @Column(name = "image_data", nullable = true, length = 10000)
+  @Column(name = "image_data", length = 65535)
+  @Size(max = 65535)
   private byte[] imageData;
 }

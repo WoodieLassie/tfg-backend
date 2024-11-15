@@ -3,7 +3,9 @@ package es.alten.bo.impl;
 import es.alten.bo.ImageBO;
 import es.alten.dao.ImageRepository;
 import es.alten.domain.Image;
+import es.alten.domain.QImage;
 import es.alten.dto.ImageDTO;
+import es.alten.dto.ImageFilterDTO;
 import es.alten.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,30 +18,29 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ImageBOImpl
+    extends ElvisGenericCRUDServiceImpl<Image, Long, QImage, ImageFilterDTO, ImageRepository>
     implements ImageBO {
 
     private static final long serialVersionUID = -5108297259280380172L;
     private static final Logger LOG = LoggerFactory.getLogger(ImageBOImpl.class);
-    private final ImageRepository repository;
 
     public ImageBOImpl(ImageRepository repository) {
-        this.repository = repository;
+        super(repository);
     }
 
-    public List<Image> findAll() {
-        return repository.findAll();
-    }
-
+    @Override
     public List<Image> findByName(String name) {
         return repository.findByName(name);
     }
 
+    @Override
     public byte[] findById(Long id) {
         Optional<Image> dbImage = repository.findById(id);
         return dbImage.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
     }
 
-    public Image save(ImageDTO imageDTO) {
+    @Override
+    public Image add(ImageDTO imageDTO) {
         Image image = imageDTO.obtainDomainObject();
         repository.save(image);
         return image;

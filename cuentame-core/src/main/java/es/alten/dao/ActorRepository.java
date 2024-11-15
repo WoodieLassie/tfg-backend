@@ -16,8 +16,8 @@ public interface ActorRepository
         JpaSpecificationExecutor<Actor>,
         QuerydslPredicateExecutor<Actor>,
         QuerydslBinderCustomizer<QActor> {
-    @Query("SELECT a from Actor a JOIN FETCH a.character c")
+    @Query("SELECT a from Actor a LEFT JOIN FETCH a.character c")
     List<Actor> findAll();
-    @Query("SELECT a from Actor a JOIN FETCH a.character c where a.id = :id")
+    @Query("SELECT a from Actor a LEFT JOIN FETCH a.character c where a.id = :id")
     Optional<Actor> findById(@Param("id") Long id);
 }

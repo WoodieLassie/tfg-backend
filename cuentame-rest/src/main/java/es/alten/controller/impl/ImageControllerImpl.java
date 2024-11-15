@@ -69,7 +69,7 @@ public class ImageControllerImpl implements ImageController {
     } catch (IOException e) {
       throw new BadInputException(e);
     }
-    bo.save(imageDTO);
+    bo.save(imageDTO.obtainDomainObject());
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
 }

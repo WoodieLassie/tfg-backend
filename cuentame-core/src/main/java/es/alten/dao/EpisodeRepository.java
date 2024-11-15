@@ -17,18 +17,21 @@ public interface EpisodeRepository
         JpaSpecificationExecutor<Episode>,
         QuerydslPredicateExecutor<Episode>,
         QuerydslBinderCustomizer<QEpisode> {
-  @Query("SELECT e FROM Episode e " + "JOIN FETCH e.season s")
+  @Query("SELECT e FROM Episode e " + "LEFT JOIN FETCH e.season s")
   List<Episode> findAll();
+
+  @Query("SELECT e FROM Episode e " + "WHERE e.id IN :ids")
+  List<Episode> findAllById(List<Long> ids);
 
   @Query(
       "SELECT e FROM Episode e "
-          + "JOIN FETCH e.season s "
-          + "JOIN FETCH e.characters c WHERE e.id = :id")
+          + "LEFT JOIN FETCH e.season s "
+          + "LEFT JOIN FETCH e.characters c WHERE e.id = :id")
   Optional<Episode> findById(@Param("id") Long id);
 
   @Query(
       "SELECT e FROM Episode e "
-          + "JOIN FETCH e.season s "
+          + "LEFT JOIN FETCH e.season s "
           + "WHERE (:seasonId IS NULL OR e.season.id = :seasonId) "
           + "AND LOWER(e.title) LIKE LOWER(CONCAT('%', :title, '%')) "
           + "AND (:episodeNum IS NULL OR e.episodeNum = :episodeNum)")
@@ -39,6 +42,6 @@ public interface EpisodeRepository
 
   // Hace fetch de los actores de cada personaje en una query aparte para evitar
   // MultipleBagFetchException
-  @Query("SELECT c FROM Character c " + "JOIN FETCH c.actors a " + "WHERE c.id IN :ids")
+  @Query("SELECT c FROM Character c " + "LEFT JOIN FETCH c.actors a " + "WHERE c.id IN :ids")
   List<Character> findByIdWithCharacters(@Param("ids") List<Long> ids);
 }

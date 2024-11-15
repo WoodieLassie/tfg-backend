@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.sql.Date;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Schema(name = "ActorDTO", description = "Data transfer object. Actor")
 @EqualsAndHashCode(callSuper = true)
@@ -22,9 +24,19 @@ public class ActorDTO extends ElvisBaseDTO<Actor> {
   @NotNull private String gender;
   @NotNull private String birthLocation;
 
-  @NotNull
-  private CharacterNoActorsDTO character;
+  @NotNull private CharacterNoActorsDTO character;
 
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private byte[] imageData;
+
+  public boolean allFieldsArePresent() {
+    return Stream.of(
+            this.name,
+            this.birthDate,
+            this.nationality,
+            this.gender,
+            this.birthLocation,
+            this.character)
+        .allMatch(Objects::nonNull);
+  }
 }

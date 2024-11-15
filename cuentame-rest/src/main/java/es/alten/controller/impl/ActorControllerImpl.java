@@ -7,6 +7,8 @@ import es.alten.domain.Actor;
 import es.alten.domain.Character;
 import es.alten.dto.ActorDTO;
 import es.alten.exceptions.BadInputException;
+import es.alten.exceptions.NotExistingIdException;
+import es.alten.exceptions.NotFoundException;
 import es.alten.utils.ImageUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/actors")
@@ -48,6 +51,9 @@ public class ActorControllerImpl implements ActorController {
   @GetMapping("/{id}")
   public ResponseEntity<ActorDTO> findById(@PathVariable Long id) {
     Actor actor = bo.findOne(id);
+    if (actor == null) {
+      throw new NotFoundException();
+    }
     ActorDTO convertedActor = new ActorDTO();
     convertedActor.loadFromDomain(actor);
     return ResponseEntity.ok(convertedActor);
@@ -56,12 +62,19 @@ public class ActorControllerImpl implements ActorController {
   @Override
   @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> findImageById(@PathVariable Long id) {
-    return ResponseEntity.ok(bo.findImageById(id));
+    byte[] image = bo.findImageById(id);
+    if (image == null || image.length == 0) {
+      throw new NotFoundException();
+    }
+    return ResponseEntity.ok(image);
   }
 
   @Override
   @PostMapping
   public ResponseEntity<Actor> add(@RequestBody ActorDTO actorDTO) {
+    if (!actorDTO.allFieldsArePresent()) {
+      throw new BadInputException("All fields must be present in request body");
+    }
     Actor actor = actorDTO.obtainDomainObject();
     Character character = characterBO.findOne(actor.getCharacter().getId());
     actor.setCharacter(character);
@@ -70,12 +83,40 @@ public class ActorControllerImpl implements ActorController {
   }
 
   @Override
-  @PatchMapping(value = "/image/{id}")
-  public ResponseEntity<ActorDTO> updateImageById(
-      @PathVariable Long id, @RequestParam("image") MultipartFile file) {
-    // TODO: Validar tipos de formato de archivo permitidos (jpg, png). Hacer lo mismo en
-    // controlador de images
+  @PatchMapping("/{id}")
+  public ResponseEntity<Actor> update(@PathVariable Long id, @RequestBody ActorDTO actorDTO) {
+    if (!actorDTO.allFieldsArePresent()) {
+      throw new BadInputException("All fields must be present in request body");
+    }
+    Actor newActorInfo = actorDTO.obtainDomainObject();
     Actor actor = bo.findOne(id);
+    if (actor == null) {
+      throw new NotExistingIdException("Actor with id " + id + " does not exist");
+    }
+    Character character = characterBO.findOne(newActorInfo.getCharacter().getId());
+    if (character == null) {
+      throw new NotExistingIdException("Character with id " + newActorInfo.getCharacter().getId() + " does not exist");
+    }
+    newActorInfo.setCharacter(character);
+    newActorInfo.setId(id);
+    bo.save(newActorInfo);
+    return ResponseEntity.noContent().build();
+  }
+
+  @Override
+  @PatchMapping(value = "/image/{id}")
+  public ResponseEntity<Actor> updateImageById(
+      @PathVariable Long id, @RequestParam("image") MultipartFile file) {
+    if (file.getSize() == 0) {
+      throw new BadInputException("A file must be attached to request");
+    }
+    if (!Objects.equals(file.getContentType(), "image/png") && !Objects.equals(file.getContentType(), "image/jpeg")) {
+      throw new BadInputException("File must be png or jpg");
+    }
+    Actor actor = bo.findOne(id);
+    if (actor == null) {
+      throw new NotExistingIdException("Actor with id " + id + " does not exist");
+    }
     try {
       actor.setImageData(ImageUtil.compressImage(file.getBytes()));
     } catch (IOException e) {
