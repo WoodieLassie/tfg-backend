@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Schema(name = "EpisodeDTO", description = "Data transfer object. Episode")
 @EqualsAndHashCode(callSuper = true)
@@ -20,10 +22,14 @@ public class EpisodeDTO extends ElvisBaseDTO<Episode> {
   @NotNull private String title;
   @NotNull private String summary;
 
-  @NotNull
-  private SeasonNoEpisodesDTO season;
+  @NotNull private SeasonNoEpisodesDTO season;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   @NotNull
   private List<CharacterDTO> characters;
+
+  public boolean allFieldsArePresent() {
+    return Stream.of(this.episodeNum, this.title, this.summary, this.season, this.characters)
+        .allMatch(Objects::nonNull);
+  }
 }

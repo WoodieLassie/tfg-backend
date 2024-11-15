@@ -20,4 +20,6 @@ public interface CharacterRepository
     List<Character> findAll();
     @Query("SELECT c from Character c LEFT JOIN FETCH c.actors a WHERE c.id = :id")
     Optional<Character> findById(@Param("id") Long id);
+    @Query("SELECT c FROM Character c LEFT JOIN FETCH c.actors a WHERE c.id IN :ids")
+    List<Character> findAllById(@Param("ids") List<Long> ids);
 }

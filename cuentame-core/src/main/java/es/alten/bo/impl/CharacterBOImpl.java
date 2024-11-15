@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class CharacterBOImpl
@@ -22,5 +24,9 @@ public class CharacterBOImpl
 
     public CharacterBOImpl(CharacterRepository repository) {
         super(repository);
+    }
+
+    public List<Character> findAllById(List<Long> ids) {
+        return repository.findAllById(ids);
     }
 }
