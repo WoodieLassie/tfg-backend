@@ -46,7 +46,7 @@ public class ActorControllerImpl implements ActorController {
       if (actorDTO.getImageData() != null) {
         String actorImageDownloadUrl =
                 ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/actors/images/")
+                        .path("/api/actors/images/")
                         .path(String.valueOf(actorDTO.getId()))
                         .toUriString();
         actorDTO.setImageUrl(actorImageDownloadUrl);
@@ -68,7 +68,7 @@ public class ActorControllerImpl implements ActorController {
     if (convertedActor.getImageData() != null) {
       String actorImageDownloadUrl =
               ServletUriComponentsBuilder.fromCurrentContextPath()
-                      .path("/actors/images/")
+                      .path("/api/actors/images/")
                       .path(String.valueOf(convertedActor.getId()))
                       .toUriString();
       convertedActor.setImageUrl(actorImageDownloadUrl);

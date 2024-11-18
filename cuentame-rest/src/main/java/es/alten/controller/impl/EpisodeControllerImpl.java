@@ -119,7 +119,29 @@ public class EpisodeControllerImpl implements EpisodeController {
   }
 
   @Override
-  public ResponseEntity<Episode> update(Long id, EpisodeDTO episodeDTO) {
-    return null;
+  @PatchMapping("/{id}")
+  public ResponseEntity<Episode> update(@PathVariable Long id, @RequestBody EpisodeDTO episodeDTO) {
+    if (!episodeDTO.allFieldsArePresent()) {
+      throw new BadInputException("All fields must be present in request body");
+    }
+    Episode episode = bo.findOne(id);
+    if (episode == null) {
+      throw new NotExistingIdException("Episode with id " + id + " does not exist");
+    }
+    Episode newEpisodeInfo = episodeDTO.obtainDomainObject();
+    Season season = seasonBO.findOne(newEpisodeInfo.getSeason().getId());
+    List<Long> charactersIds = newEpisodeInfo.getCharacters().stream().map(Character::getId).toList();
+    List<Character> charactersInfo = characterBO.findAllById(charactersIds);
+    if (newEpisodeInfo.getCharacters().size() != charactersInfo.size()) {
+      throw new NotExistingIdException("Some characters provided in request body do not exist");
+    }
+    if(season == null) {
+      throw new NotExistingIdException("Season with id " + newEpisodeInfo.getSeason().getId() + " does not exist");
+    }
+    newEpisodeInfo.setCharacters(charactersInfo);
+    newEpisodeInfo.setSeason(season);
+    newEpisodeInfo.setId(id);
+    bo.save(newEpisodeInfo);
+    return ResponseEntity.noContent().build();
   }
 }

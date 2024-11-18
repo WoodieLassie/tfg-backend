@@ -44,7 +44,7 @@ public class ImageControllerImpl implements ImageController {
       imageDTO.loadFromDomain(image);
       String imageDownloadUrl =
               ServletUriComponentsBuilder.fromCurrentContextPath()
-                      .path("/images/")
+                      .path("/api/images/")
                       .path(String.valueOf(imageDTO.getId()))
                       .toUriString();
       imageDTO.setImageUrl(imageDownloadUrl);
@@ -63,7 +63,7 @@ public class ImageControllerImpl implements ImageController {
       imageDTO.loadFromDomain(image);
       String imageDownloadUrl =
               ServletUriComponentsBuilder.fromCurrentContextPath()
-                      .path("/images/")
+                      .path("/api/images/")
                       .path(String.valueOf(imageDTO.getId()))
                       .toUriString();
       imageDTO.setImageUrl(imageDownloadUrl);
