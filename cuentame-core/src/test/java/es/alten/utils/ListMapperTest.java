@@ -24,11 +24,7 @@ class ListMapperTest {
     List<UserDTO> listUser = new ArrayList<>();
     UserDTO userDTO = new UserDTO();
     userDTO.setEmail("");
-    userDTO.setCreateDate(new Date());
-    userDTO.setCreatedBy(Constants.ANONYMOUS_USER);
     userDTO.setId(Long.valueOf(10));
-    userDTO.setUpdateDate(new Date());
-    userDTO.setUpdatedBy(Constants.ANONYMOUS_USER);
     listUser.add(userDTO);
     List<ElvisEntity> listElvisEntity = ListMapper.map(listUser);
 

@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +43,14 @@ public class ActorControllerImpl implements ActorController {
     for (Actor actor : actors) {
       ActorDTO actorDTO = new ActorDTO();
       actorDTO.loadFromDomain(actor);
+      if (actorDTO.getImageData() != null) {
+        String actorImageDownloadUrl =
+                ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/actors/images/")
+                        .path(String.valueOf(actorDTO.getId()))
+                        .toUriString();
+        actorDTO.setImageUrl(actorImageDownloadUrl);
+      }
       convertedActors.add(actorDTO);
     }
     return ResponseEntity.ok(convertedActors);
@@ -56,6 +65,14 @@ public class ActorControllerImpl implements ActorController {
     }
     ActorDTO convertedActor = new ActorDTO();
     convertedActor.loadFromDomain(actor);
+    if (convertedActor.getImageData() != null) {
+      String actorImageDownloadUrl =
+              ServletUriComponentsBuilder.fromCurrentContextPath()
+                      .path("/actors/images/")
+                      .path(String.valueOf(convertedActor.getId()))
+                      .toUriString();
+      convertedActor.setImageUrl(actorImageDownloadUrl);
+    }
     return ResponseEntity.ok(convertedActor);
   }
 
@@ -95,7 +112,8 @@ public class ActorControllerImpl implements ActorController {
     }
     Character character = characterBO.findOne(newActorInfo.getCharacter().getId());
     if (character == null) {
-      throw new NotExistingIdException("Character with id " + newActorInfo.getCharacter().getId() + " does not exist");
+      throw new NotExistingIdException(
+          "Character with id " + newActorInfo.getCharacter().getId() + " does not exist");
     }
     newActorInfo.setCharacter(character);
     newActorInfo.setId(id);
@@ -110,7 +128,8 @@ public class ActorControllerImpl implements ActorController {
     if (file.getSize() == 0) {
       throw new BadInputException("A file must be attached to request");
     }
-    if (!Objects.equals(file.getContentType(), "image/png") && !Objects.equals(file.getContentType(), "image/jpeg")) {
+    if (!Objects.equals(file.getContentType(), "image/png")
+        && !Objects.equals(file.getContentType(), "image/jpeg")) {
       throw new BadInputException("File must be png or jpg");
     }
     Actor actor = bo.findOne(id);

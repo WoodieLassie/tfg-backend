@@ -5,6 +5,8 @@ import es.alten.controller.ImageController;
 import es.alten.domain.Image;
 import es.alten.dto.ImageDTO;
 import es.alten.exceptions.BadInputException;
+import es.alten.exceptions.NotExistingIdException;
+import es.alten.exceptions.NotFoundException;
 import es.alten.utils.ImageUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -14,10 +16,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/images")
@@ -30,6 +34,7 @@ public class ImageControllerImpl implements ImageController {
     this.bo = bo;
   }
 
+  @Override
   @GetMapping
   public ResponseEntity<List<ImageDTO>> findAll() {
     List<Image> images = bo.findAll();
@@ -37,11 +42,18 @@ public class ImageControllerImpl implements ImageController {
     for (Image image : images) {
       ImageDTO imageDTO = new ImageDTO();
       imageDTO.loadFromDomain(image);
+      String imageDownloadUrl =
+              ServletUriComponentsBuilder.fromCurrentContextPath()
+                      .path("/images/")
+                      .path(String.valueOf(imageDTO.getId()))
+                      .toUriString();
+      imageDTO.setImageUrl(imageDownloadUrl);
       convertedImages.add(imageDTO);
     }
     return ResponseEntity.ok(convertedImages);
   }
 
+  @Override
   @GetMapping(params = {"name"})
   public ResponseEntity<List<ImageDTO>> findByName(@RequestParam String name) {
     List<Image> images = bo.findByName(name);
@@ -49,18 +61,37 @@ public class ImageControllerImpl implements ImageController {
     for (Image image : images) {
       ImageDTO imageDTO = new ImageDTO();
       imageDTO.loadFromDomain(image);
+      String imageDownloadUrl =
+              ServletUriComponentsBuilder.fromCurrentContextPath()
+                      .path("/images/")
+                      .path(String.valueOf(imageDTO.getId()))
+                      .toUriString();
+      imageDTO.setImageUrl(imageDownloadUrl);
       convertedImages.add(imageDTO);
     }
     return ResponseEntity.ok(convertedImages);
   }
 
+  @Override
   @GetMapping(produces = MediaType.IMAGE_PNG_VALUE, value = "/{id}")
   public ResponseEntity<byte[]> findById(@PathVariable Long id) {
-    return ResponseEntity.ok(bo.findById(id));
+    byte[] imageData = bo.findById(id);
+    if (imageData == null || imageData.length == 0) {
+      throw new NotFoundException();
+    }
+    return ResponseEntity.ok(imageData);
   }
 
+  @Override
   @PostMapping
-  public ResponseEntity<ImageDTO> add(@RequestParam("image") MultipartFile file) {
+  public ResponseEntity<Image> add(@RequestParam("image") MultipartFile file) {
+    if (file.getSize() == 0) {
+      throw new BadInputException("A file must be attached to request");
+    }
+    if (!Objects.equals(file.getContentType(), "image/png")
+            && !Objects.equals(file.getContentType(), "image/jpeg")) {
+      throw new BadInputException("File must be png or jpg");
+    }
     ImageDTO imageDTO = new ImageDTO();
     imageDTO.setName(file.getOriginalFilename());
     imageDTO.setType(file.getContentType());
@@ -71,5 +102,33 @@ public class ImageControllerImpl implements ImageController {
     }
     bo.save(imageDTO.obtainDomainObject());
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
+  }
+
+  @Override
+  @PatchMapping("/{id}")
+  public ResponseEntity<Image> update(@PathVariable Long id, @RequestParam("image") MultipartFile file) {
+    if (file.getSize() == 0) {
+      throw new BadInputException("A file must be attached to request");
+    }
+    if (!Objects.equals(file.getContentType(), "image/png")
+            && !Objects.equals(file.getContentType(), "image/jpeg")) {
+      throw new BadInputException("File must be png or jpg");
+    }
+    Image image = bo.findOne(id);
+    if (image == null) {
+      throw new NotExistingIdException("Character with id " + id + " does not exist");
+    }
+    ImageDTO imageDTO = new ImageDTO();
+    imageDTO.setName(file.getOriginalFilename());
+    imageDTO.setType(file.getContentType());
+    try {
+      imageDTO.setImageData(ImageUtil.compressImage(file.getBytes()));
+    } catch (IOException e) {
+      throw new BadInputException(e);
+    }
+    Image newImageInfo = imageDTO.obtainDomainObject();
+    newImageInfo.setId(id);
+    bo.save(newImageInfo);
+    return ResponseEntity.noContent().build();
   }
 }

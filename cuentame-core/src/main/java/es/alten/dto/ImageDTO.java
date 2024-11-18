@@ -1,5 +1,7 @@
 package es.alten.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import es.alten.domain.Image;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -12,9 +14,12 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ImageDTO extends ElvisBaseDTO<Image> {
-    @Serial private static final long serialVersionUID = 6743758202702488764L;
+  @Serial private static final long serialVersionUID = 6743758202702488764L;
 
-    @NotNull private String name;
-    @NotNull private String type;
-    @NotNull private byte[] imageData;
+  @NotNull private String name;
+  @NotNull private String type;
+  @JsonIgnore @NotNull private byte[] imageData;
+
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private String imageUrl;
 }
