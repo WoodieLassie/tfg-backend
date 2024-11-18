@@ -27,6 +27,7 @@ public class CharacterBOImpl
     }
 
     public List<Character> findAllById(List<Long> ids) {
+        LOG.debug("CharacterBOImpl: findAllById");
         return repository.findAllById(ids);
     }
 }

@@ -29,11 +29,13 @@ public class EpisodeBOImpl
 
   @Override
   public List<Episode> findAllSortedAndPaged(Long seasonId, String title, Integer episodeNum) {
+    LOG.debug("EpisodeBOImpl: findAllSortedAndPaged");
     return repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
   }
 
   @Override
   public Episode findOne(Long id) {
+    LOG.debug("EpisodeBOImpl: findOne");
     Optional<Episode> episodeOptional = repository.findById(id);
     Episode episode = new Episode();
     if (episodeOptional.isPresent()) {

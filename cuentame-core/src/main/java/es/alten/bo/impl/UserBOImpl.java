@@ -30,7 +30,7 @@ public class UserBOImpl
   
   @Override
   public User findByEmail(String email) {
-    LOG.debug("findByEmail");
+    LOG.debug("UserBOImpl: findByEmail");
     return this.repository.findByEmail(email);
   }
 }

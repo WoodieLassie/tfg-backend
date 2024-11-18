@@ -28,6 +28,7 @@ public class SeasonBOImpl
   }
 
   public List<Season> findAllByCharacters(String name) {
+    LOG.debug("SeasonBOImpl: findAllByCharacters");
     // NO MODIFICAR SEASONLIST O NINGUN OBJETO QUE TRAIGA INFORMACION DE LA BASE DE DATOS
     // DE FORMA DIRECTA O SE ALTERARAN LOS DATOS DE LA BASE DE DATOS
     List<Season> seasonList = repository.findAll();

@@ -10,5 +10,4 @@ import java.util.List;
 public interface ImageBO extends GenericCRUDService<Image, Long, QImage, ImageFilterDTO> {
     List<Image> findByName(String name);
     byte[] findById(Long id);
-    Image add(ImageDTO imageDTO);
 }

@@ -30,19 +30,14 @@ public class ImageBOImpl
 
     @Override
     public List<Image> findByName(String name) {
+        LOG.debug("ImageBOImpl: findByName");
         return repository.findByName(name);
     }
 
     @Override
     public byte[] findById(Long id) {
+        LOG.debug("ImageBOImpl: findById");
         Optional<Image> dbImage = repository.findById(id);
         return dbImage.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
-    }
-
-    @Override
-    public Image add(ImageDTO imageDTO) {
-        Image image = imageDTO.obtainDomainObject();
-        repository.save(image);
-        return image;
     }
 }
