@@ -1,6 +1,9 @@
 package es.alten.dto;
 
 import java.util.Date;
+import java.util.Objects;
+import java.util.stream.Stream;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import es.alten.domain.User;
@@ -20,4 +23,22 @@ public class UserDTO extends ElvisBaseDTO<User> {
   private String email;
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
+
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Integer deleted;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Date createDate;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Date updateDate;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Long createdBy;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Long updatedBy;
+
+  public boolean allFieldsArePresent() {
+    return Stream.of(
+                    this.email,
+                    this.password)
+            .allMatch(Objects::nonNull);
+  }
 }

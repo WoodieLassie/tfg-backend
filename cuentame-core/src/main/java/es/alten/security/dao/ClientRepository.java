@@ -7,4 +7,5 @@ import es.alten.security.domain.Client;
 public interface ClientRepository extends JpaRepository<Client, String> {
 
   Optional<Client> findByClientId(String clientId);
+  Optional<Client> findByClientName(String name);
 }

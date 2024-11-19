@@ -109,8 +109,9 @@ public class EpisodeControllerImpl implements EpisodeController {
     if (episode.getCharacters().size() != charactersInfo.size()) {
       throw new NotExistingIdException("Some characters provided in request body do not exist");
     }
-    if(season == null) {
-      throw new NotExistingIdException("Season with id " + episode.getSeason().getId() + " does not exist");
+    if (season == null) {
+      throw new NotExistingIdException(
+          "Season with id " + episode.getSeason().getId() + " does not exist");
     }
     episode.setCharacters(charactersInfo);
     episode.setSeason(season);
@@ -130,18 +131,27 @@ public class EpisodeControllerImpl implements EpisodeController {
     }
     Episode newEpisodeInfo = episodeDTO.obtainDomainObject();
     Season season = seasonBO.findOne(newEpisodeInfo.getSeason().getId());
-    List<Long> charactersIds = newEpisodeInfo.getCharacters().stream().map(Character::getId).toList();
+    List<Long> charactersIds =
+        newEpisodeInfo.getCharacters().stream().map(Character::getId).toList();
     List<Character> charactersInfo = characterBO.findAllById(charactersIds);
     if (newEpisodeInfo.getCharacters().size() != charactersInfo.size()) {
       throw new NotExistingIdException("Some characters provided in request body do not exist");
     }
-    if(season == null) {
-      throw new NotExistingIdException("Season with id " + newEpisodeInfo.getSeason().getId() + " does not exist");
+    if (season == null) {
+      throw new NotExistingIdException(
+          "Season with id " + newEpisodeInfo.getSeason().getId() + " does not exist");
     }
     newEpisodeInfo.setCharacters(charactersInfo);
     newEpisodeInfo.setSeason(season);
     newEpisodeInfo.setId(id);
     bo.save(newEpisodeInfo);
+    return ResponseEntity.noContent().build();
+  }
+
+  @Override
+  @DeleteMapping("/{id}")
+  public ResponseEntity<EpisodeDTO> delete(@PathVariable Long id) {
+    bo.delete(id);
     return ResponseEntity.noContent().build();
   }
 }

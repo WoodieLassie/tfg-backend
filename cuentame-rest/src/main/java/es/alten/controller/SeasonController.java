@@ -13,4 +13,5 @@ public interface SeasonController extends BaseController {
     ResponseEntity<List<SeasonDTO>> findAllByCharacters(String characterName);
     ResponseEntity<Season> add(SeasonDTO seasonDTO);
     ResponseEntity<Season> update(Long id, SeasonDTO seasonDTO);
+    ResponseEntity<SeasonDTO> delete(Long id);
 }

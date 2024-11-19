@@ -3,6 +3,7 @@ package es.alten.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,7 +33,9 @@ public class SecurityConfig {
   private final UserDetailsService userDetailsService;
   private final OAuth2AuthorizationService oauth2AuthorizationService;
 
-  public SecurityConfig(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
+  public SecurityConfig(
+      PasswordEncoder passwordEncoder,
+      UserDetailsService userDetailsService,
       OAuth2AuthorizationService oauth2AuthorizationService) {
     super();
     this.passwordEncoder = passwordEncoder;
@@ -46,13 +49,21 @@ public class SecurityConfig {
     OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 
     http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-        .tokenEndpoint(tokenEndpoint -> tokenEndpoint
-            .accessTokenRequestConverter(new CustomPasswordAuthenticationConverter())
-            .authenticationProvider(
-                new CustomPasswordAuthenticationProvider(this.oauth2AuthorizationService,
-                    userDetailsService, tokenGenerator(), passwordEncoder))
-            .authenticationProvider(new CustomRefreshTokenAuthenticationProvider(
-                oauth2AuthorizationService, tokenGenerator(), this.userDetailsService)));
+        .tokenEndpoint(
+            tokenEndpoint ->
+                tokenEndpoint
+                    .accessTokenRequestConverter(new CustomPasswordAuthenticationConverter())
+                    .authenticationProvider(
+                        new CustomPasswordAuthenticationProvider(
+                            this.oauth2AuthorizationService,
+                            userDetailsService,
+                            tokenGenerator(),
+                            passwordEncoder))
+                    .authenticationProvider(
+                        new CustomRefreshTokenAuthenticationProvider(
+                            oauth2AuthorizationService,
+                            tokenGenerator(),
+                            this.userDetailsService)));
 
     return http.build();
   }
@@ -61,11 +72,23 @@ public class SecurityConfig {
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
-            authz -> authz.requestMatchers("/swagger-ui/**", "/webjars/**", "/v3/api-docs/**")
-                .permitAll().anyRequest().permitAll())
+            authz ->
+                authz
+                    .requestMatchers(HttpMethod.GET, "/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/**")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.PATCH, "/**")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.DELETE, "/**")
+                    .authenticated()
+                    .requestMatchers("/swagger-ui/**", "/webjars/**", "/v3/api-docs/**")
+                    .permitAll())
         .oauth2ResourceServer(
-            configurer -> configurer.opaqueToken(opaqueTokenConfigurer -> opaqueTokenConfigurer
-                .introspector(opaqueTokenIntrospector())));
+            configurer ->
+                configurer.opaqueToken(
+                    opaqueTokenConfigurer ->
+                        opaqueTokenConfigurer.introspector(opaqueTokenIntrospector())));
 
     return http.build();
   }

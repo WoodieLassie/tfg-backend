@@ -11,4 +11,5 @@ public interface CharacterController {
     ResponseEntity<CharacterDTO> findOne(Long id);
     ResponseEntity<Character> add(CharacterDTO characterDTO);
     ResponseEntity<Character> update(Long id, CharacterDTO characterDTO);
+    ResponseEntity<CharacterDTO> delete(Long id);
 }

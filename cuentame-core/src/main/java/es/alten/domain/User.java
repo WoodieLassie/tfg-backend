@@ -1,11 +1,9 @@
 package es.alten.domain;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -27,4 +25,5 @@ public class User extends Audit {
 
   @Column(name = "password", nullable = false, length = 100)
   private String password;
+
 }

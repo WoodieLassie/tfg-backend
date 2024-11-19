@@ -33,7 +33,7 @@ public class Season extends ElvisEntity {
   @Size(max = 100)
   private String description;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "season")
-  @JsonProperty()
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "season", cascade = CascadeType.REMOVE)
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private List<Episode> episodes;
 }

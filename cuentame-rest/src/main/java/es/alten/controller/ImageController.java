@@ -14,4 +14,5 @@ public interface ImageController extends BaseController {
     ResponseEntity<byte[]> findById(Long id);
     ResponseEntity<Image> add(MultipartFile file);
     ResponseEntity<Image> update(Long id, MultipartFile file);
+    ResponseEntity<ImageDTO> delete(Long id);
 }

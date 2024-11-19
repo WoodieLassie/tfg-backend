@@ -144,4 +144,10 @@ public class ActorControllerImpl implements ActorController {
     bo.save(actor);
     return ResponseEntity.noContent().build();
   }
+  @Override
+  @DeleteMapping("/{id}")
+  public ResponseEntity<ActorDTO> delete(@PathVariable Long id) {
+    bo.delete(id);
+    return ResponseEntity.noContent().build();
+  }
 }

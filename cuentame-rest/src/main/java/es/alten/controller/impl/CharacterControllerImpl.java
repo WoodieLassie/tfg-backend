@@ -97,4 +97,10 @@ public class CharacterControllerImpl implements CharacterController {
     bo.save(newCharacterInfo);
     return ResponseEntity.noContent().build();
   }
+  @Override
+  @DeleteMapping("/{id}")
+  public ResponseEntity<CharacterDTO> delete(@PathVariable Long id) {
+    bo.delete(id);
+    return ResponseEntity.noContent().build();
+  }
 }

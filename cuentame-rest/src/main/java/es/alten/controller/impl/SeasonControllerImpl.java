@@ -3,13 +3,11 @@ package es.alten.controller.impl;
 import es.alten.bo.EpisodeBO;
 import es.alten.bo.SeasonBO;
 import es.alten.controller.SeasonController;
-import es.alten.domain.Episode;
 import es.alten.domain.Season;
 import es.alten.dto.SeasonDTO;
 import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import es.alten.exceptions.NotFoundException;
-import es.alten.rest.impl.RestControllerImpl;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -114,6 +112,13 @@ public class SeasonControllerImpl implements SeasonController {
     }
     newSeasonInfo.setId(id);
     bo.save(newSeasonInfo);
+    return ResponseEntity.noContent().build();
+  }
+
+  @Override
+  @DeleteMapping("/{id}")
+  public ResponseEntity<SeasonDTO> delete(@PathVariable Long id) {
+    bo.delete(id);
     return ResponseEntity.noContent().build();
   }
 }

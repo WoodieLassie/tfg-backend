@@ -4,8 +4,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import es.alten.utils.Constants;
@@ -20,6 +24,8 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 @MappedSuperclass
@@ -90,12 +96,17 @@ public class Audit extends ElvisEntity {
       Long userLoggedId = Constants.ANONYMOUS_USER;
       if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal()
           .equals("anonymousUser")) {
-        userLoggedId = Long
-            .valueOf(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                .getUsername());
+//        userLoggedId = Long
+//            .valueOf(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+//                .getUsername());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2IntrospectionAuthenticatedPrincipal principal = (OAuth2IntrospectionAuthenticatedPrincipal) authentication.getPrincipal();
+        LinkedHashMap<String, String> principalAttributes = (LinkedHashMap<String, String>) principal.getAttributes().get("java.security.Principal");
+        userLoggedId = Long.valueOf(principalAttributes.get("principal"));
       }
       this.createdBy = userLoggedId;
       this.updatedBy = userLoggedId;
+      this.deleted = 0;
     }
   }
 }

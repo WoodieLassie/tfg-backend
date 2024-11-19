@@ -16,4 +16,5 @@ public interface EpisodeController extends BaseController {
       Long seasonId, String title, Integer episodeNum, Integer page, Pageable pageable);
   ResponseEntity<Episode> add(EpisodeDTO episodeDTO);
   ResponseEntity<Episode> update(Long id, EpisodeDTO episodeDTO);
+  ResponseEntity<EpisodeDTO> delete(Long id);
 }

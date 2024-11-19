@@ -43,10 +43,10 @@ public class ImageControllerImpl implements ImageController {
       ImageDTO imageDTO = new ImageDTO();
       imageDTO.loadFromDomain(image);
       String imageDownloadUrl =
-              ServletUriComponentsBuilder.fromCurrentContextPath()
-                      .path("/api/images/")
-                      .path(String.valueOf(imageDTO.getId()))
-                      .toUriString();
+          ServletUriComponentsBuilder.fromCurrentContextPath()
+              .path("/api/images/")
+              .path(String.valueOf(imageDTO.getId()))
+              .toUriString();
       imageDTO.setImageUrl(imageDownloadUrl);
       convertedImages.add(imageDTO);
     }
@@ -62,10 +62,10 @@ public class ImageControllerImpl implements ImageController {
       ImageDTO imageDTO = new ImageDTO();
       imageDTO.loadFromDomain(image);
       String imageDownloadUrl =
-              ServletUriComponentsBuilder.fromCurrentContextPath()
-                      .path("/api/images/")
-                      .path(String.valueOf(imageDTO.getId()))
-                      .toUriString();
+          ServletUriComponentsBuilder.fromCurrentContextPath()
+              .path("/api/images/")
+              .path(String.valueOf(imageDTO.getId()))
+              .toUriString();
       imageDTO.setImageUrl(imageDownloadUrl);
       convertedImages.add(imageDTO);
     }
@@ -89,7 +89,7 @@ public class ImageControllerImpl implements ImageController {
       throw new BadInputException("A file must be attached to request");
     }
     if (!Objects.equals(file.getContentType(), "image/png")
-            && !Objects.equals(file.getContentType(), "image/jpeg")) {
+        && !Objects.equals(file.getContentType(), "image/jpeg")) {
       throw new BadInputException("File must be png or jpg");
     }
     ImageDTO imageDTO = new ImageDTO();
@@ -106,12 +106,13 @@ public class ImageControllerImpl implements ImageController {
 
   @Override
   @PatchMapping("/{id}")
-  public ResponseEntity<Image> update(@PathVariable Long id, @RequestParam("image") MultipartFile file) {
+  public ResponseEntity<Image> update(
+      @PathVariable Long id, @RequestParam("image") MultipartFile file) {
     if (file.getSize() == 0) {
       throw new BadInputException("A file must be attached to request");
     }
     if (!Objects.equals(file.getContentType(), "image/png")
-            && !Objects.equals(file.getContentType(), "image/jpeg")) {
+        && !Objects.equals(file.getContentType(), "image/jpeg")) {
       throw new BadInputException("File must be png or jpg");
     }
     Image image = bo.findOne(id);
@@ -129,6 +130,13 @@ public class ImageControllerImpl implements ImageController {
     Image newImageInfo = imageDTO.obtainDomainObject();
     newImageInfo.setId(id);
     bo.save(newImageInfo);
+    return ResponseEntity.noContent().build();
+  }
+
+  @Override
+  @DeleteMapping("/{id}")
+  public ResponseEntity<ImageDTO> delete(@PathVariable Long id) {
+    bo.delete(id);
     return ResponseEntity.noContent().build();
   }
 }
