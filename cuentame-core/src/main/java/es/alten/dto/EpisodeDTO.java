@@ -18,12 +18,23 @@ import java.util.stream.Stream;
 public class EpisodeDTO extends ElvisBaseDTO<Episode> {
   @Serial private static final long serialVersionUID = 5170483706615630449L;
 
-  @NotNull private Integer episodeNum;
-  @NotNull private String title;
-  @NotNull private String summary;
+  @Schema(description = "Episode number")
+  @NotNull
+  private Integer episodeNum;
 
-  @NotNull private SeasonNoEpisodesDTO season;
+  @Schema(description = "Episode title")
+  @NotNull
+  private String title;
 
+  @Schema(description = "Episode summary")
+  @NotNull
+  private String summary;
+
+  @Schema(description = "Episode season information")
+  @NotNull
+  private SeasonNoEpisodesDTO season;
+
+  @Schema(hidden = true)
   @JsonInclude(JsonInclude.Include.NON_NULL)
   @NotNull
   private List<CharacterDTO> characters;

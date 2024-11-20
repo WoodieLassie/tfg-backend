@@ -1,6 +1,6 @@
 package es.alten.utils;
 
-import es.alten.exceptions.NotFoundException;
+import es.alten.exceptions.BadInputException;
 
 import java.io.ByteArrayOutputStream;
 import java.util.zip.Deflater;
@@ -23,6 +23,7 @@ public class ImageUtil {
     try {
       outputStream.close();
     } catch (Exception e) {
+      throw new BadInputException();
     }
     return outputStream.toByteArray();
   }
@@ -42,6 +43,7 @@ public class ImageUtil {
       }
       outputStream.close();
     } catch (Exception exception) {
+      throw new BadInputException();
     }
     return outputStream.toByteArray();
   }

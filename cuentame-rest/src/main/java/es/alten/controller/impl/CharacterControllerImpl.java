@@ -2,12 +2,17 @@ package es.alten.controller.impl;
 
 import es.alten.bo.CharacterBO;
 import es.alten.controller.CharacterController;
-import es.alten.domain.Actor;
 import es.alten.domain.Character;
 import es.alten.dto.ActorNoCharacterDTO;
 import es.alten.dto.CharacterDTO;
 import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +34,17 @@ public class CharacterControllerImpl implements CharacterController {
   }
 
   @Override
+  @Operation(
+          method = "GET",
+          summary = "Get all characters")
+  @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {
+                  @Content(
+                          mediaType = "application/json",
+                          array = @ArraySchema(schema = @Schema(implementation = CharacterDTO.class)))
+          })
   @GetMapping
   public ResponseEntity<List<CharacterDTO>> findAll() {
     List<Character> characterList = bo.findAll();
@@ -52,8 +68,24 @@ public class CharacterControllerImpl implements CharacterController {
   }
 
   @Override
+  @Operation(
+      method = "GET",
+      summary = "Get a character by identification",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = CharacterDTO.class))
+      })
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
-  public ResponseEntity<CharacterDTO> findOne(@PathVariable Long id) {
+  public ResponseEntity<CharacterDTO> findById(@PathVariable Long id) {
     Character character = bo.findOne(id);
     CharacterDTO convertedCharacter = new CharacterDTO();
     convertedCharacter.loadFromDomain(character);
@@ -97,6 +129,7 @@ public class CharacterControllerImpl implements CharacterController {
     bo.save(newCharacterInfo);
     return ResponseEntity.noContent().build();
   }
+
   @Override
   @DeleteMapping("/{id}")
   public ResponseEntity<CharacterDTO> delete(@PathVariable Long id) {

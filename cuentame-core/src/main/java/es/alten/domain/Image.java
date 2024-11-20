@@ -1,7 +1,6 @@
 package es.alten.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

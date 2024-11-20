@@ -17,7 +17,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class CharacterBOImplTest {
+class CharacterBOImplTest {
   private static final List<Long> CHARACTER_IDS_TEST = new ArrayList<>(List.of(1L, 6L, 5L));
 
   @InjectMocks CharacterBOImpl characterBO;
@@ -25,29 +25,29 @@ public class CharacterBOImplTest {
   @Mock CharacterRepository repository;
 
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     MockitoAnnotations.openMocks(this);
     this.characterBO = new CharacterBOImpl(repository);
   }
 
   @Test
   void findAllById() {
-    List<Character> mock_characters = new ArrayList<>();
-    Character mock_character1 = new Character();
-    Character mock_character2 = new Character();
-    Character mock_character3 = new Character();
-    mock_character1.setId(1L);
-    mock_character2.setId(6L);
-    mock_character3.setId(5L);
-    mock_characters.add(mock_character1);
-    mock_characters.add(mock_character2);
-    mock_characters.add(mock_character3);
-    when(repository.findAllById(CHARACTER_IDS_TEST)).thenReturn(mock_characters);
+    List<Character> mockCharacters = new ArrayList<>();
+    Character mockCharacter1 = new Character();
+    Character mockCharacter2 = new Character();
+    Character mockCharacter3 = new Character();
+    mockCharacter1.setId(1L);
+    mockCharacter2.setId(6L);
+    mockCharacter3.setId(5L);
+    mockCharacters.add(mockCharacter1);
+    mockCharacters.add(mockCharacter2);
+    mockCharacters.add(mockCharacter3);
+    when(repository.findAllById(CHARACTER_IDS_TEST)).thenReturn(mockCharacters);
     List<Character> dbCharacters = characterBO.findAllById(CHARACTER_IDS_TEST);
 
     verify(repository, times(1)).findAllById(CHARACTER_IDS_TEST);
 
     Assertions.assertNotNull(dbCharacters);
-    Assertions.assertEquals(dbCharacters.size(), 3);
+    Assertions.assertEquals(3, dbCharacters.size());
   }
 }

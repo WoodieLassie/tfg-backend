@@ -1,6 +1,5 @@
 package es.alten.controller.impl;
 
-import es.alten.bo.EpisodeBO;
 import es.alten.bo.SeasonBO;
 import es.alten.controller.SeasonController;
 import es.alten.domain.Season;
@@ -8,6 +7,8 @@ import es.alten.dto.SeasonDTO;
 import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import es.alten.exceptions.NotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,24 +33,21 @@ public class SeasonControllerImpl implements SeasonController {
 
   private static final Logger LOG = LoggerFactory.getLogger(SeasonControllerImpl.class);
   private final SeasonBO bo;
-  private final EpisodeBO episodeBO;
 
-  public SeasonControllerImpl(SeasonBO bo, EpisodeBO episodeBO) {
+  public SeasonControllerImpl(SeasonBO bo) {
     this.bo = bo;
-    this.episodeBO = episodeBO;
   }
 
   @Override
-  @ApiResponses(
-      value =
-          @ApiResponse(
-              responseCode = "200",
-              description = "OK",
-              content = {
-                @Content(
-                    mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = SeasonDTO.class)))
-              }))
+  @Operation(method = "GET", summary = "Get all seasons")
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = SeasonDTO.class)))
+      })
   @GetMapping
   public ResponseEntity<List<SeasonDTO>> findAll() {
     List<Season> seasonList = bo.findAll();
@@ -62,6 +61,20 @@ public class SeasonControllerImpl implements SeasonController {
   }
 
   @Override
+  @Operation(
+      method = "GET",
+      summary = "Get a season by identification",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(mediaType = "application/json", schema = @Schema(implementation = SeasonDTO.class))
+      })
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
   public ResponseEntity<SeasonDTO> findById(@PathVariable Long id) {
     Season season = bo.findOne(id);
@@ -74,9 +87,18 @@ public class SeasonControllerImpl implements SeasonController {
   }
 
   @Override
+  @Operation(method = "GET", summary = "Get all seasons by character name")
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = SeasonDTO.class)))
+      })
   @GetMapping(value = "/sorted", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<SeasonDTO>> findAllByCharacters(
-      @RequestParam(required = false, defaultValue = "") String characterName) {
+      @Parameter @RequestParam(required = false, defaultValue = "") String characterName) {
     LOG.info("Fetching results with character name {}", characterName);
     List<Season> seasonList = bo.findAllByCharacters(characterName);
     List<SeasonDTO> convertedSeasonList = new ArrayList<>();

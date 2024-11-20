@@ -19,14 +19,14 @@ public class UserControllerImpl
     implements UserController {
 
   private final UserBO bo;
-  private final PasswordEncoder passwordEncoder;
+  private final transient PasswordEncoder passwordEncoder;
 
   public UserControllerImpl(UserBO bo, PasswordEncoder passwordEncoder) {
       this.bo = bo;
       this.passwordEncoder = passwordEncoder;
   }
 
-  @PostMapping("/register")
+  @PostMapping
   public ResponseEntity<User> register(@RequestBody UserDTO userDTO) {
     if (!userDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");

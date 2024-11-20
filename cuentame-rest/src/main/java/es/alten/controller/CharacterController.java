@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CharacterController extends BaseController {
     ResponseEntity<List<CharacterDTO>> findAll();
-    ResponseEntity<CharacterDTO> findOne(Long id);
+    ResponseEntity<CharacterDTO> findById(Long id);
     ResponseEntity<Character> add(CharacterDTO characterDTO);
     ResponseEntity<Character> update(Long id, CharacterDTO characterDTO);
     ResponseEntity<CharacterDTO> delete(Long id);

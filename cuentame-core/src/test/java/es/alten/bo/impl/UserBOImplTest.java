@@ -28,7 +28,7 @@ class UserBOImplTest {
   UserRepository repository;
 
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     MockitoAnnotations.openMocks(this);
 
     this.userBO = new UserBOImpl(repository);
@@ -36,10 +36,10 @@ class UserBOImplTest {
 
   @Test
   void testFindByEmail() {
-    User mock_user = new User();
-    mock_user.setId(Long.valueOf(1));
-    mock_user.setEmail(EMAIL_PRUEBA);
-    when(repository.findByEmail(anyString())).thenReturn(mock_user);
+    User mockUser = new User();
+    mockUser.setId(1L);
+    mockUser.setEmail(EMAIL_PRUEBA);
+    when(repository.findByEmail(anyString())).thenReturn(mockUser);
     User userBBDD = userBO.findByEmail(EMAIL_PRUEBA);
 
     verify(repository, times(1)).findByEmail(EMAIL_PRUEBA);

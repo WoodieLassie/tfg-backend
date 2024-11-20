@@ -8,6 +8,12 @@ import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import es.alten.exceptions.NotFoundException;
 import es.alten.utils.ImageUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +41,15 @@ public class ImageControllerImpl implements ImageController {
   }
 
   @Override
+  @Operation(method = "GET", summary = "Get all images")
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = ImageDTO.class)))
+      })
   @GetMapping
   public ResponseEntity<List<ImageDTO>> findAll() {
     List<Image> images = bo.findAll();
@@ -54,8 +69,17 @@ public class ImageControllerImpl implements ImageController {
   }
 
   @Override
-  @GetMapping(params = {"name"})
-  public ResponseEntity<List<ImageDTO>> findByName(@RequestParam String name) {
+  @Operation(method = "GET", summary = "Get all images by name")
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = ImageDTO.class)))
+      })
+  @GetMapping(value = "/sorted", params = {"name"})
+  public ResponseEntity<List<ImageDTO>> findByName(@Parameter @RequestParam String name) {
     List<Image> images = bo.findByName(name);
     List<ImageDTO> convertedImages = new ArrayList<>();
     for (Image image : images) {
@@ -73,6 +97,20 @@ public class ImageControllerImpl implements ImageController {
   }
 
   @Override
+  @Operation(
+      method = "GET",
+      summary = "Get an image by identification",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(mediaType = "image/png", schema = @Schema(hidden = true))
+      })
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @GetMapping(produces = MediaType.IMAGE_PNG_VALUE, value = "/{id}")
   public ResponseEntity<byte[]> findById(@PathVariable Long id) {
     byte[] imageData = bo.findById(id);

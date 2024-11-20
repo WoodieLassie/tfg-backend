@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UserFilDTOTest {
+class UserFilDTOTest {
 
   UserFilterDTO userFilterDTO;
 
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     userFilterDTO = new UserFilterDTO();
   }
 

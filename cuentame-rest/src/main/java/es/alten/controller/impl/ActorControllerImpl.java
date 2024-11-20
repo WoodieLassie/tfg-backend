@@ -10,6 +10,12 @@ import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import es.alten.exceptions.NotFoundException;
 import es.alten.utils.ImageUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,6 +42,15 @@ public class ActorControllerImpl implements ActorController {
   }
 
   @Override
+  @Operation(method = "GET", summary = "Get all actors")
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = ActorDTO.class)))
+      })
   @GetMapping
   public ResponseEntity<List<ActorDTO>> findAll() {
     List<Actor> actors = bo.findAll();
@@ -45,10 +60,10 @@ public class ActorControllerImpl implements ActorController {
       actorDTO.loadFromDomain(actor);
       if (actorDTO.getImageData() != null) {
         String actorImageDownloadUrl =
-                ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/api/actors/images/")
-                        .path(String.valueOf(actorDTO.getId()))
-                        .toUriString();
+            ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/actors/images/")
+                .path(String.valueOf(actorDTO.getId()))
+                .toUriString();
         actorDTO.setImageUrl(actorImageDownloadUrl);
       }
       convertedActors.add(actorDTO);
@@ -57,6 +72,20 @@ public class ActorControllerImpl implements ActorController {
   }
 
   @Override
+  @Operation(
+      method = "GET",
+      summary = "Get an actor by identification",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(mediaType = "application/json", schema = @Schema(implementation = ActorDTO.class))
+      })
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
   public ResponseEntity<ActorDTO> findById(@PathVariable Long id) {
     Actor actor = bo.findOne(id);
@@ -67,16 +96,28 @@ public class ActorControllerImpl implements ActorController {
     convertedActor.loadFromDomain(actor);
     if (convertedActor.getImageData() != null) {
       String actorImageDownloadUrl =
-              ServletUriComponentsBuilder.fromCurrentContextPath()
-                      .path("/api/actors/images/")
-                      .path(String.valueOf(convertedActor.getId()))
-                      .toUriString();
+          ServletUriComponentsBuilder.fromCurrentContextPath()
+              .path("/api/actors/images/")
+              .path(String.valueOf(convertedActor.getId()))
+              .toUriString();
       convertedActor.setImageUrl(actorImageDownloadUrl);
     }
     return ResponseEntity.ok(convertedActor);
   }
 
   @Override
+  @Operation(
+      method = "GET",
+      summary = "Get an actor image by actor identification",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {@Content(mediaType = "image/png", schema = @Schema(hidden = true))})
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> findImageById(@PathVariable Long id) {
     byte[] image = bo.findImageById(id);
@@ -144,6 +185,7 @@ public class ActorControllerImpl implements ActorController {
     bo.save(actor);
     return ResponseEntity.noContent().build();
   }
+
   @Override
   @DeleteMapping("/{id}")
   public ResponseEntity<ActorDTO> delete(@PathVariable Long id) {

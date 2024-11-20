@@ -12,6 +12,11 @@ import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import es.alten.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +49,15 @@ public class EpisodeControllerImpl implements EpisodeController {
   }
 
   @Override
+  @Operation(summary = "Get all episodes")
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = EpisodeDTO.class)))
+      })
   @GetMapping
   public ResponseEntity<List<EpisodeDTO>> findAll() {
     List<Episode> episodeList = bo.findAll();
@@ -68,14 +82,23 @@ public class EpisodeControllerImpl implements EpisodeController {
     return ResponseEntity.ok(convertedEpisode);
   }
 
-  @Operation(summary = "Get element by season identification, episode title and episode number")
+  // TODO: Cambiar Schema de este endpoint
+  @Operation(summary = "Get all episodes by season identification, title and episode number")
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = EpisodeDTO.class)))
+      })
   @GetMapping(value = "/sorted", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Page<EpisodeDTO>> findAllSortedAndPaged(
-      @RequestParam(required = false) Long seasonId,
-      @RequestParam(required = false, defaultValue = "") String title,
-      @RequestParam(required = false) Integer episodeNum,
-      @RequestParam(defaultValue = "0") Integer page,
-      @PageableDefault(size = 5) Pageable pageable) {
+      @Parameter @RequestParam(required = false) Long seasonId,
+      @Parameter @RequestParam(required = false, defaultValue = "") String title,
+      @Parameter @RequestParam(required = false) Integer episodeNum,
+      @Parameter @RequestParam(defaultValue = "0") Integer page,
+      @Parameter(hidden = true) @PageableDefault(size = 5) Pageable pageable) {
     LOG.info(
         "Fetching results with season id {} and title {} and episode number {}",
         seasonId,

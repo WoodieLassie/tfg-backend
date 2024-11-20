@@ -4,7 +4,6 @@ import es.alten.bo.ImageBO;
 import es.alten.dao.ImageRepository;
 import es.alten.domain.Image;
 import es.alten.domain.QImage;
-import es.alten.dto.ImageDTO;
 import es.alten.dto.ImageFilterDTO;
 import es.alten.utils.ImageUtil;
 import org.slf4j.Logger;

@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UserDTOTest {
+class UserDTOTest {
 
   UserDTO userDTO = new UserDTO();
 
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     userDTO = new UserDTO();
   }
 

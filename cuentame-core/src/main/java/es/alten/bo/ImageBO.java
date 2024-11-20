@@ -2,7 +2,6 @@ package es.alten.bo;
 
 import es.alten.domain.Image;
 import es.alten.domain.QImage;
-import es.alten.dto.ImageDTO;
 import es.alten.dto.ImageFilterDTO;
 
 import java.util.List;
