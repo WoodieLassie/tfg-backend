@@ -155,7 +155,7 @@ public class ActorControllerImpl implements ActorController {
     Character character = characterBO.findOne(actorDTO.getCharacterId());
     if (character == null) {
       throw new NotExistingIdException(
-          "Character with id " + newActorInfo.getCharacter().getId() + " does not exist");
+          "Character with id " + actorDTO.getCharacterId() + " does not exist");
     }
     newActorInfo.setCharacter(character);
     newActorInfo.setId(id);

@@ -74,10 +74,15 @@ public class Audit extends ElvisEntity {
       Long userLoggedId = Constants.ANONYMOUS_USER;
       if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal()
           .equals("anonymousUser")) {
-        userLoggedId = Long
-            .valueOf(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                .getUsername());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2IntrospectionAuthenticatedPrincipal principal = (OAuth2IntrospectionAuthenticatedPrincipal) authentication.getPrincipal();
+        LinkedHashMap<String, String> principalAttributes = (LinkedHashMap<String, String>) principal.getAttributes().get("java.security.Principal");
+        Object userDetails = principalAttributes.get("details");
+        LinkedHashMap<String, Object> userDetailsHashMap = (LinkedHashMap<String, Object>) userDetails;
+        Integer userId = (Integer) userDetailsHashMap.get("id");
+        userLoggedId = Long.valueOf(userId);
       }
+      this.deleted = 0;
       this.updatedBy = userLoggedId;
     }
   }

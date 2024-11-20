@@ -34,7 +34,7 @@ public class EpisodeBOImpl
   }
 
   @Override
-  public Episode findOne(Long id) {
+  public Episode findOneWithCharacters(Long id) {
     LOG.debug("EpisodeBOImpl: findOne");
     Optional<Episode> episodeOptional = repository.findById(id);
     Episode episode = new Episode();

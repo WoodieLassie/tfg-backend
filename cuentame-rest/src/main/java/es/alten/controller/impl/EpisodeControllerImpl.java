@@ -74,7 +74,7 @@ public class EpisodeControllerImpl implements EpisodeController {
   @Override
   @GetMapping("/{id}")
   public ResponseEntity<EpisodeDTO> findById(@PathVariable Long id) {
-    Episode episode = bo.findOne(id);
+    Episode episode = bo.findOneWithCharacters(id);
     if (episode == null) {
       throw new NotFoundException();
     }
@@ -158,12 +158,12 @@ public class EpisodeControllerImpl implements EpisodeController {
     List<Long> characterIds =
         episodeDTO.getCharacterIds();
     List<Character> charactersInfo = characterBO.findAllById(characterIds);
-    if (newEpisodeInfo.getCharacters().size() != charactersInfo.size()) {
+    if (characterIds.size() != charactersInfo.size()) {
       throw new NotExistingIdException("Some characters provided in request body do not exist");
     }
     if (season == null) {
       throw new NotExistingIdException(
-          "Season with id " + newEpisodeInfo.getSeason().getId() + " does not exist");
+          "Season with id " + episodeDTO.getSeasonId() + " does not exist");
     }
     newEpisodeInfo.setCharacters(charactersInfo);
     newEpisodeInfo.setSeason(season);
