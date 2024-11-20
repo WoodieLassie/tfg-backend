@@ -195,6 +195,10 @@ public class EpisodeControllerImpl implements EpisodeController {
       responseCode = "204",
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @DeleteMapping("/{id}")
   public ResponseEntity<EpisodeDTO> delete(@PathVariable Long id) {
     bo.delete(id);

@@ -18,26 +18,31 @@ public class UserDTO extends ElvisBaseDTO<User> {
 
   private static final long serialVersionUID = 883832912345648321L;
 
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   @NotNull
-  private String email;
+  private Long id;
+
+  @NotNull private String email;
+
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
 
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Integer deleted;
+
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Date createDate;
+
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Date updateDate;
+
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Long createdBy;
+
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Long updatedBy;
 
   public boolean allFieldsArePresent() {
-    return Stream.of(
-                    this.email,
-                    this.password)
-            .allMatch(Objects::nonNull);
+    return Stream.of(this.email, this.password).allMatch(Objects::nonNull);
   }
 }

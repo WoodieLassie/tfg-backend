@@ -23,4 +23,5 @@ public interface SeasonRepository
     Optional<Season> findById(@Param("id") Long id);
     @Query("SELECT e FROM Episode e LEFT JOIN FETCH e.characters c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%')) ORDER BY e.id")
     List<Episode> findAllByCharacter(@Param("name") String name);
+    Boolean existsBySeasonNum(Integer seasonNum);
 }

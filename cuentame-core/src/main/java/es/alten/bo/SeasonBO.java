@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface SeasonBO extends GenericCRUDService<Season, Long, QSeason, SeasonFilterDTO> {
     List<Season> findAllByCharacters(String name);
+    Boolean existsBySeasonNum(Integer seasonNum);
 }

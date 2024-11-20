@@ -16,6 +16,7 @@ import java.io.Serial;
 public class ImageDTO extends ElvisBaseDTO<Image> {
   @Serial private static final long serialVersionUID = 6743758202702488764L;
 
+  @NotNull private Long id;
   @NotNull private String name;
   @NotNull private String type;
   @JsonIgnore @NotNull private byte[] imageData;

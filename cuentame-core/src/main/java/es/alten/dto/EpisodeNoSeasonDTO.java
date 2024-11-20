@@ -18,6 +18,10 @@ import java.util.List;
 public class EpisodeNoSeasonDTO extends ElvisBaseDTO<Episode> {
   @Serial private static final long serialVersionUID = -637798618800399514L;
 
+  @Schema(description = "Episode identification")
+  @NotNull
+  private Long id;
+
   @Schema(description = "Episode number")
   @NotNull
   private Integer episodeNum;

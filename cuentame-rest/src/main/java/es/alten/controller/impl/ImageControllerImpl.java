@@ -121,7 +121,12 @@ public class ImageControllerImpl implements ImageController {
   }
 
   @Override
-  @PostMapping
+  @Operation(method = "POST", summary = "Save a new image")
+  @ApiResponse(
+          responseCode = "201",
+          description = "Created",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Image> add(@RequestParam("image") MultipartFile file) {
     if (file.getSize() == 0) {
       throw new BadInputException("A file must be attached to request");
@@ -143,7 +148,16 @@ public class ImageControllerImpl implements ImageController {
   }
 
   @Override
-  @PatchMapping("/{id}")
+  @Operation(method = "PATCH", summary = "Edit an existing image", parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+          responseCode = "204",
+          description = "No content",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
+  @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Image> update(
       @PathVariable Long id, @RequestParam("image") MultipartFile file) {
     if (file.getSize() == 0) {
@@ -172,6 +186,15 @@ public class ImageControllerImpl implements ImageController {
   }
 
   @Override
+  @Operation(method = "DELETE", summary = "Delete an image", parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+          responseCode = "204",
+          description = "No content",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @DeleteMapping("/{id}")
   public ResponseEntity<ImageDTO> delete(@PathVariable Long id) {
     bo.delete(id);

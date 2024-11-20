@@ -56,4 +56,8 @@ public class SeasonBOImpl
     }
     return newSeasonList;
   }
+
+  public Boolean existsBySeasonNum(Integer seasonNum) {
+    return repository.existsBySeasonNum(seasonNum);
+  }
 }

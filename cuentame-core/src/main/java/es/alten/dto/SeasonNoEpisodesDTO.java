@@ -8,14 +8,15 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
-@Schema(name = "SeasonNoEpisodesDTO", description = "Data transfer object. Season without episode data")
+@Schema(
+    name = "SeasonNoEpisodesDTO",
+    description = "Data transfer object. Season without episode data")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SeasonNoEpisodesDTO extends ElvisBaseDTO<Season>{
-    @Serial
-    private static final long serialVersionUID = -8617926782001985439L;
+public class SeasonNoEpisodesDTO extends ElvisBaseDTO<Season> {
+  @Serial private static final long serialVersionUID = -8617926782001985439L;
 
-    @NotNull
-    private Integer seasonNum;
-    @NotNull private String description;
+  @NotNull private Long id;
+  @NotNull private Integer seasonNum;
+  @NotNull private String description;
 }

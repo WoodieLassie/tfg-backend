@@ -1,5 +1,6 @@
 package es.alten.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import es.alten.domain.Episode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +15,10 @@ import java.util.stream.Stream;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class EpisodeInputDTO extends ElvisBaseDTO<Episode> {
+  private static final long serialVersionUID = -4157249428593446209L;
+
+  @JsonIgnore private Long id;
+
   @Schema(description = "Episode number")
   @NotNull
   private Integer episodeNum;
@@ -35,6 +40,6 @@ public class EpisodeInputDTO extends ElvisBaseDTO<Episode> {
 
   public boolean allFieldsArePresent() {
     return Stream.of(this.episodeNum, this.title, this.summary, this.seasonId, this.characterIds)
-            .allMatch(Objects::nonNull);
+        .allMatch(Objects::nonNull);
   }
 }

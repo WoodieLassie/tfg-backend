@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class CharacterNoActorsDTO extends ElvisBaseDTO<Character> {
+  @NotNull private Long id;
   @NotNull private String name;
   @NotNull private String description;
   @NotNull private String gender;

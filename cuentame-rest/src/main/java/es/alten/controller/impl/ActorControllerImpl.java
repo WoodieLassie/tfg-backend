@@ -222,6 +222,10 @@ public class ActorControllerImpl implements ActorController {
       responseCode = "204",
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @DeleteMapping("/{id}")
   public ResponseEntity<ActorDTO> delete(@PathVariable Long id) {
     bo.delete(id);

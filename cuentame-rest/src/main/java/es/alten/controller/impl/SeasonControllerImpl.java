@@ -5,6 +5,7 @@ import es.alten.controller.SeasonController;
 import es.alten.domain.Season;
 import es.alten.dto.SeasonDTO;
 import es.alten.dto.SeasonInputDTO;
+import es.alten.exceptions.AlreadyExistsException;
 import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import es.alten.exceptions.NotFoundException;
@@ -122,6 +123,10 @@ public class SeasonControllerImpl implements SeasonController {
     if (!seasonDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
+    if (bo.existsBySeasonNum(seasonDTO.getSeasonNum())) {
+      throw new AlreadyExistsException("Season with number " + seasonDTO.getSeasonNum() + " already exists");
+    }
+
     Season season = seasonDTO.obtainDomainObject();
     bo.save(season);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
@@ -161,6 +166,10 @@ public class SeasonControllerImpl implements SeasonController {
           responseCode = "204",
           description = "No content",
           content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @DeleteMapping("/{id}")
   public ResponseEntity<SeasonDTO> delete(@PathVariable Long id) {
     bo.delete(id);

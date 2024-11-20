@@ -31,7 +31,7 @@ public abstract class ElvisBaseDTO<T extends ElvisEntity> implements Serializabl
   @JsonIgnore
   private final Class<T> entityType;
   /** Entity identifier. */
-  @Schema(name = "Object identification", example = "2")
+  @Schema
   private Long id;
 
   /**
