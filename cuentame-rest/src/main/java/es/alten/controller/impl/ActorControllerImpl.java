@@ -6,6 +6,7 @@ import es.alten.controller.ActorController;
 import es.alten.domain.Actor;
 import es.alten.domain.Character;
 import es.alten.dto.ActorDTO;
+import es.alten.dto.ActorInputDTO;
 import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import es.alten.exceptions.NotFoundException;
@@ -129,12 +130,12 @@ public class ActorControllerImpl implements ActorController {
 
   @Override
   @PostMapping
-  public ResponseEntity<Actor> add(@RequestBody ActorDTO actorDTO) {
+  public ResponseEntity<Actor> add(@RequestBody ActorInputDTO actorDTO) {
     if (!actorDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
     Actor actor = actorDTO.obtainDomainObject();
-    Character character = characterBO.findOne(actor.getCharacter().getId());
+    Character character = characterBO.findOne(actorDTO.getCharacterId());
     actor.setCharacter(character);
     bo.save(actor);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
@@ -142,7 +143,7 @@ public class ActorControllerImpl implements ActorController {
 
   @Override
   @PatchMapping("/{id}")
-  public ResponseEntity<Actor> update(@PathVariable Long id, @RequestBody ActorDTO actorDTO) {
+  public ResponseEntity<Actor> update(@PathVariable Long id, @RequestBody ActorInputDTO actorDTO) {
     if (!actorDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
@@ -151,7 +152,7 @@ public class ActorControllerImpl implements ActorController {
     if (actor == null) {
       throw new NotExistingIdException("Actor with id " + id + " does not exist");
     }
-    Character character = characterBO.findOne(newActorInfo.getCharacter().getId());
+    Character character = characterBO.findOne(actorDTO.getCharacterId());
     if (character == null) {
       throw new NotExistingIdException(
           "Character with id " + newActorInfo.getCharacter().getId() + " does not exist");

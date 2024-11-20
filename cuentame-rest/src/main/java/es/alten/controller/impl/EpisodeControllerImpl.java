@@ -8,6 +8,7 @@ import es.alten.domain.Character;
 import es.alten.domain.Episode;
 import es.alten.domain.Season;
 import es.alten.dto.EpisodeDTO;
+import es.alten.dto.EpisodeInputDTO;
 import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import es.alten.exceptions.NotFoundException;
@@ -121,20 +122,20 @@ public class EpisodeControllerImpl implements EpisodeController {
 
   @Override
   @PostMapping
-  public ResponseEntity<Episode> add(@RequestBody EpisodeDTO episodeDTO) {
+  public ResponseEntity<Episode> add(@RequestBody EpisodeInputDTO episodeDTO) {
     if (!episodeDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
     Episode episode = episodeDTO.obtainDomainObject();
-    Season season = seasonBO.findOne(episode.getSeason().getId());
-    List<Long> charactersIds = episode.getCharacters().stream().map(Character::getId).toList();
-    List<Character> charactersInfo = characterBO.findAllById(charactersIds);
-    if (episode.getCharacters().size() != charactersInfo.size()) {
+    Season season = seasonBO.findOne(episodeDTO.getSeasonId());
+    List<Long> characterIds = episodeDTO.getCharacterIds();
+    List<Character> charactersInfo = characterBO.findAllById(characterIds);
+    if (characterIds.size() != charactersInfo.size()) {
       throw new NotExistingIdException("Some characters provided in request body do not exist");
     }
     if (season == null) {
       throw new NotExistingIdException(
-          "Season with id " + episode.getSeason().getId() + " does not exist");
+          "Season with id " + episodeDTO.getSeasonId() + " does not exist");
     }
     episode.setCharacters(charactersInfo);
     episode.setSeason(season);
@@ -144,7 +145,7 @@ public class EpisodeControllerImpl implements EpisodeController {
 
   @Override
   @PatchMapping("/{id}")
-  public ResponseEntity<Episode> update(@PathVariable Long id, @RequestBody EpisodeDTO episodeDTO) {
+  public ResponseEntity<Episode> update(@PathVariable Long id, @RequestBody EpisodeInputDTO episodeDTO) {
     if (!episodeDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
@@ -153,10 +154,10 @@ public class EpisodeControllerImpl implements EpisodeController {
       throw new NotExistingIdException("Episode with id " + id + " does not exist");
     }
     Episode newEpisodeInfo = episodeDTO.obtainDomainObject();
-    Season season = seasonBO.findOne(newEpisodeInfo.getSeason().getId());
-    List<Long> charactersIds =
-        newEpisodeInfo.getCharacters().stream().map(Character::getId).toList();
-    List<Character> charactersInfo = characterBO.findAllById(charactersIds);
+    Season season = seasonBO.findOne(episodeDTO.getSeasonId());
+    List<Long> characterIds =
+        episodeDTO.getCharacterIds();
+    List<Character> charactersInfo = characterBO.findAllById(characterIds);
     if (newEpisodeInfo.getCharacters().size() != charactersInfo.size()) {
       throw new NotExistingIdException("Some characters provided in request body do not exist");
     }

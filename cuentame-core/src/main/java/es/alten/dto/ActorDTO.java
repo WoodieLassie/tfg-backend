@@ -11,8 +11,6 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.sql.Date;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @Schema(name = "ActorDTO", description = "Data transfer object. Actor")
 @EqualsAndHashCode(callSuper = true)
@@ -33,15 +31,4 @@ public class ActorDTO extends ElvisBaseDTO<Actor> {
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   @JsonInclude(value = JsonInclude.Include.NON_NULL)
   private String imageUrl;
-
-  public boolean allFieldsArePresent() {
-    return Stream.of(
-            this.name,
-            this.birthDate,
-            this.nationality,
-            this.gender,
-            this.birthLocation,
-            this.character)
-        .allMatch(Objects::nonNull);
-  }
 }

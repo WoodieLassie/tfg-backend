@@ -5,6 +5,7 @@ import es.alten.controller.CharacterController;
 import es.alten.domain.Character;
 import es.alten.dto.ActorNoCharacterDTO;
 import es.alten.dto.CharacterDTO;
+import es.alten.dto.CharacterInputDTO;
 import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -104,7 +105,7 @@ public class CharacterControllerImpl implements CharacterController {
 
   @Override
   @PostMapping
-  public ResponseEntity<Character> add(@RequestBody CharacterDTO characterDTO) {
+  public ResponseEntity<Character> add(@RequestBody CharacterInputDTO characterDTO) {
     if (!characterDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
@@ -116,7 +117,7 @@ public class CharacterControllerImpl implements CharacterController {
   @Override
   @PatchMapping("/{id}")
   public ResponseEntity<Character> update(
-      @PathVariable Long id, @RequestBody CharacterDTO characterDTO) {
+      @PathVariable Long id, @RequestBody CharacterInputDTO characterDTO) {
     if (!characterDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }

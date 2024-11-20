@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.sql.Date;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Schema(name = "ActorInputDTO", description = "Data transfer object for input. Actor")
 @EqualsAndHashCode(callSuper = true)
@@ -18,4 +20,15 @@ public class ActorInputDTO extends ElvisBaseDTO<Actor> {
   @NotNull private String gender;
   @NotNull private String birthLocation;
   @NotNull private Long characterId;
+
+  public boolean allFieldsArePresent() {
+    return Stream.of(
+                    this.name,
+                    this.birthDate,
+                    this.nationality,
+                    this.gender,
+                    this.birthLocation,
+                    this.characterId)
+            .allMatch(Objects::nonNull);
+  }
 }

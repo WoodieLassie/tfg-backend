@@ -4,6 +4,7 @@ import es.alten.bo.SeasonBO;
 import es.alten.controller.SeasonController;
 import es.alten.domain.Season;
 import es.alten.dto.SeasonDTO;
+import es.alten.dto.SeasonInputDTO;
 import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import es.alten.exceptions.NotFoundException;
@@ -112,7 +113,7 @@ public class SeasonControllerImpl implements SeasonController {
 
   @Override
   @PostMapping
-  public ResponseEntity<Season> add(@RequestBody SeasonDTO seasonDTO) {
+  public ResponseEntity<Season> add(@RequestBody SeasonInputDTO seasonDTO) {
     if (!seasonDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
@@ -123,7 +124,7 @@ public class SeasonControllerImpl implements SeasonController {
 
   @Override
   @PatchMapping("/{id}")
-  public ResponseEntity<Season> update(@PathVariable Long id, @RequestBody SeasonDTO seasonDTO) {
+  public ResponseEntity<Season> update(@PathVariable Long id, @RequestBody SeasonInputDTO seasonDTO) {
     if (!seasonDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }

@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Objects;
+import java.util.stream.Stream;
+
 @Schema(name = "SeasonInputDTO", description = "Data transfer object for input. Season")
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -17,4 +20,8 @@ public class SeasonInputDTO extends ElvisBaseDTO<Season> {
   @Schema(description = "Season description")
   @NotNull
   private String description;
+
+    public boolean allFieldsArePresent() {
+        return Stream.of(this.seasonNum, this.description).allMatch(Objects::nonNull);
+    }
 }

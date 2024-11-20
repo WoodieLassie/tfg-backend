@@ -2,6 +2,7 @@ package es.alten.controller;
 
 import es.alten.domain.Episode;
 import es.alten.dto.EpisodeDTO;
+import es.alten.dto.EpisodeInputDTO;
 import es.alten.rest.BaseController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ public interface EpisodeController extends BaseController {
   ResponseEntity<EpisodeDTO> findById(Long id);
   ResponseEntity<Page<EpisodeDTO>> findAllSortedAndPaged(
       Long seasonId, String title, Integer episodeNum, Integer page, Pageable pageable);
-  ResponseEntity<Episode> add(EpisodeDTO episodeDTO);
-  ResponseEntity<Episode> update(Long id, EpisodeDTO episodeDTO);
+  ResponseEntity<Episode> add(EpisodeInputDTO episodeDTO);
+  ResponseEntity<Episode> update(Long id, EpisodeInputDTO episodeDTO);
   ResponseEntity<EpisodeDTO> delete(Long id);
 }

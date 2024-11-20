@@ -9,8 +9,6 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @Schema(name = "SeasonDTO", description = "Data transfer object. Season")
 @EqualsAndHashCode(callSuper = true)
@@ -29,8 +27,4 @@ public class SeasonDTO extends ElvisBaseDTO<Season> {
   @Schema(description = "Season episodes")
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private List<EpisodeNoSeasonDTO> episodes;
-
-  public boolean allFieldsArePresent() {
-    return Stream.of(this.seasonNum, this.description).allMatch(Objects::nonNull);
-  }
 }
