@@ -129,6 +129,11 @@ public class ActorControllerImpl implements ActorController {
   }
 
   @Override
+  @Operation(method = "POST", summary = "Save a new actor")
+  @ApiResponse(
+      responseCode = "201",
+      description = "Created",
+      content = {@Content(schema = @Schema(hidden = true))})
   @PostMapping
   public ResponseEntity<Actor> add(@RequestBody ActorInputDTO actorDTO) {
     if (!actorDTO.allFieldsArePresent()) {
@@ -142,6 +147,18 @@ public class ActorControllerImpl implements ActorController {
   }
 
   @Override
+  @Operation(
+      method = "PATCH",
+      summary = "Edit an existing actor",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @PatchMapping("/{id}")
   public ResponseEntity<Actor> update(@PathVariable Long id, @RequestBody ActorInputDTO actorDTO) {
     if (!actorDTO.allFieldsArePresent()) {
@@ -164,7 +181,19 @@ public class ActorControllerImpl implements ActorController {
   }
 
   @Override
-  @PatchMapping(value = "/image/{id}")
+  @Operation(
+      method = "PATCH",
+      summary = "Edit an existing actor image",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
+  @PatchMapping(value = "/image/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Actor> updateImageById(
       @PathVariable Long id, @RequestParam("image") MultipartFile file) {
     if (file.getSize() == 0) {
@@ -188,6 +217,11 @@ public class ActorControllerImpl implements ActorController {
   }
 
   @Override
+  @Operation(method = "DELETE", summary = "Delete an actor", parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
   @DeleteMapping("/{id}")
   public ResponseEntity<ActorDTO> delete(@PathVariable Long id) {
     bo.delete(id);

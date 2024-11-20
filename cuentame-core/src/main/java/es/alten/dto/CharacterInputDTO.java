@@ -14,10 +14,15 @@ import java.util.stream.Stream;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class CharacterInputDTO extends ElvisBaseDTO<Character> {
+  @Schema(description = "Character name")
   @NotNull private String name;
+  @Schema(description = "Character description")
   @NotNull private String description;
+  @Schema(description = "Character gender")
   @NotNull private String gender;
+  @Schema(description = "Character nationality")
   @NotNull private String nationality;
+  @Schema(description = "Character age")
   @NotNull private Integer age;
 
   public boolean allFieldsArePresent() {

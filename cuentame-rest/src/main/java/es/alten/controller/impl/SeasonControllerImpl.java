@@ -112,6 +112,11 @@ public class SeasonControllerImpl implements SeasonController {
   }
 
   @Override
+  @Operation(method = "POST", summary = "Save a new season")
+  @ApiResponse(
+          responseCode = "201",
+          description = "Created",
+          content = {@Content(schema = @Schema(hidden = true))})
   @PostMapping
   public ResponseEntity<Season> add(@RequestBody SeasonInputDTO seasonDTO) {
     if (!seasonDTO.allFieldsArePresent()) {
@@ -123,6 +128,18 @@ public class SeasonControllerImpl implements SeasonController {
   }
 
   @Override
+  @Operation(
+          method = "PATCH",
+          summary = "Edit an existing season",
+          parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+          responseCode = "204",
+          description = "No content",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @PatchMapping("/{id}")
   public ResponseEntity<Season> update(@PathVariable Long id, @RequestBody SeasonInputDTO seasonDTO) {
     if (!seasonDTO.allFieldsArePresent()) {
@@ -139,6 +156,11 @@ public class SeasonControllerImpl implements SeasonController {
   }
 
   @Override
+  @Operation(method = "DELETE", summary = "Delete a season", parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+          responseCode = "204",
+          description = "No content",
+          content = {@Content(schema = @Schema(hidden = true))})
   @DeleteMapping("/{id}")
   public ResponseEntity<SeasonDTO> delete(@PathVariable Long id) {
     bo.delete(id);

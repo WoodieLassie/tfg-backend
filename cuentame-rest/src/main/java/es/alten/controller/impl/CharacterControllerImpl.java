@@ -35,17 +35,15 @@ public class CharacterControllerImpl implements CharacterController {
   }
 
   @Override
-  @Operation(
-          method = "GET",
-          summary = "Get all characters")
+  @Operation(method = "GET", summary = "Get all characters")
   @ApiResponse(
-          responseCode = "200",
-          description = "OK",
-          content = {
-                  @Content(
-                          mediaType = "application/json",
-                          array = @ArraySchema(schema = @Schema(implementation = CharacterDTO.class)))
-          })
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = CharacterDTO.class)))
+      })
   @GetMapping
   public ResponseEntity<List<CharacterDTO>> findAll() {
     List<Character> characterList = bo.findAll();
@@ -104,6 +102,11 @@ public class CharacterControllerImpl implements CharacterController {
   }
 
   @Override
+  @Operation(method = "POST", summary = "Save a new character")
+  @ApiResponse(
+      responseCode = "201",
+      description = "Created",
+      content = {@Content(schema = @Schema(hidden = true))})
   @PostMapping
   public ResponseEntity<Character> add(@RequestBody CharacterInputDTO characterDTO) {
     if (!characterDTO.allFieldsArePresent()) {
@@ -115,6 +118,18 @@ public class CharacterControllerImpl implements CharacterController {
   }
 
   @Override
+  @Operation(
+      method = "PATCH",
+      summary = "Edit an existing character",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @PatchMapping("/{id}")
   public ResponseEntity<Character> update(
       @PathVariable Long id, @RequestBody CharacterInputDTO characterDTO) {
@@ -132,6 +147,11 @@ public class CharacterControllerImpl implements CharacterController {
   }
 
   @Override
+  @Operation(method = "DELETE", summary = "Delete a character", parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
   @DeleteMapping("/{id}")
   public ResponseEntity<CharacterDTO> delete(@PathVariable Long id) {
     bo.delete(id);

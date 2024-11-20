@@ -79,7 +79,8 @@ public class Audit extends ElvisEntity {
         LinkedHashMap<String, String> principalAttributes = (LinkedHashMap<String, String>) principal.getAttributes().get("java.security.Principal");
         Object userDetails = principalAttributes.get("details");
         LinkedHashMap<String, Object> userDetailsHashMap = (LinkedHashMap<String, Object>) userDetails;
-        Integer userId = (Integer) userDetailsHashMap.get("id");
+          assert userDetailsHashMap != null;
+          Integer userId = (Integer) userDetailsHashMap.get("id");
         userLoggedId = Long.valueOf(userId);
       }
       this.deleted = 0;
@@ -106,7 +107,8 @@ public class Audit extends ElvisEntity {
         LinkedHashMap<String, String> principalAttributes = (LinkedHashMap<String, String>) principal.getAttributes().get("java.security.Principal");
         Object userDetails = principalAttributes.get("details");
         LinkedHashMap<String, Object> userDetailsHashMap = (LinkedHashMap<String, Object>) userDetails;
-        Integer userId = (Integer) userDetailsHashMap.get("id");
+          assert userDetailsHashMap != null;
+          Integer userId = (Integer) userDetailsHashMap.get("id");
         userLoggedId = Long.valueOf(userId);
       }
       this.createdBy = userLoggedId;

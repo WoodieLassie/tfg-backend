@@ -121,6 +121,11 @@ public class EpisodeControllerImpl implements EpisodeController {
   }
 
   @Override
+  @Operation(method = "POST", summary = "Save a new episode")
+  @ApiResponse(
+      responseCode = "201",
+      description = "Created",
+      content = {@Content(schema = @Schema(hidden = true))})
   @PostMapping
   public ResponseEntity<Episode> add(@RequestBody EpisodeInputDTO episodeDTO) {
     if (!episodeDTO.allFieldsArePresent()) {
@@ -144,8 +149,21 @@ public class EpisodeControllerImpl implements EpisodeController {
   }
 
   @Override
+  @Operation(
+      method = "PATCH",
+      summary = "Edit an existing episode",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @PatchMapping("/{id}")
-  public ResponseEntity<Episode> update(@PathVariable Long id, @RequestBody EpisodeInputDTO episodeDTO) {
+  public ResponseEntity<Episode> update(
+      @PathVariable Long id, @RequestBody EpisodeInputDTO episodeDTO) {
     if (!episodeDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
@@ -155,8 +173,7 @@ public class EpisodeControllerImpl implements EpisodeController {
     }
     Episode newEpisodeInfo = episodeDTO.obtainDomainObject();
     Season season = seasonBO.findOne(episodeDTO.getSeasonId());
-    List<Long> characterIds =
-        episodeDTO.getCharacterIds();
+    List<Long> characterIds = episodeDTO.getCharacterIds();
     List<Character> charactersInfo = characterBO.findAllById(characterIds);
     if (characterIds.size() != charactersInfo.size()) {
       throw new NotExistingIdException("Some characters provided in request body do not exist");
@@ -173,6 +190,11 @@ public class EpisodeControllerImpl implements EpisodeController {
   }
 
   @Override
+  @Operation(method = "DELETE", summary = "Delete an episode", parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
   @DeleteMapping("/{id}")
   public ResponseEntity<EpisodeDTO> delete(@PathVariable Long id) {
     bo.delete(id);

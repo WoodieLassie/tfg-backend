@@ -14,11 +14,17 @@ import java.util.stream.Stream;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ActorInputDTO extends ElvisBaseDTO<Actor> {
+  @Schema(description = "Actor name")
   @NotNull private String name;
+  @Schema(description = "Actor birth date")
   @NotNull private Date birthDate;
+  @Schema(description = "Actor nationality")
   @NotNull private String nationality;
+  @Schema(description = "Actor gender")
   @NotNull private String gender;
+  @Schema(description = "Actor birth location")
   @NotNull private String birthLocation;
+  @Schema(description = "Identification of the character that this actor interprets")
   @NotNull private Long characterId;
 
   public boolean allFieldsArePresent() {

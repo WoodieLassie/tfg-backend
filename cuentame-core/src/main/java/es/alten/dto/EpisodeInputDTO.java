@@ -30,7 +30,7 @@ public class EpisodeInputDTO extends ElvisBaseDTO<Episode> {
   @NotNull
   private Long seasonId;
 
-  @Schema(description = "Character identifications")
+  @Schema(description = "Identifications of the characters that appear in this episode")
   private List<Long> characterIds;
 
   public boolean allFieldsArePresent() {
