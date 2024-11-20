@@ -47,5 +47,5 @@ CREATE TABLE ${sch}.actors (
   gender VARCHAR(100) NOT NULL,
   birth_location VARCHAR(100) NOT NULL,
   character_id BIGINT NOT NULL,
-  CONSTRAINT actors_fk_01 FOREIGN KEY (character_id) REFERENCES characters (id)
+  CONSTRAINT actors_fk_01 FOREIGN KEY (character_id) REFERENCES characters (id) ON DELETE CASCADE
 );

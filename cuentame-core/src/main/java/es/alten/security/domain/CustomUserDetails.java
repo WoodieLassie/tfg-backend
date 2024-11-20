@@ -1,11 +1,14 @@
 package es.alten.security.domain;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@Getter
+@EqualsAndHashCode(callSuper = false)
 public class CustomUserDetails extends User {
     private final Long id;
 
@@ -17,9 +20,5 @@ public class CustomUserDetails extends User {
     public CustomUserDetails(Long id, String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.id = id;
-    }
-
-    public Long getId() {
-        return this.id;
     }
 }

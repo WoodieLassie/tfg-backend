@@ -41,6 +41,6 @@ public class Character extends Audit {
   @NotNull
   private Integer age;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "character")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "character", cascade = CascadeType.REMOVE)
   private List<Actor> actors;
 }

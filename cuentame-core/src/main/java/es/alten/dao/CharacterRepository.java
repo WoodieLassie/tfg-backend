@@ -3,6 +3,7 @@ package es.alten.dao;
 import es.alten.domain.Character;
 import es.alten.domain.QCharacter;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -22,4 +23,10 @@ public interface CharacterRepository
     Optional<Character> findById(@Param("id") Long id);
     @Query("SELECT c FROM Character c LEFT JOIN FETCH c.actors a WHERE c.id IN :ids")
     List<Character> findAllById(@Param("ids") List<Long> ids);
+    @Modifying
+    @Query(value = "DELETE FROM episode_character e WHERE e.character_id = :id", nativeQuery = true)
+    void deleteFromRelatedTable(@Param("id") Long id);
+    @Modifying
+    @Query("DELETE FROM Character c WHERE c.id = :id")
+    void delete(@Param("id") Long id);
 }

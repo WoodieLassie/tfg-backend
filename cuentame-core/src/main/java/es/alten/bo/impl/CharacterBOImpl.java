@@ -30,4 +30,10 @@ public class CharacterBOImpl
         LOG.debug("CharacterBOImpl: findAllById");
         return repository.findAllById(ids);
     }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteFromRelatedTable(id);
+        repository.delete(id);
+    }
 }
