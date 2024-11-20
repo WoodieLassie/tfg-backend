@@ -1,10 +1,10 @@
 DROP TABLE IF EXISTS ${sch}.images;
-DROP TABLE IF EXISTS ${sch}.users;
 DROP TABLE IF EXISTS ${sch}.episode_character;
 DROP TABLE IF EXISTS ${sch}.actors;
 DROP TABLE IF EXISTS ${sch}.characters;
 DROP TABLE IF EXISTS ${sch}.episodes;
 DROP TABLE IF EXISTS ${sch}.seasons;
+DROP TABLE IF EXISTS ${sch}.users;
 
 CREATE TABLE ${sch}.seasons (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -1,6 +1,6 @@
 INSERT INTO oauth2_registered_client(id, client_id, client_id_issued_at, client_secret, client_name, client_authentication_methods, authorization_grant_types, scopes, client_settings, token_settings) VALUES
 ("d40168ee-cbd4-4833-85f2-65c289ec4a6d",
-"1",
+"d40168ee-cbd4-4833-85f2-65c289ec4a6d",
 "2024-11-19 11:16:13",
 "$2a$06$5jNY3ZlK8Dx4/XcyBnJ1iOIeEPcNy.fTrPIQpGBDUxX0qGvRzgXo6",
 "d40168ee-cbd4-4833-85f2-65c289ec4a6d",

@@ -8,6 +8,5 @@ import org.springframework.http.ResponseEntity;
 
 @SuppressWarnings("unused")
 public interface UserController extends BaseController {
-    ResponseEntity<String> login(String username, String password) throws JsonProcessingException;
     ResponseEntity<User> register(UserDTO userDTO);
 }

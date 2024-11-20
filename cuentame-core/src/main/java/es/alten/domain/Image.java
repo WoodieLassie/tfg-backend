@@ -13,13 +13,8 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "images")
-public class Image extends ElvisEntity {
+public class Image extends Audit {
     @Serial private static final long serialVersionUID = 7040125363430892302L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
-    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;

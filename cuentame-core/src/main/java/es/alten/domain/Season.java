@@ -16,13 +16,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "seasons")
-public class Season extends ElvisEntity {
+public class Season extends Audit {
   @Serial private static final long serialVersionUID = -789744819989480524L;
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", unique = true, nullable = false)
-  private Long id;
 
   @Column(name = "season_num", nullable = false, unique = true)
   @NotNull

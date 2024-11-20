@@ -29,7 +29,7 @@ public class CustomJdbcUserDetailsService implements UserDetailsService {
 
     final List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ADMIN"));
 
-    return new org.springframework.security.core.userdetails.User(username, user.getPassword(),
+    return new es.alten.security.domain.CustomUserDetails(user.getId(), username, user.getPassword(),
         true, true, true, true, authorities);
   }
 
