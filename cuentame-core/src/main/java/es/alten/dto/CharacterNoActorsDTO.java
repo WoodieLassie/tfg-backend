@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Schema(name = "CharacterDTO", description = "Data transfer object. Character without actor data")
+@Schema(name = "CharacterNoActorsDTO", description = "Data transfer object. Character without actor data")
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class CharacterNoActorsDTO extends ElvisBaseDTO<Character> {

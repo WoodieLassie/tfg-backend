@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 
 import java.sql.Date;
 
-@Schema(name = "ActorDTO", description = "Data transfer object. Actor")
+@Schema(name = "ActorNoCharacterDTO", description = "Data transfer object. Actor")
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ActorNoCharacterDTO extends ElvisBaseDTO<Actor> {

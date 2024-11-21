@@ -9,6 +9,7 @@ import es.alten.domain.Episode;
 import es.alten.domain.Season;
 import es.alten.dto.EpisodeDTO;
 import es.alten.dto.EpisodeInputDTO;
+import es.alten.dto.EpisodeSwaggerDTO;
 import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
 import es.alten.exceptions.NotFoundException;
@@ -72,6 +73,22 @@ public class EpisodeControllerImpl implements EpisodeController {
   }
 
   @Override
+  @Operation(
+      method = "GET",
+      summary = "Get an episode by identification",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {
+        @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = EpisodeSwaggerDTO.class))
+      })
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
   public ResponseEntity<EpisodeDTO> findById(@PathVariable Long id) {
     Episode episode = bo.findOneWithCharacters(id);
@@ -83,7 +100,6 @@ public class EpisodeControllerImpl implements EpisodeController {
     return ResponseEntity.ok(convertedEpisode);
   }
 
-  // TODO: Cambiar Schema de este endpoint
   @Operation(summary = "Get all episodes by season identification, title and episode number")
   @ApiResponse(
       responseCode = "200",
@@ -196,9 +212,9 @@ public class EpisodeControllerImpl implements EpisodeController {
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-          responseCode = "404",
-          description = "Not found",
-          content = @Content(schema = @Schema(hidden = true)))
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @DeleteMapping("/{id}")
   public ResponseEntity<EpisodeDTO> delete(@PathVariable Long id) {
     bo.delete(id);
