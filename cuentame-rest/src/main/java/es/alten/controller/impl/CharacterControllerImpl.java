@@ -8,6 +8,7 @@ import es.alten.dto.CharacterDTO;
 import es.alten.dto.CharacterInputDTO;
 import es.alten.exceptions.BadInputException;
 import es.alten.exceptions.NotExistingIdException;
+import es.alten.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -87,6 +88,9 @@ public class CharacterControllerImpl implements CharacterController {
   @GetMapping("/{id}")
   public ResponseEntity<CharacterDTO> findById(@PathVariable Long id) {
     Character character = bo.findOne(id);
+    if (character == null) {
+      throw new NotFoundException();
+    }
     CharacterDTO convertedCharacter = new CharacterDTO();
     convertedCharacter.loadFromDomain(character);
     for (ActorNoCharacterDTO actor : convertedCharacter.getActors()) {

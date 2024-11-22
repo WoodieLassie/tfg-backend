@@ -92,10 +92,10 @@ public class EpisodeControllerImpl implements EpisodeController {
           content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
   public ResponseEntity<EpisodeDTO> findById(@PathVariable Long id) {
-    Episode episode = bo.findOneWithCharacters(id);
-    if (episode == null) {
+    if (bo.findOne(id) == null) {
       throw new NotFoundException();
     }
+    Episode episode = bo.findOneWithCharacters(id);
     EpisodeDTO convertedEpisode = new EpisodeDTO();
     convertedEpisode.loadFromDomain(episode);
     return ResponseEntity.ok(convertedEpisode);
