@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,6 +60,37 @@ class SeasonBOImplTest {
     verify(repository, times(1)).findAllByCharacter(CHARACTER_NAME_TEST);
 
     Assertions.assertNotNull(dbSeasons);
-    Assertions.assertEquals(1, dbSeasons.size());
+    Assertions.assertEquals(mockSeasons.size(), dbSeasons.size());
+  }
+  @Test
+  void testExistsBySeasonNum() {
+    Season mockSeason = new Season();
+    mockSeason.setSeasonNum(1);
+    when(repository.existsBySeasonNum(mockSeason.getSeasonNum())).thenReturn(true);
+    Boolean dbSeasonExists = seasonBO.existsBySeasonNum(mockSeason.getSeasonNum());
+
+    verify(repository, times(1)).existsBySeasonNum(mockSeason.getSeasonNum());
+
+    Assertions.assertTrue(dbSeasonExists);
+  }
+  @Test
+  void saveTest() {
+    Season mockSeason = new Season();
+    mockSeason.setId(1L);
+    given(repository.save(mockSeason)).willReturn(mockSeason);
+    Season dbSeason = seasonBO.save(mockSeason);
+
+    verify(repository, times(1)).save(mockSeason);
+
+    Assertions.assertNotNull(dbSeason);
+    Assertions.assertEquals(mockSeason, dbSeason);
+  }
+  @Test
+  void deleteTest() {
+    Season mockSeason = new Season();
+    mockSeason.setId(1L);
+    willDoNothing().given(repository).deleteById(mockSeason.getId());
+    seasonBO.delete(mockSeason.getId());
+    verify(repository, times(1)).deleteById(mockSeason.getId());
   }
 }

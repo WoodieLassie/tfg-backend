@@ -27,21 +27,6 @@ public class UserDTO extends ElvisBaseDTO<User> {
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
 
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  private Integer deleted;
-
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  private Date createDate;
-
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  private Date updateDate;
-
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  private Long createdBy;
-
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  private Long updatedBy;
-
   public boolean allFieldsArePresent() {
     return Stream.of(this.email, this.password).allMatch(Objects::nonNull);
   }

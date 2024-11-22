@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,6 +143,7 @@ public class EpisodeControllerImpl implements EpisodeController {
       responseCode = "201",
       description = "Created",
       content = {@Content(schema = @Schema(hidden = true))})
+  @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Episode> add(@RequestBody EpisodeInputDTO episodeDTO) {
     if (!episodeDTO.allFieldsArePresent()) {
@@ -177,6 +179,7 @@ public class EpisodeControllerImpl implements EpisodeController {
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Episode> update(
       @PathVariable Long id, @RequestBody EpisodeInputDTO episodeDTO) {
@@ -215,6 +218,7 @@ public class EpisodeControllerImpl implements EpisodeController {
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<EpisodeDTO> delete(@PathVariable Long id) {
     bo.delete(id);

@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,5 +51,27 @@ class CharacterBOImplTest {
 
     Assertions.assertNotNull(dbCharacters);
     Assertions.assertEquals(3, dbCharacters.size());
+  }
+  @Test
+  void saveTest() {
+    Character mockCharacter = new Character();
+    mockCharacter.setId(1L);
+    given(repository.save(mockCharacter)).willReturn(mockCharacter);
+    Character dbCharacter = characterBO.save(mockCharacter);
+
+    verify(repository, times(1)).save(mockCharacter);
+
+    Assertions.assertNotNull(dbCharacter);
+    Assertions.assertEquals(mockCharacter, dbCharacter);
+  }
+  @Test
+  void deleteTest() {
+    Character mockCharacter = new Character();
+    mockCharacter.setId(1L);
+    willDoNothing().given(repository).deleteById(mockCharacter.getId());
+    willDoNothing().given(repository).deleteFromRelatedTable(mockCharacter.getId());
+    characterBO.delete(mockCharacter.getId());
+    verify(repository, times(1)).deleteById(mockCharacter.getId());
+    verify(repository, times(1)).deleteFromRelatedTable(mockCharacter.getId());
   }
 }

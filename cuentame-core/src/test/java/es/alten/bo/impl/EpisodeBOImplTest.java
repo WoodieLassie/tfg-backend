@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -76,5 +78,25 @@ class EpisodeBOImplTest {
 
     Assertions.assertNotNull(dbEpisodes);
     Assertions.assertEquals(mockEpisodes, dbEpisodes);
+  }
+  @Test
+  void saveTest() {
+    Episode mockEpisode = new Episode();
+    mockEpisode.setId(1L);
+    given(repository.save(mockEpisode)).willReturn(mockEpisode);
+    Episode dbEpisode = episodeBO.save(mockEpisode);
+
+    verify(repository, times(1)).save(mockEpisode);
+
+    Assertions.assertNotNull(dbEpisode);
+    Assertions.assertEquals(mockEpisode, dbEpisode);
+  }
+  @Test
+  void deleteTest() {
+    Episode mockEpisode = new Episode();
+    mockEpisode.setId(1L);
+    willDoNothing().given(repository).deleteById(mockEpisode.getId());
+    episodeBO.delete(mockEpisode.getId());
+    verify(repository, times(1)).deleteById(mockEpisode.getId());
   }
 }

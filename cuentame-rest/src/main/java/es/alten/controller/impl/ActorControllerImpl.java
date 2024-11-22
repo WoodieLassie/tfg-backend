@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -134,6 +135,7 @@ public class ActorControllerImpl implements ActorController {
       responseCode = "201",
       description = "Created",
       content = {@Content(schema = @Schema(hidden = true))})
+  @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Actor> add(@RequestBody ActorInputDTO actorDTO) {
     if (!actorDTO.allFieldsArePresent()) {
@@ -159,6 +161,7 @@ public class ActorControllerImpl implements ActorController {
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Actor> update(@PathVariable Long id, @RequestBody ActorInputDTO actorDTO) {
     if (!actorDTO.allFieldsArePresent()) {
@@ -193,6 +196,7 @@ public class ActorControllerImpl implements ActorController {
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @PatchMapping(value = "/image/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Actor> updateImageById(
       @PathVariable Long id, @RequestParam("image") MultipartFile file) {
@@ -226,6 +230,7 @@ public class ActorControllerImpl implements ActorController {
           responseCode = "404",
           description = "Not found",
           content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<ActorDTO> delete(@PathVariable Long id) {
     bo.delete(id);

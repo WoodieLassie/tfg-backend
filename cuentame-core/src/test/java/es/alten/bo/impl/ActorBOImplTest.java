@@ -13,34 +13,56 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ActorBOImplTest {
-    @InjectMocks
-    ActorBOImpl actorBO;
-    @Mock
-    ActorRepository repository;
+  @InjectMocks ActorBOImpl actorBO;
+  @Mock ActorRepository repository;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        this.actorBO = new ActorBOImpl(repository);
-    }
+  @BeforeEach
+  void setUp() {
+    MockitoAnnotations.openMocks(this);
+    this.actorBO = new ActorBOImpl(repository);
+  }
 
-    @Test
-    void testFindByImageId() {
-        Actor mockActor = new Actor();
-        byte[] mockImageData = "byte array mock".getBytes();
-        mockActor.setImageData(mockImageData);
-        mockActor.setId(1L);
+  @Test
+  void testFindByImageId() {
+    Actor mockActor = new Actor();
+    byte[] mockImageData = "byte array mock".getBytes();
+    mockActor.setImageData(mockImageData);
+    mockActor.setId(1L);
 
-        when(repository.findById(mockActor.getId())).thenReturn(Optional.of(mockActor));
-        Optional<Actor> dbActor = repository.findById(mockActor.getId());
+    when(repository.findById(mockActor.getId())).thenReturn(Optional.of(mockActor));
+    Optional<Actor> dbActor = repository.findById(mockActor.getId());
 
-        verify(repository, times(1)).findById(mockActor.getId());
+    verify(repository, times(1)).findById(mockActor.getId());
 
-        Assertions.assertNotNull(dbActor);
-        Assertions.assertArrayEquals(dbActor.get().getImageData(), mockImageData);
-    }
+    Assertions.assertNotNull(dbActor);
+    Assertions.assertArrayEquals(dbActor.get().getImageData(), mockImageData);
+  }
+
+  @Test
+  void saveTest() {
+    Actor mockActor = new Actor();
+    mockActor.setId(1L);
+    given(repository.save(mockActor)).willReturn(mockActor);
+    Actor dbActor = actorBO.save(mockActor);
+
+    verify(repository, times(1)).save(mockActor);
+
+    Assertions.assertNotNull(dbActor);
+    Assertions.assertEquals(mockActor, dbActor);
+  }
+
+  @Test
+  void deleteTest() {
+    Actor mockActor = new Actor();
+    mockActor.setId(1L);
+    willDoNothing().given(repository).deleteById(mockActor.getId());
+    actorBO.delete(mockActor.getId());
+    verify(repository, times(1)).deleteById(mockActor.getId());
+  }
 }

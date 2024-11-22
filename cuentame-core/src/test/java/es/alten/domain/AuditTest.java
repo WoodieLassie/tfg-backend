@@ -1,17 +1,15 @@
 package es.alten.domain;
 
-import es.alten.utils.Constants;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal;
 
 import java.text.ParseException;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,17 +21,26 @@ class AuditTest {
   Authentication auth;
 
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     audit = new Audit();
   }
 
   @Test
   void testCreateAuditInfo() throws ParseException {
     mockAuthentication();
+    Map<String, Object> mockAuthenticatedPrincipal = new LinkedHashMap<>();
+    Map<String, Object> mockDetails = new LinkedHashMap<>();
+    Map<String, Object> mockUserDetails = new LinkedHashMap<>();
+    mockUserDetails.put("id", 1);
+    mockDetails.put("details", mockUserDetails);
+    mockAuthenticatedPrincipal.put("java.security.Principal", mockDetails);
     when(auth.getPrincipal())
-        .thenReturn(new User(Constants.ANONYMOUS_USER.toString(), "", Collections.emptyList()));
+        .thenReturn(new OAuth2IntrospectionAuthenticatedPrincipal(mockAuthenticatedPrincipal, null));
     audit.createAuditInfo();
-    Assertions.assertEquals(Optional.empty(), Optional.empty());
+    Integer userId = (Integer) mockUserDetails.get("id");
+    Long userLoggedId = Long.valueOf(userId);
+    Assertions.assertEquals(userLoggedId, audit.getCreatedBy());
+    Assertions.assertEquals(userLoggedId, audit.getCreatedBy());
   }
 
   @Test
@@ -65,10 +72,18 @@ class AuditTest {
   @Test
   void testUpdateAuditInfo() throws ParseException {
     mockAuthentication();
+    Map<String, Object> mockAuthenticatedPrincipal = new LinkedHashMap<>();
+    Map<String, Object> mockDetails = new LinkedHashMap<>();
+    Map<String, Object> mockUserDetails = new LinkedHashMap<>();
+    mockUserDetails.put("id", 1);
+    mockDetails.put("details", mockUserDetails);
+    mockAuthenticatedPrincipal.put("java.security.Principal", mockDetails);
     when(auth.getPrincipal())
-        .thenReturn(new User(Constants.ANONYMOUS_USER.toString(), "", Collections.emptyList()));
-    audit.updateAuditInfo();
-    Assertions.assertEquals(Optional.empty(), Optional.empty());
+            .thenReturn(new OAuth2IntrospectionAuthenticatedPrincipal(mockAuthenticatedPrincipal, null));
+    audit.createAuditInfo();
+    Integer userId = (Integer) mockUserDetails.get("id");
+    Long userLoggedId = Long.valueOf(userId);
+    Assertions.assertEquals(userLoggedId, audit.getCreatedBy());
   }
 
   @Test

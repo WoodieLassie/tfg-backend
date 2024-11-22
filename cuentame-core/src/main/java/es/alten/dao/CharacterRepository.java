@@ -26,7 +26,4 @@ public interface CharacterRepository
     @Modifying
     @Query(value = "DELETE FROM episode_character e WHERE e.character_id = :id", nativeQuery = true)
     void deleteFromRelatedTable(@Param("id") Long id);
-    @Modifying
-    @Query("DELETE FROM Character c WHERE c.id = :id")
-    void delete(@Param("id") Long id);
 }

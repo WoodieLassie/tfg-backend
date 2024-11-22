@@ -1,9 +1,12 @@
 package es.alten.bo.impl;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,5 +50,25 @@ class UserBOImplTest {
     Assertions.assertNotNull(userBBDD);
     Assertions.assertEquals(userBBDD.getId(), Long.valueOf(1));
     Assertions.assertEquals(EMAIL_PRUEBA, userBBDD.getEmail());
+  }
+  @Test
+  void saveTest() {
+    User mockUser = new User();
+    mockUser.setId(1L);
+    given(repository.save(mockUser)).willReturn(mockUser);
+    User dbUser = userBO.save(mockUser);
+
+    verify(repository, times(1)).save(mockUser);
+
+    Assertions.assertNotNull(dbUser);
+    Assertions.assertEquals(mockUser, dbUser);
+  }
+  @Test
+  void deleteTest() {
+    User mockUser = new User();
+    mockUser.setId(1L);
+    willDoNothing().given(repository).deleteById(mockUser.getId());
+    userBO.delete(mockUser.getId());
+    verify(repository, times(1)).deleteById(mockUser.getId());
   }
 }

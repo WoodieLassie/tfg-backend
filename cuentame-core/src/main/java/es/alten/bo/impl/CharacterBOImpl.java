@@ -19,21 +19,22 @@ public class CharacterBOImpl
         Character, Long, QCharacter, CharacterFilterDTO, CharacterRepository>
     implements CharacterBO {
 
-    private static final long serialVersionUID = 5582874611771949151L;
-    private static final Logger LOG = LoggerFactory.getLogger(CharacterBOImpl.class);
+  private static final long serialVersionUID = 5582874611771949151L;
+  private static final Logger LOG = LoggerFactory.getLogger(CharacterBOImpl.class);
 
-    public CharacterBOImpl(CharacterRepository repository) {
-        super(repository);
-    }
+  public CharacterBOImpl(CharacterRepository repository) {
+    super(repository);
+  }
 
-    public List<Character> findAllById(List<Long> ids) {
-        LOG.debug("CharacterBOImpl: findAllById");
-        return repository.findAllById(ids);
-    }
+  public List<Character> findAllById(List<Long> ids) {
+    LOG.debug("CharacterBOImpl: findAllById");
+    return repository.findAllById(ids);
+  }
 
-    @Override
-    public void delete(Long id) {
-        repository.deleteFromRelatedTable(id);
-        repository.delete(id);
-    }
+  @Override
+  public void delete(Long id) {
+    LOG.debug("CharacterBOImpl: delete");
+    repository.deleteFromRelatedTable(id);
+    repository.deleteById(id);
+  }
 }
