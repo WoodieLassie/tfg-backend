@@ -24,6 +24,8 @@ public class User extends Audit {
   private String email;
 
   @Column(name = "password", nullable = false, length = 100)
+  @NotNull
+  @Size(max = 100)
   private String password;
 
 }

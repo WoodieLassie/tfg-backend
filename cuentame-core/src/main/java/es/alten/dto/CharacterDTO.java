@@ -22,6 +22,5 @@ public class CharacterDTO extends ElvisBaseDTO<Character> {
   @NotNull private String nationality;
   @NotNull private Integer age;
 
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private List<ActorNoCharacterDTO> actors;
 }

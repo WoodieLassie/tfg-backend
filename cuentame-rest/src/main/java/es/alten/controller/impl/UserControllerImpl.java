@@ -1,5 +1,6 @@
 package es.alten.controller.impl;
 
+import es.alten.dto.UserInputDTO;
 import es.alten.exceptions.AlreadyExistsException;
 import es.alten.exceptions.BadInputException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import es.alten.bo.UserBO;
 import es.alten.controller.UserController;
 import es.alten.domain.User;
-import es.alten.dto.UserDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -41,16 +41,16 @@ public class UserControllerImpl implements UserController {
       description = "Conflict",
       content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
-  public ResponseEntity<User> register(@RequestBody UserDTO userDTO) {
-    if (!userDTO.allFieldsArePresent()) {
+  public ResponseEntity<User> register(@RequestBody UserInputDTO userInputDTO) {
+    if (!userInputDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
-    User dbUser = bo.findByEmail(userDTO.getEmail());
+    User dbUser = bo.findByEmail(userInputDTO.getEmail());
     if (dbUser != null) {
-      throw new AlreadyExistsException("User with email " + userDTO.getEmail() + " already exists");
+      throw new AlreadyExistsException("User with email " + userInputDTO.getEmail() + " already exists");
     }
-    userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-    bo.save(userDTO.obtainDomainObject());
+    userInputDTO.setPassword(passwordEncoder.encode(userInputDTO.getPassword()));
+    bo.save(userInputDTO.obtainDomainObject());
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
 }

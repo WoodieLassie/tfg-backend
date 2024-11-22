@@ -29,6 +29,5 @@ public class SeasonDTO extends ElvisBaseDTO<Season> {
   private String description;
 
   @Schema(description = "Season episodes")
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private List<EpisodeNoSeasonDTO> episodes;
 }

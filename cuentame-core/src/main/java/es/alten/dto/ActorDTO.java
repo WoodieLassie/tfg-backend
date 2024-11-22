@@ -28,7 +28,6 @@ public class ActorDTO extends ElvisBaseDTO<Actor> {
 
   @JsonIgnore private byte[] imageData;
 
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   @JsonInclude(value = JsonInclude.Include.NON_NULL)
   private String imageUrl;
 }
