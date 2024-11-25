@@ -19,6 +19,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,7 @@ import java.util.Objects;
 @RequestMapping("/api/actors")
 @Tag(name = "actors")
 public class ActorControllerImpl implements ActorController {
+  private static final Logger LOG = LoggerFactory.getLogger(ActorControllerImpl.class);
   private final ActorBO bo;
   private final CharacterBO characterBO;
 
@@ -55,6 +58,7 @@ public class ActorControllerImpl implements ActorController {
       })
   @GetMapping
   public ResponseEntity<List<ActorDTO>> findAll() {
+    LOG.debug("ActorControllerImpl: Fetching all results");
     List<Actor> actors = bo.findAll();
     List<ActorDTO> convertedActors = new ArrayList<>();
     for (Actor actor : actors) {
@@ -90,6 +94,7 @@ public class ActorControllerImpl implements ActorController {
       content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
   public ResponseEntity<ActorDTO> findById(@PathVariable Long id) {
+    LOG.debug("ActorControllerImpl: Fetching results with id {}", id);
     Actor actor = bo.findOne(id);
     if (actor == null) {
       throw new NotFoundException();
@@ -122,6 +127,7 @@ public class ActorControllerImpl implements ActorController {
       content = @Content(schema = @Schema(hidden = true)))
   @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> findImageById(@PathVariable Long id) {
+    LOG.debug("ActorControllerImpl: Fetching image results with actor id {}", id);
     byte[] image = bo.findImageById(id);
     if (image == null || image.length == 0) {
       throw new NotFoundException();
@@ -143,7 +149,11 @@ public class ActorControllerImpl implements ActorController {
     }
     Actor actor = actorDTO.obtainDomainObject();
     Character character = characterBO.findOne(actorDTO.getCharacterId());
+    if (character == null) {
+      throw new NotExistingIdException("Character with id " + actorDTO.getCharacterId() + " does not exist");
+    }
     actor.setCharacter(character);
+    LOG.debug("ActorControllerImpl: Saving data");
     bo.save(actor);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
@@ -179,6 +189,7 @@ public class ActorControllerImpl implements ActorController {
     }
     newActorInfo.setCharacter(character);
     newActorInfo.setId(id);
+    LOG.debug("ActorControllerImpl: Modifying data with id {}", id);
     bo.save(newActorInfo);
     return ResponseEntity.noContent().build();
   }
@@ -216,6 +227,7 @@ public class ActorControllerImpl implements ActorController {
     } catch (IOException e) {
       throw new BadInputException(e);
     }
+    LOG.debug("ActorControllerImpl: Modifying image data with actor id {}", id);
     bo.save(actor);
     return ResponseEntity.noContent().build();
   }
@@ -233,6 +245,10 @@ public class ActorControllerImpl implements ActorController {
   @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<ActorDTO> delete(@PathVariable Long id) {
+    if (!bo.exists(id)) {
+      throw new NotFoundException("Actor with id " + id + " does not exist");
+    }
+    LOG.debug("ActorControllerImpl: Deleting data with id {}", id);
     bo.delete(id);
     return ResponseEntity.noContent().build();
   }

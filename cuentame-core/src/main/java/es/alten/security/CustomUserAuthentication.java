@@ -89,8 +89,8 @@ public class CustomUserAuthentication implements AuthenticationProvider {
     UserDetails result = null;
     final Object userDetails =
         SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (userDetails instanceof UserDetails) {
-      result = (UserDetails) userDetails;
+    if (userDetails instanceof UserDetails u) {
+      result = u;
     }
 
     return result;

@@ -48,10 +48,13 @@ public abstract class RestControllerImpl<T extends ElvisEntity, D extends ElvisB
    *
    * @noinspection SpringJavaAutowiredMembersInspection
    */
-  @Autowired
-  protected B bo;
+  protected final B bo;
 
-  @Override
+    protected RestControllerImpl(B bo) {
+        this.bo = bo;
+    }
+
+    @Override
   @PostConstruct
   @SuppressWarnings("all")
   public void init() {

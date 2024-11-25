@@ -2,7 +2,6 @@ package es.alten.utils;
 
 import es.alten.dto.ErrorDTO;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,9 +14,6 @@ class PageWrapperTest {
 
   private static final String DESC = "desc";
   private static final String URL = "url";
-
-  @BeforeEach
-  void setUp() throws Exception {}
 
   @Test
   <T> void testPageWrapper() {

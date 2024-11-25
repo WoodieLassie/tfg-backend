@@ -9,7 +9,7 @@ class ElvisEntityTest {
   ElvisEntity elvisEntity;
 
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     elvisEntity = new ElvisEntity() {};
   }
 

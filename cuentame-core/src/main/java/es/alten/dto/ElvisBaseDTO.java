@@ -40,7 +40,7 @@ public abstract class ElvisBaseDTO<T extends ElvisEntity> implements Serializabl
    * @noinspection all
    */
   @SuppressWarnings("unchecked")
-  public ElvisBaseDTO() {
+  protected ElvisBaseDTO() {
     // Gets form type used by child controller
     final ParameterizedType genericSuperclass =
         (ParameterizedType) getClass().getGenericSuperclass();

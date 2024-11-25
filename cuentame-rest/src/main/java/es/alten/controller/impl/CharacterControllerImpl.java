@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,7 @@ import java.util.List;
 @Tag(name = "characters")
 public class CharacterControllerImpl implements CharacterController {
 
+  private static final Logger LOG = LoggerFactory.getLogger(CharacterControllerImpl.class);
   private final CharacterBO bo;
 
   public CharacterControllerImpl(CharacterBO bo) {
@@ -48,6 +51,7 @@ public class CharacterControllerImpl implements CharacterController {
       })
   @GetMapping
   public ResponseEntity<List<CharacterDTO>> findAll() {
+    LOG.debug("CharacterControllerImpl: Fetching all results");
     List<Character> characterList = bo.findAll();
     List<CharacterDTO> convertedCharacterList = new ArrayList<>();
     for (Character character : characterList) {
@@ -87,6 +91,7 @@ public class CharacterControllerImpl implements CharacterController {
       content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
   public ResponseEntity<CharacterDTO> findById(@PathVariable Long id) {
+    LOG.debug("CharacterControllerImpl: Fetching results with id {}", id);
     Character character = bo.findOne(id);
     if (character == null) {
       throw new NotFoundException();
@@ -119,6 +124,7 @@ public class CharacterControllerImpl implements CharacterController {
       throw new BadInputException("All fields must be present in request body");
     }
     Character character = characterDTO.obtainDomainObject();
+    LOG.debug("CharacterControllerImpl: Saving data");
     bo.save(character);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
@@ -149,6 +155,7 @@ public class CharacterControllerImpl implements CharacterController {
       throw new NotExistingIdException("Character with id " + id + " does not exist");
     }
     newCharacterInfo.setId(character.getId());
+    LOG.debug("CharacterControllerImpl: Modifying data with id {}", id);
     bo.save(newCharacterInfo);
     return ResponseEntity.noContent().build();
   }
@@ -166,6 +173,10 @@ public class CharacterControllerImpl implements CharacterController {
   @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<CharacterDTO> delete(@PathVariable Long id) {
+    if (!bo.exists(id)) {
+      throw new NotFoundException("Character with id " + id + " does not exist");
+    }
+    LOG.debug("CharacterControllerImpl: Deleting data with id {}", id);
     bo.delete(id);
     return ResponseEntity.noContent().build();
   }

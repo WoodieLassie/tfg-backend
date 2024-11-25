@@ -63,6 +63,7 @@ public class EpisodeControllerImpl implements EpisodeController {
       })
   @GetMapping
   public ResponseEntity<List<EpisodeDTO>> findAll() {
+    LOG.debug("EpisodeControllerImpl: Fetching all results");
     List<Episode> episodeList = bo.findAll();
     List<EpisodeDTO> convertedEpisodeList = new ArrayList<>();
     for (Episode episode : episodeList) {
@@ -92,6 +93,7 @@ public class EpisodeControllerImpl implements EpisodeController {
           content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
   public ResponseEntity<EpisodeDTO> findById(@PathVariable Long id) {
+    LOG.debug("EpisodeControllerImpl: Fetching results with id {}", id);
     if (bo.findOne(id) == null) {
       throw new NotFoundException();
     }
@@ -117,7 +119,7 @@ public class EpisodeControllerImpl implements EpisodeController {
       @Parameter @RequestParam(required = false) Integer episodeNum,
       @Parameter @RequestParam(defaultValue = "0") Integer page,
       @Parameter(hidden = true) @PageableDefault(size = 5) Pageable pageable) {
-    LOG.info(
+    LOG.debug(
         "Fetching results with season id {} and title {} and episode number {}",
         seasonId,
         title,
@@ -162,6 +164,7 @@ public class EpisodeControllerImpl implements EpisodeController {
     }
     episode.setCharacters(charactersInfo);
     episode.setSeason(season);
+    LOG.debug("EpisodeControllerImpl: Saving data");
     bo.save(episode);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
@@ -204,6 +207,7 @@ public class EpisodeControllerImpl implements EpisodeController {
     newEpisodeInfo.setCharacters(charactersInfo);
     newEpisodeInfo.setSeason(season);
     newEpisodeInfo.setId(id);
+    LOG.debug("EpisodeControllerImpl: Modifying data with id {}", id);
     bo.save(newEpisodeInfo);
     return ResponseEntity.noContent().build();
   }
@@ -221,6 +225,10 @@ public class EpisodeControllerImpl implements EpisodeController {
   @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<EpisodeDTO> delete(@PathVariable Long id) {
+    if (!bo.exists(id)) {
+      throw new NotFoundException("Episode with id " + id + " does not exist");
+    }
+    LOG.debug("EpisodeControllerImpl: Deleting data with id {}", id);
     bo.delete(id);
     return ResponseEntity.noContent().build();
   }

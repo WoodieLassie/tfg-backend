@@ -11,7 +11,7 @@ class ObjectMapperTest {
   ObjectMapper mapper;
 
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     mapper = ObjectMapper.getInstance();
   }
 

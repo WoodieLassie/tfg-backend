@@ -3,8 +3,8 @@ package es.alten.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.alten.bo.CharacterBO;
 import es.alten.controller.impl.CharacterControllerImpl;
-import es.alten.domain.Actor;
 import es.alten.domain.Character;
+import es.alten.dto.CharacterDTO;
 import es.alten.dto.CharacterInputDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,11 +19,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ComponentScan(basePackages = "es.alten.cuentame.*")
@@ -36,16 +40,49 @@ class CharacterControllerImplTest {
   @MockBean private CharacterBO characterBO;
   @Autowired private ObjectMapper objectMapper;
 
-  private CharacterInputDTO mockCharacter;
+  private CharacterInputDTO mockInputCharacter;
+  private CharacterDTO mockCharacter;
 
   @BeforeEach
   void setUp() {
-    mockCharacter = new CharacterInputDTO();
-    mockCharacter.setDescription("desc");
-    mockCharacter.setNationality("nation");
+    mockInputCharacter = new CharacterInputDTO();
+    mockCharacter = new CharacterDTO();
+    mockInputCharacter.setDescription("desc");
+    mockInputCharacter.setNationality("nation");
+    mockInputCharacter.setGender("gender");
+    mockInputCharacter.setAge(23);
+    mockInputCharacter.setName("name");
+    mockCharacter.setId(1L);
+    mockCharacter.setNationality("nationality");
     mockCharacter.setGender("gender");
+    mockCharacter.setDescription("desc");
+    mockCharacter.setActors(new ArrayList<>());
     mockCharacter.setAge(23);
     mockCharacter.setName("name");
+  }
+
+  @Test
+  void findAllTest() throws Exception {
+    List<Character> mockCharacterList =
+        new ArrayList<>(List.of(mockCharacter.obtainDomainObject()));
+    List<CharacterDTO> mockCharacterDTOList = new ArrayList<>(List.of(mockCharacter));
+    given(characterBO.findAll()).willReturn(mockCharacterList);
+    ResultActions response = mockMvc.perform(get("/api/characters"));
+    response
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(content().json(objectMapper.writeValueAsString(mockCharacterDTOList)));
+  }
+
+  @Test
+  void findByIdTest() throws Exception {
+    Character mockCharacterEntity = mockCharacter.obtainDomainObject();
+    given(characterBO.findOne(mockCharacter.getId())).willReturn(mockCharacterEntity);
+    ResultActions response = mockMvc.perform(get("/api/characters/{id}", mockCharacter.getId()));
+    response
+        .andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(content().json(objectMapper.writeValueAsString(mockCharacter)));
   }
 
   @Test
@@ -56,13 +93,13 @@ class CharacterControllerImplTest {
         mockMvc.perform(
             post("/api/characters")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(mockCharacter)));
+                .content(objectMapper.writeValueAsString(mockInputCharacter)));
     response.andDo(print()).andExpect(status().isCreated());
   }
 
   @Test
   void updateTest() throws Exception {
-    Character mockDbCharacter = mockCharacter.obtainDomainObject();
+    Character mockDbCharacter = mockInputCharacter.obtainDomainObject();
     mockDbCharacter.setId(1L);
     CharacterInputDTO updatedCharacter = new CharacterInputDTO();
     updatedCharacter.setDescription("desc2");
@@ -80,12 +117,15 @@ class CharacterControllerImplTest {
                 .content(objectMapper.writeValueAsString(updatedCharacter)));
     response.andDo(print()).andExpect(status().isNoContent());
   }
+
   @Test
   void deleteTest() throws Exception {
-    Character mockDbCharacter = mockCharacter.obtainDomainObject();
+    Character mockDbCharacter = mockInputCharacter.obtainDomainObject();
     mockDbCharacter.setId(1L);
+    given(characterBO.exists(mockCharacter.getId())).willReturn(true);
     willDoNothing().given(characterBO).delete(mockDbCharacter.getId());
-    ResultActions response = mockMvc.perform(delete("/api/characters/{id}", mockDbCharacter.getId()));
+    ResultActions response =
+        mockMvc.perform(delete("/api/characters/{id}", mockDbCharacter.getId()));
     response.andExpect(status().isNoContent()).andDo(print());
   }
 }

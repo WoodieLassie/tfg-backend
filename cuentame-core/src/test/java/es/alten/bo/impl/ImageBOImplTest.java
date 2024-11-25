@@ -1,7 +1,6 @@
 package es.alten.bo.impl;
 
 import es.alten.dao.ImageRepository;
-import es.alten.domain.Episode;
 import es.alten.domain.Image;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +20,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ImageBOImplTest {
+class ImageBOImplTest {
 
   private static final String IMAGE_TEST_NAME = "name";
 

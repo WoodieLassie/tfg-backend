@@ -3,7 +3,6 @@ package es.alten.web.impl;
 import es.alten.web.BaseController;
 import es.alten.web.NavSection;
 import es.alten.web.i18n.CustomReloadableResourceBundleMessageSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.ArrayList;
@@ -40,9 +39,13 @@ public abstract class BaseControllerImpl implements BaseController {
    *
    * @noinspection SpringJavaAutowiredMembersInspection
    */
-  @Autowired protected transient CustomReloadableResourceBundleMessageSource messageSource;
+  protected final transient CustomReloadableResourceBundleMessageSource messageSource;
 
-  /**
+    protected BaseControllerImpl(CustomReloadableResourceBundleMessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+    /**
    * Adds an attribute 'i18n' to each HTTP response. Messages list stores information, validation
    * and error i18n to show the final user.
    *

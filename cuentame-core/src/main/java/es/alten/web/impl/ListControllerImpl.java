@@ -2,9 +2,10 @@ package es.alten.web.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+
+import es.alten.web.i18n.CustomReloadableResourceBundleMessageSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,18 +22,23 @@ import es.alten.web.ListController;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 
-
 /**
  * Implements interface {@link ListController}.
  *
  * @author irojas
  * @noinspection unused, WeakerAccess
  */
-public abstract class ListControllerImpl<T extends ElvisEntity, I extends Serializable, B extends GenericCRUDService<T, I, Q, F>, Q extends EntityPathBase<T>, F extends BaseFilterDTO<T>>
+public abstract class ListControllerImpl<
+        T extends ElvisEntity,
+        I extends Serializable,
+        B extends GenericCRUDService<T, I, Q, F>,
+        Q extends EntityPathBase<T>,
+        F extends BaseFilterDTO<T>>
     extends BaseControllerImpl implements ListController<T, I, B, Q, F> {
 
   /** serialVersionUID for object serialization */
   private static final long serialVersionUID = 1888014367419563856L;
+
   /** The Constant LOG. */
   private static final Logger LOG = LoggerFactory.getLogger(ListControllerImpl.class);
 
@@ -51,8 +57,12 @@ public abstract class ListControllerImpl<T extends ElvisEntity, I extends Serial
    *
    * @noinspection SpringJavaAutowiredMembersInspection
    */
-  @Autowired
-  protected B bo;
+  protected final B bo;
+
+  protected ListControllerImpl(CustomReloadableResourceBundleMessageSource messageSource, B bo) {
+    super(messageSource);
+    this.bo = bo;
+  }
 
   /** Init basic attributes to list controller. */
   @PostConstruct
@@ -103,8 +113,12 @@ public abstract class ListControllerImpl<T extends ElvisEntity, I extends Serial
    */
   @Override
   @GetMapping(value = "list")
-  public ModelAndView list(@ModelAttribute F search, Pageable pageable, Model model,
-      @RequestParam(value = ORDER_BY, required = false) String orderBy, HttpSession httpSession) {
+  public ModelAndView list(
+      @ModelAttribute F search,
+      Pageable pageable,
+      Model model,
+      @RequestParam(value = ORDER_BY, required = false) String orderBy,
+      HttpSession httpSession) {
     LOG.debug("list");
     ModelAndView modelAndView = new ModelAndView();
 
@@ -140,8 +154,12 @@ public abstract class ListControllerImpl<T extends ElvisEntity, I extends Serial
    */
   @Override
   @PostMapping(value = "/search")
-  public ModelAndView search(@ModelAttribute F search, Pageable pageable, Model model,
-      @RequestParam(value = ORDER_BY, required = false) String orderBy, HttpSession httpSession) {
+  public ModelAndView search(
+      @ModelAttribute F search,
+      Pageable pageable,
+      Model model,
+      @RequestParam(value = ORDER_BY, required = false) String orderBy,
+      HttpSession httpSession) {
     LOG.debug(SEARCH);
     ModelAndView modelAndView = new ModelAndView();
 
@@ -163,7 +181,7 @@ public abstract class ListControllerImpl<T extends ElvisEntity, I extends Serial
    *
    * @param filter Filter object.
    * @return <code>true</code> if filter object contains data to filter, <code>false</code>
-   *         otherwise.
+   *     otherwise.
    */
   protected boolean isFiltered(F filter) {
     LOG.debug("isFiltered");
@@ -173,7 +191,8 @@ public abstract class ListControllerImpl<T extends ElvisEntity, I extends Serial
     for (Field f : filter.getClass().getDeclaredFields()) {
       f.setAccessible(true);
       try {
-        if (!f.getName().equals("serialVersionUID") && f.get(filter) != null
+        if (!f.getName().equals("serialVersionUID")
+            && f.get(filter) != null
             && !f.get(filter).equals("")) {
           return true;
         }

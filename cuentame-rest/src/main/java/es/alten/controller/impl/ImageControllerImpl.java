@@ -53,6 +53,7 @@ public class ImageControllerImpl implements ImageController {
       })
   @GetMapping
   public ResponseEntity<List<ImageDTO>> findAll() {
+    LOG.debug("ImageControllerImpl: Fetching all results");
     List<Image> images = bo.findAll();
     List<ImageDTO> convertedImages = new ArrayList<>();
     for (Image image : images) {
@@ -81,6 +82,7 @@ public class ImageControllerImpl implements ImageController {
       })
   @GetMapping(value = "/sorted", params = {"name"})
   public ResponseEntity<List<ImageDTO>> findByName(@Parameter @RequestParam String name) {
+    LOG.debug("ImageControllerImpl: Fetching results with name {}", name);
     List<Image> images = bo.findByName(name);
     List<ImageDTO> convertedImages = new ArrayList<>();
     for (Image image : images) {
@@ -114,6 +116,7 @@ public class ImageControllerImpl implements ImageController {
       content = @Content(schema = @Schema(hidden = true)))
   @GetMapping(produces = MediaType.IMAGE_PNG_VALUE, value = "/{id}")
   public ResponseEntity<byte[]> findById(@PathVariable Long id) {
+    LOG.debug("ImageControllerImpl: Fetching results with id {}", id);
     byte[] imageData = bo.findById(id);
     if (imageData == null || imageData.length == 0) {
       throw new NotFoundException();
@@ -145,6 +148,7 @@ public class ImageControllerImpl implements ImageController {
     } catch (IOException e) {
       throw new BadInputException(e);
     }
+    LOG.debug("ImageControllerImpl: Saving data");
     bo.save(imageDTO.obtainDomainObject());
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
@@ -184,6 +188,7 @@ public class ImageControllerImpl implements ImageController {
     }
     Image newImageInfo = imageDTO.obtainDomainObject();
     newImageInfo.setId(id);
+    LOG.debug("ImageControllerImpl: Modifying data with id {}", id);
     bo.save(newImageInfo);
     return ResponseEntity.noContent().build();
   }
@@ -201,6 +206,10 @@ public class ImageControllerImpl implements ImageController {
   @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<ImageDTO> delete(@PathVariable Long id) {
+    if (!bo.exists(id)) {
+      throw new NotFoundException("Image with id " + id + " does not exist");
+    }
+    LOG.debug("ImageControllerImpl: Deleting data with id {}", id);
     bo.delete(id);
     return ResponseEntity.noContent().build();
   }

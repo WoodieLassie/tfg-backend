@@ -156,10 +156,10 @@ public class CustomRefreshTokenAuthenticationProvider implements AuthenticationP
     OAuth2AccessToken accessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER,
         generatedAccessToken.getTokenValue(), generatedAccessToken.getIssuedAt(),
         generatedAccessToken.getExpiresAt(), tokenContext.getAuthorizedScopes());
-    if (generatedAccessToken instanceof ClaimAccessor) {
-      authorizationBuilder.token(accessToken, (metadata) -> {
+    if (generatedAccessToken instanceof ClaimAccessor claimAccessor) {
+      authorizationBuilder.token(accessToken, metadata -> {
         metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME,
-            ((ClaimAccessor) generatedAccessToken).getClaims());
+            claimAccessor.getClaims());
         metadata.put(OAuth2Authorization.Token.INVALIDATED_METADATA_NAME, false);
       });
     } else {
@@ -208,7 +208,7 @@ public class CustomRefreshTokenAuthenticationProvider implements AuthenticationP
 
       idToken = new OidcIdToken(generatedIdToken.getTokenValue(), generatedIdToken.getIssuedAt(),
           generatedIdToken.getExpiresAt(), ((Jwt) generatedIdToken).getClaims());
-      authorizationBuilder.token(idToken, (metadata) -> metadata
+      authorizationBuilder.token(idToken, metadata -> metadata
           .put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME, idToken.getClaims()));
     } else {
       idToken = null;

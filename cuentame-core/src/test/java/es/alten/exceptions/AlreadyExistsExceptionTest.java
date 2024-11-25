@@ -2,42 +2,38 @@ package es.alten.exceptions;
 
 import es.alten.utils.Constants;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AlreadyExistsExceptionTest {
 
-  AlreadyExistsException AlreadyExistsException;
-
-  @BeforeEach
-  void setUp() throws Exception {}
+  AlreadyExistsException alreadyExistsException;
 
   @Test
   void testAlreadyExistsException() {
-    AlreadyExistsException = new AlreadyExistsException();
-    Assertions.assertEquals(AlreadyExistsException.getClass(), es.alten.exceptions.AlreadyExistsException.class);
+    alreadyExistsException = new AlreadyExistsException();
+    Assertions.assertEquals(alreadyExistsException.getClass(), es.alten.exceptions.AlreadyExistsException.class);
   }
 
   @Test
   void testAlreadyExistsExceptionString() {
-    AlreadyExistsException = new AlreadyExistsException(Constants.ERROR);
-    assertEquals(Constants.ERROR, AlreadyExistsException.getMessage());
+    alreadyExistsException = new AlreadyExistsException(Constants.ERROR);
+    assertEquals(Constants.ERROR, alreadyExistsException.getMessage());
   }
 
   @Test
   void testAlreadyExistsExceptionStringThrowable() {
     Throwable t = new Throwable();
-    AlreadyExistsException = new AlreadyExistsException(Constants.ERROR, t);
-    assertEquals(Constants.ERROR, AlreadyExistsException.getMessage());
-    assertEquals(AlreadyExistsException.getCause(), t);
+    alreadyExistsException = new AlreadyExistsException(Constants.ERROR, t);
+    assertEquals(Constants.ERROR, alreadyExistsException.getMessage());
+    assertEquals(alreadyExistsException.getCause(), t);
   }
 
   @Test
   void testAlreadyExistsExceptionThrowable() {
     Throwable t = new Throwable();
-    AlreadyExistsException = new AlreadyExistsException(t);
-    assertEquals(AlreadyExistsException.getCause(), t);
+    alreadyExistsException = new AlreadyExistsException(t);
+    assertEquals(alreadyExistsException.getCause(), t);
   }
 }

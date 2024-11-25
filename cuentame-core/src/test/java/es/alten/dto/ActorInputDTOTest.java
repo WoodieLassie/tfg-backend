@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
+import java.util.Calendar;
 
 class ActorInputDTOTest {
   ActorInputDTO actorInputDTO = new ActorInputDTO();
@@ -37,7 +38,11 @@ class ActorInputDTOTest {
     y.setId(1L);
     y.setName("actor");
     y.setGender("gender");
-    y.setBirthDate(new Date(1, 1, 1));
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.YEAR, 1);
+    calendar.set(Calendar.MONTH, Calendar.JANUARY);
+    calendar.set(Calendar.DAY_OF_MONTH, 1);
+    y.setBirthDate(new Date(calendar.getTimeInMillis()));
     y.setNationality("nationality");
     y.setBirthLocation("location");
     y.setCharacterId(1L);

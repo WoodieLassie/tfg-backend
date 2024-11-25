@@ -51,6 +51,7 @@ public class SeasonControllerImpl implements SeasonController {
       })
   @GetMapping
   public ResponseEntity<List<SeasonDTO>> findAll() {
+    LOG.debug("SeasonControllerImpl: Fetching all results");
     List<Season> seasonList = bo.findAll();
     List<SeasonDTO> convertedSeasonList = new ArrayList<>();
     for (Season season : seasonList) {
@@ -78,6 +79,7 @@ public class SeasonControllerImpl implements SeasonController {
       content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
   public ResponseEntity<SeasonDTO> findById(@PathVariable Long id) {
+    LOG.debug("SeasonControllerImpl: Fetching results with id {}", id);
     Season season = bo.findOne(id);
     if (season == null) {
       throw new NotFoundException();
@@ -100,7 +102,7 @@ public class SeasonControllerImpl implements SeasonController {
   @GetMapping(value = "/sorted", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<SeasonDTO>> findAllByCharacters(
       @Parameter @RequestParam(required = false, defaultValue = "") String characterName) {
-    LOG.info("Fetching results with character name {}", characterName);
+    LOG.debug("Fetching results with character name {}", characterName);
     List<Season> seasonList = bo.findAllByCharacters(characterName);
     List<SeasonDTO> convertedSeasonList = new ArrayList<>();
     for (Season season : seasonList) {
@@ -117,6 +119,10 @@ public class SeasonControllerImpl implements SeasonController {
           responseCode = "201",
           description = "Created",
           content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "409",
+          description = "Conflict",
+          content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Season> add(@RequestBody SeasonInputDTO seasonDTO) {
@@ -126,8 +132,8 @@ public class SeasonControllerImpl implements SeasonController {
     if (Boolean.TRUE.equals(bo.existsBySeasonNum(seasonDTO.getSeasonNum()))) {
       throw new AlreadyExistsException("Season with number " + seasonDTO.getSeasonNum() + " already exists");
     }
-
     Season season = seasonDTO.obtainDomainObject();
+    LOG.debug("SeasonControllerImpl: Saving data");
     bo.save(season);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
@@ -151,12 +157,16 @@ public class SeasonControllerImpl implements SeasonController {
     if (!seasonDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
+    if (Boolean.TRUE.equals(bo.existsBySeasonNum(seasonDTO.getSeasonNum()))) {
+      throw new AlreadyExistsException("Season with number " + seasonDTO.getSeasonNum() + " already exists");
+    }
     Season newSeasonInfo = seasonDTO.obtainDomainObject();
     Season season = bo.findOne(id);
     if (season == null) {
       throw new NotExistingIdException("Actor with id " + id + " does not exist");
     }
     newSeasonInfo.setId(id);
+    LOG.debug("SeasonControllerImpl: Modifying data with id {}", id);
     bo.save(newSeasonInfo);
     return ResponseEntity.noContent().build();
   }
@@ -174,6 +184,10 @@ public class SeasonControllerImpl implements SeasonController {
   @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<SeasonDTO> delete(@PathVariable Long id) {
+    if (!bo.exists(id)) {
+      throw new NotFoundException("Season with id " + id + " does not exist");
+    }
+    LOG.debug("SeasonControllerImpl: Deleting data with id {}", id);
     bo.delete(id);
     return ResponseEntity.noContent().build();
   }

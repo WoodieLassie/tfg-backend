@@ -3,7 +3,6 @@ package es.alten.security.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -63,9 +62,9 @@ public class CustomJpaRegisteredClientRepository implements RegisteredClientRepo
     final Client client = new Client();
     final List<String> clientAuthenticationMethods =
         registeredClient.getClientAuthenticationMethods().stream()
-            .map(ClientAuthenticationMethod::getValue).collect(Collectors.toList());
+            .map(ClientAuthenticationMethod::getValue).toList();
     final List<String> authorizationGrantTypes = registeredClient.getAuthorizationGrantTypes()
-        .stream().map(AuthorizationGrantType::getValue).collect(Collectors.toList());
+        .stream().map(AuthorizationGrantType::getValue).toList();
 
     client.setId(registeredClient.getId());
     client.setAuthorizationGrantTypes(

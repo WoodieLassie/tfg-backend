@@ -2,7 +2,6 @@ package es.alten.web;
 
 import es.alten.web.NavSection.NavSectionType;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class NavSectionTest {
@@ -11,10 +10,6 @@ class NavSectionTest {
   private static final String SECTION_TITLE = "section.title";
   private static final String SECTION = "section";
   NavSection navSection;
-
-  @BeforeEach
-  void setUp() throws Exception {}
-
   @Test
   void test_getTitle_detail() {
     navSection = new NavSection(SECTION, NavSectionType.DETAIL);

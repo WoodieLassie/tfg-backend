@@ -1,11 +1,6 @@
 package es.alten.dto;
 
-import java.util.Date;
-import java.util.Objects;
-import java.util.stream.Stream;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import es.alten.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

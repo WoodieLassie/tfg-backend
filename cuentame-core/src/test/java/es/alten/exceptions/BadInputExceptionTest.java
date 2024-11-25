@@ -2,7 +2,6 @@ package es.alten.exceptions;
 
 import es.alten.utils.Constants;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,9 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class BadInputExceptionTest {
 
   BadInputException badInputException;
-
-  @BeforeEach
-  void setUp() throws Exception {}
 
   @Test
   void testBadInputException() {

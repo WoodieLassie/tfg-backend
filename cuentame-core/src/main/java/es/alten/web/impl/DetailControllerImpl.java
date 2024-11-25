@@ -3,9 +3,10 @@ package es.alten.web.impl;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
+
+import es.alten.web.i18n.CustomReloadableResourceBundleMessageSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -59,8 +60,12 @@ public abstract class DetailControllerImpl<T extends ElvisEntity, N extends Seri
    *
    * @noinspection SpringJavaAutowiredMembersInspection
    */
-  @Autowired
-  protected B bo;
+  protected final B bo;
+
+  protected DetailControllerImpl(CustomReloadableResourceBundleMessageSource messageSource, B bo) {
+    super(messageSource);
+    this.bo = bo;
+  }
 
   /** Init basic attributes to detail controller. */
   @SuppressWarnings("unchecked")
