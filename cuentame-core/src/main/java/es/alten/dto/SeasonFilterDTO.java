@@ -15,20 +15,20 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class SeasonFilterDTO extends BaseFilterDTO<Season> {
-    @Serial private static final long serialVersionUID = 1400069111102606308L;
+  @Serial private static final long serialVersionUID = 1400069111102606308L;
 
-    private Integer seasonNum;
-    private String description;
-    private List<EpisodeDTO> episodes;
+  private Integer seasonNum;
+  private String description;
+  private List<EpisodeDTO> episodes;
 
-    @Override
-    public Specification<Season> obtainFilterSpecification() {
-        return (root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            if (seasonNum != null ) {
-                predicates.add(cb.like(root.get("seasonNum"), "%" + this.seasonNum + "%"));
-            }
-            return cb.and(predicates.toArray(new Predicate[0]));
-        };
-    }
+  @Override
+  public Specification<Season> obtainFilterSpecification() {
+    return (root, query, cb) -> {
+      Predicate predicate = cb.and();
+      if (seasonNum != null) {
+        predicate = cb.and(predicate, cb.like(root.get("email"), "%" + this.seasonNum + "%"));
+      }
+      return predicate;
+    };
+  }
 }

@@ -189,7 +189,7 @@ class EpisodeControllerImplTest {
         mockMvc.perform(
             patch("/api/episodes/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(mockInputEpisode)));
+                .content(objectMapper.writeValueAsString(updatedEpisode)));
     response.andDo(print()).andExpect(status().isNoContent());
   }
 
@@ -201,5 +201,192 @@ class EpisodeControllerImplTest {
     willDoNothing().given(episodeBO).delete(mockDbEpisode.getId());
     ResultActions response = mockMvc.perform(delete("/api/episodes/{id}", mockDbEpisode.getId()));
     response.andExpect(status().isNoContent()).andDo(print());
+  }
+
+  @Test
+  void findByIdNotFoundTest() throws Exception {
+    Episode mockEpisodeEntity = mockEpisode.obtainDomainObject();
+    given(episodeBO.findOne(mockEpisode.getId())).willReturn(null);
+    given(episodeBO.findOneWithCharacters(mockEpisode.getId())).willReturn(null);
+    when(characterBO.findAllById(new ArrayList<>(List.of(mockCharacterDTO.getId()))))
+        .thenReturn(new ArrayList<>(List.of(mockCharacterDTO.obtainDomainObject())));
+    when(seasonBO.findOne(mockEpisode.getSeason().getId()))
+        .thenReturn(mockSeasonDTO.obtainDomainObject());
+    ResultActions response = mockMvc.perform(get("/api/episodes/{id}", mockEpisode.getId()));
+    response.andExpect(status().isNotFound()).andDo(print());
+  }
+
+  @Test
+  void addBadRequestTest() throws Exception {
+    Season mockSeason = new Season();
+    mockSeason.setId(1L);
+    Character mockCharacter = new Character();
+    mockCharacter.setId(1L);
+    mockInputEpisode = new EpisodeInputDTO();
+    given(episodeBO.save(any(Episode.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(seasonBO.findOne(mockInputEpisode.getSeasonId())).thenReturn(mockSeason);
+    when(characterBO.findAllById(mockInputEpisode.getCharacterIds()))
+        .thenReturn(new ArrayList<>(List.of(mockCharacter)));
+    ResultActions response =
+        mockMvc.perform(
+            post("/api/episodes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(mockInputEpisode)));
+    response.andDo(print()).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void addCharactersNotFoundTest() throws Exception {
+    Season mockSeason = new Season();
+    mockSeason.setId(1L);
+    Character mockCharacter = new Character();
+    mockCharacter.setId(1L);
+    given(episodeBO.save(any(Episode.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(seasonBO.findOne(mockInputEpisode.getSeasonId())).thenReturn(mockSeason);
+    when(characterBO.findAllById(mockInputEpisode.getCharacterIds())).thenReturn(new ArrayList<>());
+    ResultActions response =
+        mockMvc.perform(
+            post("/api/episodes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(mockInputEpisode)));
+    response.andDo(print()).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void addSeasonNotFoundTest() throws Exception {
+    Season mockSeason = new Season();
+    mockSeason.setId(1L);
+    Character mockCharacter = new Character();
+    mockCharacter.setId(1L);
+    given(episodeBO.save(any(Episode.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(seasonBO.findOne(mockInputEpisode.getSeasonId())).thenReturn(null);
+    when(characterBO.findAllById(mockInputEpisode.getCharacterIds()))
+        .thenReturn(new ArrayList<>(List.of(mockCharacter)));
+    ResultActions response =
+        mockMvc.perform(
+            post("/api/episodes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(mockInputEpisode)));
+    response.andDo(print()).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void updateBadRequestTest() throws Exception {
+    Season mockSeason = new Season();
+    mockSeason.setId(1L);
+    Character mockCharacter = new Character();
+    mockCharacter.setId(1L);
+    Episode mockDbEpisode = mockInputEpisode.obtainDomainObject();
+    mockDbEpisode.setId(1L);
+    mockDbEpisode.setCharacters(new ArrayList<>(List.of(mockCharacter)));
+    mockDbEpisode.setSeason(mockSeason);
+    EpisodeInputDTO updatedEpisode = new EpisodeInputDTO();
+    given(episodeBO.findOne(mockDbEpisode.getId())).willReturn(mockDbEpisode);
+    given(episodeBO.save(any(Episode.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(seasonBO.findOne(updatedEpisode.getSeasonId())).thenReturn(mockSeason);
+    when(characterBO.findAllById(updatedEpisode.getCharacterIds()))
+        .thenReturn(new ArrayList<>(List.of(mockCharacter)));
+    ResultActions response =
+        mockMvc.perform(
+            patch("/api/episodes/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEpisode)));
+    response.andDo(print()).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updateEpisodeNotFoundTest() throws Exception {
+    Season mockSeason = new Season();
+    mockSeason.setId(1L);
+    Character mockCharacter = new Character();
+    mockCharacter.setId(1L);
+    Episode mockDbEpisode = mockInputEpisode.obtainDomainObject();
+    mockDbEpisode.setId(1L);
+    mockDbEpisode.setCharacters(new ArrayList<>(List.of(mockCharacter)));
+    mockDbEpisode.setSeason(mockSeason);
+    EpisodeInputDTO updatedEpisode = new EpisodeInputDTO();
+    updatedEpisode.setEpisodeNum(1);
+    updatedEpisode.setSeasonId(1L);
+    updatedEpisode.setSummary("summary2");
+    updatedEpisode.setTitle("title2");
+    updatedEpisode.setCharacterIds(new ArrayList<>(List.of(1L)));
+    given(episodeBO.findOne(mockDbEpisode.getId())).willReturn(null);
+    given(episodeBO.save(any(Episode.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(seasonBO.findOne(updatedEpisode.getSeasonId())).thenReturn(mockSeason);
+    when(characterBO.findAllById(updatedEpisode.getCharacterIds()))
+        .thenReturn(new ArrayList<>(List.of(mockCharacter)));
+    ResultActions response =
+        mockMvc.perform(
+            patch("/api/episodes/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEpisode)));
+    response.andDo(print()).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void updateCharactersNotFoundTest() throws Exception {
+    Season mockSeason = new Season();
+    mockSeason.setId(1L);
+    Character mockCharacter = new Character();
+    mockCharacter.setId(1L);
+    Episode mockDbEpisode = mockInputEpisode.obtainDomainObject();
+    mockDbEpisode.setId(1L);
+    mockDbEpisode.setCharacters(new ArrayList<>(List.of(mockCharacter)));
+    mockDbEpisode.setSeason(mockSeason);
+    EpisodeInputDTO updatedEpisode = new EpisodeInputDTO();
+    updatedEpisode.setEpisodeNum(1);
+    updatedEpisode.setSeasonId(1L);
+    updatedEpisode.setSummary("summary2");
+    updatedEpisode.setTitle("title2");
+    updatedEpisode.setCharacterIds(new ArrayList<>(List.of(1L)));
+    given(episodeBO.findOne(mockDbEpisode.getId())).willReturn(mockDbEpisode);
+    given(episodeBO.save(any(Episode.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(seasonBO.findOne(updatedEpisode.getSeasonId())).thenReturn(mockSeason);
+    when(characterBO.findAllById(updatedEpisode.getCharacterIds())).thenReturn(new ArrayList<>());
+    ResultActions response =
+        mockMvc.perform(
+            patch("/api/episodes/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEpisode)));
+    response.andDo(print()).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void updateSeasonNotFoundTest() throws Exception {
+    Season mockSeason = new Season();
+    mockSeason.setId(1L);
+    Character mockCharacter = new Character();
+    mockCharacter.setId(1L);
+    Episode mockDbEpisode = mockInputEpisode.obtainDomainObject();
+    mockDbEpisode.setId(1L);
+    mockDbEpisode.setCharacters(new ArrayList<>(List.of(mockCharacter)));
+    mockDbEpisode.setSeason(mockSeason);
+    EpisodeInputDTO updatedEpisode = new EpisodeInputDTO();
+    updatedEpisode.setEpisodeNum(1);
+    updatedEpisode.setSeasonId(1L);
+    updatedEpisode.setSummary("summary2");
+    updatedEpisode.setTitle("title2");
+    updatedEpisode.setCharacterIds(new ArrayList<>(List.of(1L)));
+    given(episodeBO.findOne(mockDbEpisode.getId())).willReturn(mockDbEpisode);
+    given(episodeBO.save(any(Episode.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(seasonBO.findOne(updatedEpisode.getSeasonId())).thenReturn(null);
+    when(characterBO.findAllById(updatedEpisode.getCharacterIds()))
+        .thenReturn(new ArrayList<>(List.of(mockCharacter)));
+    ResultActions response =
+        mockMvc.perform(
+            patch("/api/episodes/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEpisode)));
+    response.andDo(print()).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void deleteNotFoundTest() throws Exception {
+    Episode mockDbEpisode = mockInputEpisode.obtainDomainObject();
+    mockDbEpisode.setId(1L);
+    given(episodeBO.exists(mockEpisode.getId())).willReturn(false);
+    willDoNothing().given(episodeBO).delete(mockDbEpisode.getId());
+    ResultActions response = mockMvc.perform(delete("/api/episodes/{id}", mockDbEpisode.getId()));
+    response.andExpect(status().isNotFound()).andDo(print());
   }
 }

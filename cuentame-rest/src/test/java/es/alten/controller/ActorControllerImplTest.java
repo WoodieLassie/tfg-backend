@@ -1,8 +1,5 @@
 package es.alten.controller;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import es.alten.domain.Character;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.alten.bo.ActorBO;
 import es.alten.bo.CharacterBO;
@@ -83,6 +80,7 @@ class ActorControllerImplTest {
     mockCharacter.setAge(23);
     mockCharacter.setDescription("desc");
     mockActor.setCharacter(mockCharacter);
+    mockActor.setImageData("image".getBytes());
   }
 
   @Test
@@ -114,7 +112,6 @@ class ActorControllerImplTest {
 
   @Test
   void findImageById() throws Exception {
-    mockActor.setImageData("image".getBytes());
     Actor mockActorEntity = mockActor.obtainDomainObject();
     given(actorBO.findImageById(mockActor.getId())).willReturn(mockActorEntity.getImageData());
     ResultActions response = mockMvc.perform(get("/api/actors/image/{id}", mockActor.getId()));
@@ -155,7 +152,8 @@ class ActorControllerImplTest {
     updatedActor.setCharacterId(1L);
     given(actorBO.findOne(mockDbActor.getId())).willReturn(mockDbActor);
     given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
-    when(characterBO.findOne(updatedActor.getCharacterId())).thenReturn(mockCharacter.obtainDomainObject());
+    when(characterBO.findOne(updatedActor.getCharacterId()))
+        .thenReturn(mockCharacter.obtainDomainObject());
     ResultActions response =
         mockMvc.perform(
             patch("/api/actors/{id}", mockDbActor.getId())
@@ -191,5 +189,193 @@ class ActorControllerImplTest {
     willDoNothing().given(actorBO).delete(mockDbActor.getId());
     ResultActions response = mockMvc.perform(delete("/api/actors/{id}", mockDbActor.getId()));
     response.andExpect(status().isNoContent()).andDo(print());
+  }
+
+  @Test
+  void findImageByIdNotFoundImageIsNullTest() throws Exception {
+    mockActor.setImageData(null);
+    Actor mockActorEntity = mockActor.obtainDomainObject();
+    given(actorBO.findImageById(mockActor.getId())).willReturn(mockActorEntity.getImageData());
+    ResultActions response = mockMvc.perform(get("/api/actors/image/{id}", mockActor.getId()));
+    response.andExpect(status().isNotFound()).andDo(print());
+  }
+
+  @Test
+  void findImageByIdNotFoundImageIsEmptyTest() throws Exception {
+    mockActor.setImageData(new byte[0]);
+    Actor mockActorEntity = mockActor.obtainDomainObject();
+    given(actorBO.findImageById(mockActor.getId())).willReturn(mockActorEntity.getImageData());
+    ResultActions response = mockMvc.perform(get("/api/actors/image/{id}", mockActor.getId()));
+    response.andExpect(status().isNotFound()).andDo(print());
+  }
+
+  @Test
+  void findByIdNotFoundTest() throws Exception {
+    given(actorBO.findOne(mockActor.getId())).willReturn(null);
+    ResultActions response = mockMvc.perform(get("/api/actors/{id}", mockActor.getId()));
+    response.andExpect(status().isNotFound()).andDo(print());
+  }
+
+  @Test
+  void addBadRequestTest() throws Exception {
+    mockInputActor = new ActorInputDTO();
+    ResultActions response =
+        mockMvc.perform(
+            post("/api/actors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(mockInputActor)));
+    response.andDo(print()).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void addNotFoundTest() throws Exception {
+    given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(characterBO.findOne(mockActor.getCharacter().getId())).thenReturn(null);
+    ResultActions response =
+        mockMvc.perform(
+            post("/api/actors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(mockInputActor)));
+    response.andDo(print()).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void updateBadRequestTest() throws Exception {
+    Actor mockDbActor = mockInputActor.obtainDomainObject();
+    mockDbActor.setId(1L);
+    mockDbActor.setCharacter(mockCharacter.obtainDomainObject());
+    ActorInputDTO updatedActor = new ActorInputDTO();
+    given(actorBO.findOne(mockDbActor.getId())).willReturn(mockDbActor);
+    given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(characterBO.findOne(updatedActor.getCharacterId()))
+        .thenReturn(mockCharacter.obtainDomainObject());
+    ResultActions response =
+        mockMvc.perform(
+            patch("/api/actors/{id}", mockDbActor.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedActor)));
+    response.andDo(print()).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updateNewActorNotFoundTest() throws Exception {
+    Actor mockDbActor = mockInputActor.obtainDomainObject();
+    mockDbActor.setId(1L);
+    mockDbActor.setCharacter(mockCharacter.obtainDomainObject());
+    ActorInputDTO updatedActor = new ActorInputDTO();
+    updatedActor.setName("name2");
+    updatedActor.setGender("gender2");
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.YEAR, 2);
+    calendar.set(Calendar.MONTH, Calendar.FEBRUARY);
+    calendar.set(Calendar.DAY_OF_MONTH, 2);
+    updatedActor.setBirthDate(new Date(calendar.getTimeInMillis()));
+    updatedActor.setNationality("nationality2");
+    updatedActor.setBirthLocation("location2");
+    updatedActor.setCharacterId(1L);
+    given(actorBO.findOne(mockDbActor.getId())).willReturn(null);
+    given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(characterBO.findOne(updatedActor.getCharacterId()))
+        .thenReturn(mockCharacter.obtainDomainObject());
+    ResultActions response =
+        mockMvc.perform(
+            patch("/api/actors/{id}", mockDbActor.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedActor)));
+    response.andDo(print()).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void updateCharacterNotFoundTest() throws Exception {
+    Actor mockDbActor = mockInputActor.obtainDomainObject();
+    mockDbActor.setId(1L);
+    mockDbActor.setCharacter(mockCharacter.obtainDomainObject());
+    ActorInputDTO updatedActor = new ActorInputDTO();
+    updatedActor.setName("name2");
+    updatedActor.setGender("gender2");
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.YEAR, 2);
+    calendar.set(Calendar.MONTH, Calendar.FEBRUARY);
+    calendar.set(Calendar.DAY_OF_MONTH, 2);
+    updatedActor.setBirthDate(new Date(calendar.getTimeInMillis()));
+    updatedActor.setNationality("nationality2");
+    updatedActor.setBirthLocation("location2");
+    updatedActor.setCharacterId(1L);
+    given(actorBO.findOne(mockDbActor.getId())).willReturn(mockDbActor);
+    given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(characterBO.findOne(updatedActor.getCharacterId())).thenReturn(null);
+    ResultActions response =
+        mockMvc.perform(
+            patch("/api/actors/{id}", mockDbActor.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedActor)));
+    response.andDo(print()).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void updateImageByIdNotAttachedBadRequestTest() throws Exception {
+    Actor dbActor = new Actor();
+    dbActor.setId(1L);
+    MockMultipartFile newImage =
+        new MockMultipartFile("image", "filename2.png", "image/png", new byte[0]);
+    MockMultipartHttpServletRequestBuilder builder =
+        MockMvcRequestBuilders.multipart("/api/actors/image/{id}", dbActor.getId()).file(newImage);
+    builder.with(
+        request -> {
+          request.setMethod("PATCH");
+          return request;
+        });
+    given(actorBO.findOne(dbActor.getId())).willReturn(dbActor);
+    given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
+    ResultActions response = mockMvc.perform(builder.file(newImage));
+    response.andDo(print()).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updateImageByIdNotAnImageBadRequestTest() throws Exception {
+    Actor dbActor = new Actor();
+    dbActor.setId(1L);
+    MockMultipartFile newImage =
+        new MockMultipartFile("image", "filename2.png", "xDDDD", "some png2".getBytes());
+    MockMultipartHttpServletRequestBuilder builder =
+        MockMvcRequestBuilders.multipart("/api/actors/image/{id}", dbActor.getId()).file(newImage);
+    builder.with(
+        request -> {
+          request.setMethod("PATCH");
+          return request;
+        });
+    given(actorBO.findOne(dbActor.getId())).willReturn(dbActor);
+    given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
+    ResultActions response = mockMvc.perform(builder.file(newImage));
+    response.andDo(print()).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updateImageByIdNotFoundTest() throws Exception {
+    Actor dbActor = new Actor();
+    dbActor.setId(1L);
+    MockMultipartFile newImage =
+        new MockMultipartFile("image", "filename2.png", "image/png", "some png2".getBytes());
+    MockMultipartHttpServletRequestBuilder builder =
+        MockMvcRequestBuilders.multipart("/api/actors/image/{id}", dbActor.getId()).file(newImage);
+    builder.with(
+        request -> {
+          request.setMethod("PATCH");
+          return request;
+        });
+    given(actorBO.findOne(dbActor.getId())).willReturn(null);
+    given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
+    ResultActions response = mockMvc.perform(builder.file(newImage));
+    response.andDo(print()).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void deleteNotFoundTest() throws Exception {
+    Actor mockDbActor = mockInputActor.obtainDomainObject();
+    mockDbActor.setId(1L);
+    given(actorBO.exists(mockActor.getId())).willReturn(false);
+    willDoNothing().given(actorBO).delete(mockDbActor.getId());
+    ResultActions response = mockMvc.perform(delete("/api/actors/{id}", mockDbActor.getId()));
+    response.andExpect(status().isNotFound()).andDo(print());
   }
 }

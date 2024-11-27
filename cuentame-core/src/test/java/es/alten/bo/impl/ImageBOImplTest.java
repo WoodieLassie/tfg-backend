@@ -2,6 +2,7 @@ package es.alten.bo.impl;
 
 import es.alten.dao.ImageRepository;
 import es.alten.domain.Image;
+import es.alten.utils.ImageUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,16 +57,17 @@ class ImageBOImplTest {
   @Test
   void testFindById() {
     Image mockImage = new Image();
+    String data = "imageData";
     mockImage.setId(1L);
     mockImage.setName(IMAGE_TEST_NAME);
     mockImage.setType("type");
-    mockImage.setImageData("imageData".getBytes());
+    mockImage.setImageData(ImageUtil.compressImage(data.getBytes()));
 
     when(repository.findById(mockImage.getId())).thenReturn(Optional.of(mockImage));
-    Optional<Image> dbImage = repository.findById(mockImage.getId());
+    byte[] dbImage = imageBO.findById(mockImage.getId());
 
     Assertions.assertNotNull(dbImage);
-    Assertions.assertArrayEquals(mockImage.getImageData(), dbImage.get().getImageData());
+    Assertions.assertArrayEquals(data.getBytes(), dbImage);
   }
 
   @Test

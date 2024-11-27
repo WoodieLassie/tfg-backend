@@ -2,6 +2,7 @@ package es.alten.bo.impl;
 
 import es.alten.dao.ActorRepository;
 import es.alten.domain.Actor;
+import es.alten.utils.ImageUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,17 +32,18 @@ class ActorBOImplTest {
   @Test
   void testFindByImageId() {
     Actor mockActor = new Actor();
-    byte[] mockImageData = "byte array mock".getBytes();
+    String data = "byte array mock";
+    byte[] mockImageData = ImageUtil.compressImage(data.getBytes());
     mockActor.setImageData(mockImageData);
     mockActor.setId(1L);
 
     when(repository.findById(mockActor.getId())).thenReturn(Optional.of(mockActor));
-    Optional<Actor> dbActor = repository.findById(mockActor.getId());
+    byte[] dbActor = actorBO.findImageById(mockActor.getId());
 
     verify(repository, times(1)).findById(mockActor.getId());
 
     Assertions.assertNotNull(dbActor);
-    Assertions.assertArrayEquals(dbActor.get().getImageData(), mockImageData);
+    Assertions.assertArrayEquals(dbActor, data.getBytes());
   }
 
   @Test

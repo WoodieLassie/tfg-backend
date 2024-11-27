@@ -27,6 +27,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -145,5 +146,96 @@ class SeasonControllerImplTest {
     willDoNothing().given(seasonBO).delete(mockDbSeason.getId());
     ResultActions response = mockMvc.perform(delete("/api/seasons/{id}", mockDbSeason.getId()));
     response.andExpect(status().isNoContent()).andDo(print());
+  }
+
+  @Test
+  void findByIdNotFoundTest() throws Exception {
+    given(seasonBO.findOne(mockSeason.getId())).willReturn(null);
+    ResultActions response = mockMvc.perform(get("/api/seasons/{id}", mockSeason.getId()));
+    response.andExpect(status().isNotFound()).andDo(print());
+  }
+
+  @Test
+  void addBadRequestTest() throws Exception {
+    mockInputSeason = new SeasonInputDTO();
+    given(seasonBO.save(any(Season.class))).willAnswer(invocation -> invocation.getArgument(0));
+    ResultActions response =
+        mockMvc.perform(
+            post("/api/seasons")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(mockInputSeason)));
+    response.andDo(print()).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void addConflictTest() throws Exception {
+    given(seasonBO.save(any(Season.class))).willAnswer(invocation -> invocation.getArgument(0));
+    when(seasonBO.existsBySeasonNum(mockInputSeason.getSeasonNum())).thenReturn(true);
+    ResultActions response =
+        mockMvc.perform(
+            post("/api/seasons")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(mockInputSeason)));
+    response.andDo(print()).andExpect(status().isConflict());
+  }
+
+  @Test
+  void updateBadRequestTest() throws Exception {
+    Season mockDbSeason = mockInputSeason.obtainDomainObject();
+    mockDbSeason.setId(1L);
+    Season updatedSeason = new Season();
+    given(seasonBO.findOne(mockDbSeason.getId())).willReturn(mockDbSeason);
+    given(seasonBO.save(any(Season.class))).willAnswer(invocation -> invocation.getArgument(0));
+    ResultActions response =
+        mockMvc.perform(
+            patch("/api/seasons/{id}", mockDbSeason.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedSeason)));
+    response.andDo(print()).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updateConflictTest() throws Exception {
+    Season mockDbSeason = mockInputSeason.obtainDomainObject();
+    mockDbSeason.setId(1L);
+    Season updatedSeason = new Season();
+    updatedSeason.setDescription("desc2");
+    updatedSeason.setSeasonNum(2);
+    given(seasonBO.existsBySeasonNum(updatedSeason.getSeasonNum())).willReturn(true);
+    given(seasonBO.findOne(mockDbSeason.getId())).willReturn(mockDbSeason);
+    given(seasonBO.save(any(Season.class))).willAnswer(invocation -> invocation.getArgument(0));
+    ResultActions response =
+        mockMvc.perform(
+            patch("/api/seasons/{id}", mockDbSeason.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedSeason)));
+    response.andDo(print()).andExpect(status().isConflict());
+  }
+
+  @Test
+  void updateNotFoundTest() throws Exception {
+    Season mockDbSeason = mockInputSeason.obtainDomainObject();
+    mockDbSeason.setId(1L);
+    Season updatedSeason = new Season();
+    updatedSeason.setDescription("desc2");
+    updatedSeason.setSeasonNum(2);
+    given(seasonBO.findOne(mockDbSeason.getId())).willReturn(null);
+    given(seasonBO.save(any(Season.class))).willAnswer(invocation -> invocation.getArgument(0));
+    ResultActions response =
+        mockMvc.perform(
+            patch("/api/seasons/{id}", mockDbSeason.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedSeason)));
+    response.andDo(print()).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void deleteNotFoundTest() throws Exception {
+    Season mockDbSeason = mockInputSeason.obtainDomainObject();
+    mockDbSeason.setId(1L);
+    given(seasonBO.exists(mockSeason.getId())).willReturn(false);
+    willDoNothing().given(seasonBO).delete(mockDbSeason.getId());
+    ResultActions response = mockMvc.perform(delete("/api/seasons/{id}", mockDbSeason.getId()));
+    response.andExpect(status().isNotFound()).andDo(print());
   }
 }

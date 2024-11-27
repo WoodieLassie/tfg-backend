@@ -19,5 +19,4 @@ class UserFilDTOTest {
     userFilterDTO.setEmail("test1");
     Assertions.assertEquals("test1", userFilterDTO.getEmail());
   }
-
 }

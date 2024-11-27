@@ -47,14 +47,36 @@ class UserControllerImplTest {
 
   @Test
   void addTest() throws Exception {
-    System.out.println(mockUser.getPassword());
     given(userBO.save(any(User.class))).willAnswer(invocation -> invocation.getArgument(0));
-    System.out.println(mockUser.getPassword());
     ResultActions response =
         mockMvc.perform(
             post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(mockUser)));
     response.andDo(print()).andExpect(status().isCreated());
+  }
+
+  @Test
+  void addConflicTest() throws Exception {
+    given(userBO.findByEmail(mockUser.getEmail())).willReturn(mockUser.obtainDomainObject());
+    given(userBO.save(any(User.class))).willAnswer(invocation -> invocation.getArgument(0));
+    ResultActions response =
+        mockMvc.perform(
+            post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(mockUser)));
+    response.andDo(print()).andExpect(status().isConflict());
+  }
+
+  @Test
+  void addBadRequestTest() throws Exception {
+    mockUser = new UserInputDTO();
+    given(userBO.save(any(User.class))).willAnswer(invocation -> invocation.getArgument(0));
+    ResultActions response =
+        mockMvc.perform(
+            post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(mockUser)));
+    response.andDo(print()).andExpect(status().isBadRequest());
   }
 }

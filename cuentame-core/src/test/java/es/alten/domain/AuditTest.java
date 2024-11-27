@@ -40,7 +40,7 @@ class AuditTest {
     Integer userId = (Integer) mockUserDetails.get("id");
     Long userLoggedId = Long.valueOf(userId);
     Assertions.assertEquals(userLoggedId, audit.getCreatedBy());
-    Assertions.assertEquals(userLoggedId, audit.getCreatedBy());
+    Assertions.assertEquals(userLoggedId, audit.getUpdatedBy());
   }
 
   @Test
@@ -80,10 +80,10 @@ class AuditTest {
     mockAuthenticatedPrincipal.put("java.security.Principal", mockDetails);
     when(auth.getPrincipal())
             .thenReturn(new OAuth2IntrospectionAuthenticatedPrincipal(mockAuthenticatedPrincipal, null));
-    audit.createAuditInfo();
+    audit.updateAuditInfo();
     Integer userId = (Integer) mockUserDetails.get("id");
     Long userLoggedId = Long.valueOf(userId);
-    Assertions.assertEquals(userLoggedId, audit.getCreatedBy());
+    Assertions.assertEquals(userLoggedId, audit.getUpdatedBy());
   }
 
   @Test

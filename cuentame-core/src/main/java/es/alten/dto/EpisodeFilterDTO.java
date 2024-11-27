@@ -21,7 +21,7 @@ public class EpisodeFilterDTO extends BaseFilterDTO<Episode> {
     private Integer episodeNum;
     private String title;
     private String summary;
-    private SeasonDTO season;
+    private SeasonNoEpisodesDTO season;
     private List<CharacterDTO> characters;
 
     @Override
