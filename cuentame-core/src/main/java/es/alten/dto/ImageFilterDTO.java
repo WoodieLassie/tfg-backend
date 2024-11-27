@@ -9,8 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.io.Serial;
-import java.util.ArrayList;
-import java.util.List;
 
 @Schema(name = "ImageFilterDTO", description = "Image filter")
 @EqualsAndHashCode(callSuper = true)

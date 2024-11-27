@@ -205,7 +205,6 @@ class EpisodeControllerImplTest {
 
   @Test
   void findByIdNotFoundTest() throws Exception {
-    Episode mockEpisodeEntity = mockEpisode.obtainDomainObject();
     given(episodeBO.findOne(mockEpisode.getId())).willReturn(null);
     given(episodeBO.findOneWithCharacters(mockEpisode.getId())).willReturn(null);
     when(characterBO.findAllById(new ArrayList<>(List.of(mockCharacterDTO.getId()))))

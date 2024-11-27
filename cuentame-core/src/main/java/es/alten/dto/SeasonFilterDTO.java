@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.io.Serial;
-import java.util.ArrayList;
 import java.util.List;
 
 @Schema(name = "SeasonFilterDTO", description = "Season filter")
