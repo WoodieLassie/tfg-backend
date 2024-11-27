@@ -43,14 +43,9 @@ public class EpisodeBOImpl
     }
     List<Long> characterIds =
         episode.getCharacters().stream().map(Character::getId).toList();
-    // Recorre las IDs de cada personaje que aparece en un episodio y lo convierte en una lista de
-    // Long
     List<Character> charactersWithActors = repository.findByIdWithCharacters(characterIds);
     for (Character character : episode.getCharacters()) {
       for (Character characterWithActor : charactersWithActors) {
-        // Revisa si el personaje sin datos de actor es el mismo que el personaje con datos de
-        // actor, y si lo es, le inserta los datos de actor. Si no se hace este check, provocará un
-        // error de "found shared references in a collecion"
         if (character.getId().equals(characterWithActor.getId())) {
           character.setActors(characterWithActor.getActors());
         }
