@@ -74,7 +74,7 @@ public class ElvisGenericCRUDServiceImpl<T extends ElvisEntity, I extends Serial
    */
   @Override
   public boolean exists(final I id) {
-    return false;
+    return repository.existsById(id);
   }
 
   /**
