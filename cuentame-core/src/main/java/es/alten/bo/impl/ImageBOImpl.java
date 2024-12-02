@@ -27,12 +27,14 @@ public class ImageBOImpl
         super(repository);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Image> findByName(String name) {
         LOG.debug("ImageBOImpl: findByName");
         return repository.findByName(name);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public byte[] findById(Long id) {
         LOG.debug("ImageBOImpl: findById");

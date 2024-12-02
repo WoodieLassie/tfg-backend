@@ -27,12 +27,14 @@ public class EpisodeBOImpl
     super(repository);
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<Episode> findAllSortedAndPaged(Long seasonId, String title, Integer episodeNum) {
     LOG.debug("EpisodeBOImpl: findAllSortedAndPaged");
     return repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
   }
 
+  @Transactional(readOnly = true)
   @Override
   public Episode findOneWithCharacters(Long id) {
     LOG.debug("EpisodeBOImpl: findOne");

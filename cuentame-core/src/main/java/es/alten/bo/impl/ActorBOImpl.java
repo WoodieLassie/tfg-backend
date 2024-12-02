@@ -26,6 +26,7 @@ public class ActorBOImpl
     super(repository);
   }
 
+  @Transactional(readOnly = true)
   public byte[] findImageById(Long id) {
     LOG.debug("ActorBOImpl: findImageById");
     Optional<Actor> actor = repository.findById(id);
