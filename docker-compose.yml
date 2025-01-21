@@ -4,7 +4,7 @@ services:
     container_name: db
     environment:
       MYSQL_ROOT_PASSWORD: my_secret_password
-      MYSQL_DATABASE: cuentame
+      MYSQL_DATABASE: tfg-backend
       MYSQL_USER: db_user
       MYSQL_PASSWORD: db_user_pass
     ports:

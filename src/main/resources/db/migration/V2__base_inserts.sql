@@ -1,6 +1,8 @@
-INSERT INTO seasons (season_num, description) VALUES (1, "Temporada uno");
-INSERT INTO seasons (season_num, description) VALUES (2, "Temporada dos");
-INSERT INTO seasons (season_num, description) VALUES (3, "Temporada tres");
+INSERT INTO shows (name, description) VALUES ("cuentame", "cuentame");
+
+INSERT INTO seasons (season_num, description, show_id) VALUES (1, "Temporada uno", 1);
+INSERT INTO seasons (season_num, description, show_id) VALUES (2, "Temporada dos", 1);
+INSERT INTO seasons (season_num, description, show_id) VALUES (3, "Temporada tres", 1);
 
 INSERT INTO episodes (episode_num, title, summary, season_id) VALUES (1, "El regreso del fugitivo", "Primer episodio", 1);
 INSERT INTO episodes (episode_num, title, summary, season_id) VALUES (2, "Un cielo lleno de futbolines", "Segundo episodio", 1);
@@ -331,4 +333,10 @@ INSERT INTO episode_character (episode_id, character_id) VALUES (60, 10);
 INSERT INTO episode_character (episode_id, character_id) VALUES (60, 12);
 INSERT INTO episode_character (episode_id, character_id) VALUES (60, 4);
 INSERT INTO episode_character (episode_id, character_id) VALUES (60, 3);
+
+INSERT INTO users (email, password)
+VALUES ('judith@gmail.com', '$2a$06$5jNY3ZlK8Dx4/XcyBnJ1iOIeEPcNy.fTrPIQpGBDUxX0qGvRzgXo6');
+
+INSERT INTO comments (text, show_id)
+VALUES ('hola', 1);
 

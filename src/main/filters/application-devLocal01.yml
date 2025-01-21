@@ -5,7 +5,7 @@ profile-active: devLocal01
 spring-banner: "off"
 
 # Data source config
-datasource-url: jdbc:mysql://localhost:6033/cuentame
+datasource-url: jdbc:mysql://localhost:6033/tfg-backend
 datasource-username: root 
 datasource-password: my_secret_password
 datasource-driver: com.mysql.cj.jdbc.Driver 

@@ -1,3 +1,19 @@
+ALTER TABLE comments ADD deleted BIT NOT NULL DEFAULT 0;
+ALTER TABLE comments ADD create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE comments ADD create_user_id BIGINT DEFAULT NULL;
+ALTER TABLE comments ADD update_time DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE comments ADD update_user_id BIGINT DEFAULT NULL;
+ALTER TABLE comments ADD CONSTRAINT comments_users_fk_01 FOREIGN KEY (create_user_id) REFERENCES users(id);
+ALTER TABLE comments ADD CONSTRAINT comments_users_fk_02 FOREIGN KEY (update_user_id) REFERENCES users(id);
+
+ALTER TABLE shows ADD deleted BIT NOT NULL DEFAULT 0;
+ALTER TABLE shows ADD create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE shows ADD create_user_id BIGINT DEFAULT NULL;
+ALTER TABLE shows ADD update_time DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE shows ADD update_user_id BIGINT DEFAULT NULL;
+ALTER TABLE shows ADD CONSTRAINT shows_users_fk_01 FOREIGN KEY (create_user_id) REFERENCES users(id);
+ALTER TABLE shows ADD CONSTRAINT shows_users_fk_02 FOREIGN KEY (update_user_id) REFERENCES users(id);
+
 ALTER TABLE episodes ADD deleted BIT NOT NULL DEFAULT 0;
 ALTER TABLE episodes ADD create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE episodes ADD create_user_id BIGINT DEFAULT NULL;
@@ -52,3 +68,6 @@ UPDATE characters SET deleted = 0, create_time = '2021-02-22 00:00:00', create_u
 UPDATE actors SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
 UPDATE episode_character SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
 UPDATE images SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
+UPDATE shows SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
+UPDATE users SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
+UPDATE comments SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;

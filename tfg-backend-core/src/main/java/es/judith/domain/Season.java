@@ -31,4 +31,9 @@ public class Season extends Audit {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "season", cascade = CascadeType.REMOVE)
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private List<Episode> episodes;
+
+  //En el DTO de lectura NO hace falta mostrar la serie a la que pertenece, pero en el de escritura debe haber un campo para introducir la id de la serie
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "show_id", nullable = false)
+  private Show show;
 }
