@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!--Artifact information-->
-    <groupId>es.alten</groupId>
-    <artifactId>cuentame</artifactId>
+    <groupId>es.judith</groupId>
+    <artifactId>tfg-backend</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -18,7 +18,7 @@
     <!-- Project modules -->
 
     <!-- Project information -->
-    <name>cuentame</name>
+    <name>tfg-backend</name>
     <url>http://.../</url>
     <inceptionYear>2019</inceptionYear>
     <description>Description</description>
@@ -230,7 +230,7 @@
     </properties>
     
     <modules>
-        <module>cuentame-core</module>
-        <module>cuentame-rest</module>
+        <module>tfg-backend-core</module>
+        <module>tfg-backend-rest</module>
     </modules>
 </project>

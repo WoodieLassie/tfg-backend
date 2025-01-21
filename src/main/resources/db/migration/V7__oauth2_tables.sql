@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS ${sch}.oauth2_authorization;
+DROP TABLE IF EXISTS oauth2_authorization;
 
-CREATE TABLE ${sch}.oauth2_authorization (
+CREATE TABLE oauth2_authorization (
     id varchar(100) NOT NULL,
     registered_client_id varchar(100) NOT NULL,
     principal_name varchar(200) NOT NULL,
@@ -37,9 +37,9 @@ CREATE TABLE ${sch}.oauth2_authorization (
     PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS ${sch}.oauth2_registered_client;
+DROP TABLE IF EXISTS oauth2_registered_client;
 
-CREATE TABLE ${sch}.oauth2_registered_client (
+CREATE TABLE oauth2_registered_client (
     id varchar(100) NOT NULL,
     client_id varchar(100) NOT NULL,
     client_id_issued_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
