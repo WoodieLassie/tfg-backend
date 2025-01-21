@@ -1,5 +1,6 @@
 package es.judith.controller.impl;
 
+import es.judith.dto.UserDTO;
 import es.judith.dto.UserInputDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
@@ -10,12 +11,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal;
 import org.springframework.web.bind.annotation.*;
 import es.judith.bo.UserBO;
 import es.judith.controller.UserController;
 import es.judith.domain.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.security.Principal;
+import java.util.LinkedHashMap;
 
 @RestController
 @RequestMapping("/api/users")
@@ -29,7 +36,21 @@ public class UserControllerImpl implements UserController {
     this.bo = bo;
     this.passwordEncoder = passwordEncoder;
   }
-
+  @PostMapping("/getCurrent")
+  public ResponseEntity<UserDTO> getUser(Authentication auth) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    OAuth2IntrospectionAuthenticatedPrincipal principal = (OAuth2IntrospectionAuthenticatedPrincipal) authentication.getPrincipal();
+    LinkedHashMap<String, String> principalAttributes = (LinkedHashMap<String, String>) principal.getAttributes().get("java.security.Principal");
+    Object userDetails = principalAttributes.get("details");
+    LinkedHashMap<String, Object> userDetailsHashMap = (LinkedHashMap<String, Object>) userDetails;
+    assert userDetailsHashMap != null;
+    Integer userId = (Integer) userDetailsHashMap.get("id");
+    Long userLoggedId = Long.valueOf(userId);
+    User user = bo.findOne(userLoggedId);
+    UserDTO userDTO = new UserDTO();
+    userDTO.loadFromDomain(user);
+    return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+  }
   @PostMapping
   @Operation(method = "POST", summary = "Save a new user")
   @ApiResponse(
