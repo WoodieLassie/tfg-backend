@@ -57,7 +57,7 @@ public class CustomUserAuthentication implements AuthenticationProvider {
       if (passwordEncoder.matches(password, "PASS")) {
 
         List<GrantedAuthority> grantedAuths = new ArrayList<>();
-        grantedAuths.add(new SimpleGrantedAuthority("ADMIN"));
+        grantedAuths.add(new SimpleGrantedAuthority(usuario.getRole().toString()));
 
         org.springframework.security.core.userdetails.User userDetails =
             new org.springframework.security.core.userdetails.User(

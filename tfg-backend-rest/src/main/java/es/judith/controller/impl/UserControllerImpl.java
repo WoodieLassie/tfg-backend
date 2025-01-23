@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.security.Principal;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/users")
@@ -36,11 +37,27 @@ public class UserControllerImpl implements UserController {
     this.bo = bo;
     this.passwordEncoder = passwordEncoder;
   }
-  @PostMapping("/getCurrent")
-  public ResponseEntity<UserDTO> getUser(Authentication auth) {
+
+  @Operation(method = "GET", summary = "Fetch data of currently logged in user")
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {@Content(schema = @Schema(implementation = UserDTO.class))})
+  @ApiResponse(
+      responseCode = "401",
+      description = "Unauthorized",
+      content = {@Content(schema = @Schema(hidden = true))})
+  @SecurityRequirement(name = "Authorization")
+  @GetMapping
+  public ResponseEntity<UserDTO> getUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    OAuth2IntrospectionAuthenticatedPrincipal principal = (OAuth2IntrospectionAuthenticatedPrincipal) authentication.getPrincipal();
-    LinkedHashMap<String, String> principalAttributes = (LinkedHashMap<String, String>) principal.getAttributes().get("java.security.Principal");
+    if (Objects.equals(authentication.getPrincipal().toString(), "anonymousUser")) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+    OAuth2IntrospectionAuthenticatedPrincipal principal =
+        (OAuth2IntrospectionAuthenticatedPrincipal) authentication.getPrincipal();
+    LinkedHashMap<String, String> principalAttributes =
+        (LinkedHashMap<String, String>) principal.getAttributes().get("java.security.Principal");
     Object userDetails = principalAttributes.get("details");
     LinkedHashMap<String, Object> userDetailsHashMap = (LinkedHashMap<String, Object>) userDetails;
     assert userDetailsHashMap != null;
@@ -51,6 +68,7 @@ public class UserControllerImpl implements UserController {
     userDTO.loadFromDomain(user);
     return ResponseEntity.status(HttpStatus.OK).body(userDTO);
   }
+
   @PostMapping
   @Operation(method = "POST", summary = "Save a new user")
   @ApiResponse(
@@ -68,7 +86,8 @@ public class UserControllerImpl implements UserController {
     }
     User dbUser = bo.findByEmail(userInputDTO.getEmail());
     if (dbUser != null) {
-      throw new AlreadyExistsException("User with email " + userInputDTO.getEmail() + " already exists");
+      throw new AlreadyExistsException(
+          "User with email " + userInputDTO.getEmail() + " already exists");
     }
     userInputDTO.setPassword(passwordEncoder.encode(userInputDTO.getPassword()));
     bo.save(userInputDTO.obtainDomainObject());

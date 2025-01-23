@@ -28,4 +28,8 @@ public class User extends Audit {
   @Size(max = 100)
   private String password;
 
+  @Column(name = "role", nullable = false)
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  private Role role;
 }

@@ -27,7 +27,7 @@ public class CustomJdbcUserDetailsService implements UserDetailsService {
       throw new UsernameNotFoundException("Invalid username");
     }
 
-    final List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ADMIN"));
+    final List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString()));
 
     return new es.judith.security.domain.CustomUserDetails(user.getId(), username, user.getPassword(),
         true, true, true, true, authorities);

@@ -1,8 +1,11 @@
 package es.judith.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import es.judith.domain.Role;
 import es.judith.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +22,10 @@ public class UserInputDTO extends ElvisBaseDTO<User> {
   @NotNull private String email;
 
   @NotNull private String password;
+
+  @Enumerated(EnumType.STRING)
+  @NotNull
+  private Role role;
 
   public boolean allFieldsArePresent() {
     return Stream.of(this.email, this.password).allMatch(Objects::nonNull);
