@@ -1,3 +1,11 @@
+ALTER TABLE reviews ADD deleted BIT NOT NULL DEFAULT 0;
+ALTER TABLE reviews ADD create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE reviews ADD create_user_id BIGINT DEFAULT NULL;
+ALTER TABLE reviews ADD update_time DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE reviews ADD update_user_id BIGINT DEFAULT NULL;
+ALTER TABLE reviews ADD CONSTRAINT reviews_users_fk_01 FOREIGN KEY (create_user_id) REFERENCES users(id);
+ALTER TABLE reviews ADD CONSTRAINT reviews_users_fk_02 FOREIGN KEY (update_user_id) REFERENCES users(id);
+
 ALTER TABLE comments ADD deleted BIT NOT NULL DEFAULT 0;
 ALTER TABLE comments ADD create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE comments ADD create_user_id BIGINT DEFAULT NULL;
@@ -71,3 +79,4 @@ UPDATE images SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_
 UPDATE shows SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
 UPDATE users SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
 UPDATE comments SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
+UPDATE reviews SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;

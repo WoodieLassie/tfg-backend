@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS episodes;
 DROP TABLE IF EXISTS seasons;
 DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS shows;
 DROP TABLE IF EXISTS users;
 
@@ -27,6 +28,13 @@ CREATE TABLE comments (
   text VARCHAR(255) NOT NULL,
   show_id BIGINT NOT NULL,
   CONSTRAINT comments_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id)
+);
+
+CREATE TABLE reviews (
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  rating INT NOT NULL,
+  show_id BIGINT NOT NULL,
+  CONSTRAINT reviews_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id)
 );
 
 CREATE TABLE seasons (

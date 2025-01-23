@@ -1,8 +1,6 @@
 package es.judith.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,14 +11,12 @@ import java.io.Serial;
 @XmlRootElement
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Table(name = "comments")
-public class Comment extends Audit {
-  @Serial static final long serialVersionUID = 8182917368975655915L;
+@Table(name = "reviews")
+public class Review extends Audit {
+  @Serial private static final long serialVersionUID = 8725454164585149005L;
 
-  @Column(name = "text", nullable = false)
-  @NotNull
-  @Size(max = 255)
-  private String text;
+  @Column(name = "rating", nullable = false)
+  private Integer rating;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "show_id")

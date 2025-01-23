@@ -340,3 +340,6 @@ VALUES ('judith@gmail.com', '$2a$06$5jNY3ZlK8Dx4/XcyBnJ1iOIeEPcNy.fTrPIQpGBDUxX0
 INSERT INTO comments (text, show_id)
 VALUES ('hola', 1);
 
+INSERT INTO reviews (rating, show_id)
+VALUES (5, 1)
+
