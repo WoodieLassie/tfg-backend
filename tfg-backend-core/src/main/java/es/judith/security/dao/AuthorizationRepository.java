@@ -24,6 +24,7 @@ public interface AuthorizationRepository extends JpaRepository<Authorization, St
       + "or a.accessTokenValue = :token "
       + "or a.refreshTokenValue = :token")
   Optional<Authorization> findByAnyValue(@Param("token") String token);
+  Optional<Authorization> findByPrincipalName(String principalName);
  
   // @formatter:on
 }

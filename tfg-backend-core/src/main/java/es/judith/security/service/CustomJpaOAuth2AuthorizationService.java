@@ -34,7 +34,8 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
   private final RegisteredClientRepository registeredClientRepository;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
-  public CustomJpaOAuth2AuthorizationService(AuthorizationRepository authorizationRepository,
+  public CustomJpaOAuth2AuthorizationService(
+      AuthorizationRepository authorizationRepository,
       RegisteredClientRepository registeredClientRepository) {
     super();
     Assert.notNull(authorizationRepository, "authorization repository cannot be null");
@@ -52,6 +53,7 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
   @Override
   public void save(OAuth2Authorization authorization) {
     Assert.notNull(authorization, "Authorization cannot be null");
+
     this.authorizationRepository.save(toEntity(authorization));
   }
 
@@ -67,6 +69,13 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
     return this.authorizationRepository.findById(id).map(this::toObject).orElse(null);
   }
 
+  public OAuth2Authorization findByPrincipalName(String principalName) {
+    return this.authorizationRepository
+        .findByPrincipalName(principalName)
+        .map(this::toObject)
+        .orElse(null);
+  }
+
   @Override
   public OAuth2Authorization findByToken(String token, OAuth2TokenType tokenType) {
     Assert.hasText(token, "Token cannot be null");
@@ -79,14 +88,23 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
       authorization =
           this.authorizationRepository.findByState(token).map(this::toObject).orElse(null);
     } else if (OAuth2ParameterNames.CODE.equalsIgnoreCase(tokenType.getValue())) {
-      authorization = this.authorizationRepository.findByAuthorizationCodeValue(token)
-          .map(this::toObject).orElse(null);
+      authorization =
+          this.authorizationRepository
+              .findByAuthorizationCodeValue(token)
+              .map(this::toObject)
+              .orElse(null);
     } else if (OAuth2ParameterNames.ACCESS_TOKEN.equalsIgnoreCase(tokenType.getValue())) {
-      authorization = this.authorizationRepository.findByAccessTokenValue(token).map(this::toObject)
-          .orElse(null);
+      authorization =
+          this.authorizationRepository
+              .findByAccessTokenValue(token)
+              .map(this::toObject)
+              .orElse(null);
     } else if (OAuth2ParameterNames.REFRESH_TOKEN.equalsIgnoreCase(tokenType.getValue())) {
-      authorization = this.authorizationRepository.findByRefreshTokenValue(token)
-          .map(this::toObject).orElse(null);
+      authorization =
+          this.authorizationRepository
+              .findByRefreshTokenValue(token)
+              .map(this::toObject)
+              .orElse(null);
     }
 
     return authorization;
@@ -105,11 +123,11 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
     return authorization;
   }
 
-  private void setCommonTokenValues(OAuth2Authorization oauth2Authorization,
-      final Authorization authorization) {
+  private void setCommonTokenValues(
+      OAuth2Authorization oauth2Authorization, final Authorization authorization) {
     authorization.setAttributes(writeMap(oauth2Authorization.getAttributes()));
-    authorization
-        .setAuthorizationGrantType(oauth2Authorization.getAuthorizationGrantType().getValue());
+    authorization.setAuthorizationGrantType(
+        oauth2Authorization.getAuthorizationGrantType().getValue());
     authorization.setAuthorizedScopes(
         StringUtils.collectionToCommaDelimitedString(oauth2Authorization.getAuthorizedScopes()));
     authorization.setId(oauth2Authorization.getId());
@@ -118,8 +136,8 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
     authorization.setState(oauth2Authorization.getAttribute(OAuth2ParameterNames.STATE));
   }
 
-  private void setAccessTokenValues(OAuth2Authorization oauth2Authorization,
-      final Authorization authorization) {
+  private void setAccessTokenValues(
+      OAuth2Authorization oauth2Authorization, final Authorization authorization) {
     final OAuth2Authorization.Token<OAuth2AccessToken> accessToken =
         oauth2Authorization.getToken(OAuth2AccessToken.class);
     if (accessToken != null && accessToken.getToken() != null) {
@@ -135,8 +153,8 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
     }
   }
 
-  private void setAuthorizationCodeTokenValues(OAuth2Authorization oauth2Authorization,
-      final Authorization authorization) {
+  private void setAuthorizationCodeTokenValues(
+      OAuth2Authorization oauth2Authorization, final Authorization authorization) {
     final OAuth2Authorization.Token<OAuth2AuthorizationCode> authorizationCodeToken =
         oauth2Authorization.getToken(OAuth2AuthorizationCode.class);
     if (authorizationCodeToken != null && authorizationCodeToken.getToken() != null) {
@@ -147,8 +165,8 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
     }
   }
 
-  private void setDeviceCodeTokenValues(OAuth2Authorization oauth2Authorization,
-      final Authorization authorization) {
+  private void setDeviceCodeTokenValues(
+      OAuth2Authorization oauth2Authorization, final Authorization authorization) {
     final OAuth2Authorization.Token<OAuth2DeviceCode> deviceCodeToken =
         oauth2Authorization.getToken(OAuth2DeviceCode.class);
     if (deviceCodeToken != null && deviceCodeToken.getToken() != null) {
@@ -159,8 +177,8 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
     }
   }
 
-  private void setOidcIdTokenValues(OAuth2Authorization oauth2Authorization,
-      final Authorization authorization) {
+  private void setOidcIdTokenValues(
+      OAuth2Authorization oauth2Authorization, final Authorization authorization) {
     final OAuth2Authorization.Token<OidcIdToken> oidcIdToken =
         oauth2Authorization.getToken(OidcIdToken.class);
     if (oidcIdToken != null && oidcIdToken.getToken() != null) {
@@ -171,8 +189,8 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
     }
   }
 
-  private void setRefreshTokenValues(OAuth2Authorization oauth2Authorization,
-      final Authorization authorization) {
+  private void setRefreshTokenValues(
+      OAuth2Authorization oauth2Authorization, final Authorization authorization) {
     final OAuth2Authorization.Token<OAuth2RefreshToken> refreshToken =
         oauth2Authorization.getToken(OAuth2RefreshToken.class);
     if (refreshToken != null && refreshToken.getToken() != null) {
@@ -183,8 +201,8 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
     }
   }
 
-  private void setUserCodeTokenValues(OAuth2Authorization oauth2Authorization,
-      final Authorization authorization) {
+  private void setUserCodeTokenValues(
+      OAuth2Authorization oauth2Authorization, final Authorization authorization) {
     final OAuth2Authorization.Token<OAuth2UserCode> userCodeToken =
         oauth2Authorization.getToken(OAuth2UserCode.class);
     if (userCodeToken != null && userCodeToken.getToken() != null) {
@@ -199,8 +217,10 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
     final RegisteredClient registeredClient =
         this.registeredClientRepository.findById(authorization.getRegisteredClientId());
     if (registeredClient == null) {
-      throw new DataRetrievalFailureException(String.format(
-          "Registered client with id %s does not exist", authorization.getRegisteredClientId()));
+      throw new DataRetrievalFailureException(
+          String.format(
+              "Registered client with id %s does not exist",
+              authorization.getRegisteredClientId()));
     }
 
     final OAuth2Authorization.Builder builder =
@@ -216,81 +236,103 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
     return builder.build();
   }
 
-  private void setCommomTokenValues(Authorization authorization,
-      final OAuth2Authorization.Builder builder) {
+  private void setCommomTokenValues(
+      Authorization authorization, final OAuth2Authorization.Builder builder) {
     builder
         .attributes(attributes -> attributes.putAll(parseAttributes(authorization.getAttributes())))
         .authorizationGrantType(
             resolveAuthorizationGrantType(authorization.getAuthorizationGrantType()))
         .authorizedScopes(StringUtils.commaDelimitedListToSet(authorization.getAuthorizedScopes()))
-        .id(authorization.getId()).principalName(authorization.getPrincipalName());
+        .id(authorization.getId())
+        .principalName(authorization.getPrincipalName());
     if (StringUtils.hasText(authorization.getState())) {
       builder.attribute(OAuth2ParameterNames.STATE, authorization.getState());
     }
   }
 
-  private void setAccessTokenValues(Authorization authorization,
-      final OAuth2Authorization.Builder builder) {
+  private void setAccessTokenValues(
+      Authorization authorization, final OAuth2Authorization.Builder builder) {
     if (StringUtils.hasText(authorization.getAccessTokenValue())) {
-      final OAuth2AccessToken accessToken = new OAuth2AccessToken(
-          OAuth2AccessToken.TokenType.BEARER, authorization.getAccessTokenValue(),
-          authorization.getAccessTokenIssuedAt(), authorization.getAccessTokenExpiresAt(),
-          StringUtils.commaDelimitedListToSet(authorization.getAccessTokenScopes()));
-      builder.token(accessToken,
+      final OAuth2AccessToken accessToken =
+          new OAuth2AccessToken(
+              OAuth2AccessToken.TokenType.BEARER,
+              authorization.getAccessTokenValue(),
+              authorization.getAccessTokenIssuedAt(),
+              authorization.getAccessTokenExpiresAt(),
+              StringUtils.commaDelimitedListToSet(authorization.getAccessTokenScopes()));
+      builder.token(
+          accessToken,
           metadata -> metadata.putAll(parseMap(authorization.getAccessTokenMetadata())));
     }
   }
 
-  private void setAuthorizationCodeTokenValues(Authorization authorization,
-      final OAuth2Authorization.Builder builder) {
+  private void setAuthorizationCodeTokenValues(
+      Authorization authorization, final OAuth2Authorization.Builder builder) {
     if (StringUtils.hasText(authorization.getAuthorizationCodeValue())) {
-      final OAuth2AuthorizationCode authorizationCodeToken = new OAuth2AuthorizationCode(
-          authorization.getAuthorizationCodeValue(), authorization.getAuthorizationCodeIssuedAt(),
-          authorization.getAuthorizationCodeExpiresAt());
-      builder.token(authorizationCodeToken,
+      final OAuth2AuthorizationCode authorizationCodeToken =
+          new OAuth2AuthorizationCode(
+              authorization.getAuthorizationCodeValue(),
+              authorization.getAuthorizationCodeIssuedAt(),
+              authorization.getAuthorizationCodeExpiresAt());
+      builder.token(
+          authorizationCodeToken,
           metadata -> metadata.putAll(parseMap(authorization.getAuthorizationCodeMetadata())));
     }
   }
 
-  private void setDeviceCodeTokenValues(Authorization authorization,
-      final OAuth2Authorization.Builder builder) {
+  private void setDeviceCodeTokenValues(
+      Authorization authorization, final OAuth2Authorization.Builder builder) {
     if (StringUtils.hasText(authorization.getDeviceCodeValue())) {
       final OAuth2DeviceCode deviceCodeToken =
-          new OAuth2DeviceCode(authorization.getDeviceCodeValue(),
-              authorization.getDeviceCodeIssuedAt(), authorization.getDeviceCodeExpiresAt());
-      builder.token(deviceCodeToken,
+          new OAuth2DeviceCode(
+              authorization.getDeviceCodeValue(),
+              authorization.getDeviceCodeIssuedAt(),
+              authorization.getDeviceCodeExpiresAt());
+      builder.token(
+          deviceCodeToken,
           metadata -> metadata.putAll(parseMap(authorization.getDeviceCodeMetadata())));
     }
   }
 
-  private void setOidcIdTokenValues(Authorization authorization,
-      final OAuth2Authorization.Builder builder) {
+  private void setOidcIdTokenValues(
+      Authorization authorization, final OAuth2Authorization.Builder builder) {
     if (StringUtils.hasText(authorization.getOidcIdTokenValue())) {
-      final OidcIdToken oidcIdToken = new OidcIdToken(authorization.getOidcIdTokenValue(),
-          authorization.getOidcIdTokenIssuedAt(), authorization.getOidcIdTokenExpiresAt(),
-          parseMap(authorization.getOidcIdTokenMetadata()));
-      builder.token(oidcIdToken,
+      final OidcIdToken oidcIdToken =
+          new OidcIdToken(
+              authorization.getOidcIdTokenValue(),
+              authorization.getOidcIdTokenIssuedAt(),
+              authorization.getOidcIdTokenExpiresAt(),
+              parseMap(authorization.getOidcIdTokenMetadata()));
+      builder.token(
+          oidcIdToken,
           metadata -> metadata.putAll(parseMap(authorization.getOidcIdTokenMetadata())));
     }
   }
 
-  private void setRefreshTokenValues(Authorization authorization,
-      final OAuth2Authorization.Builder builder) {
+  private void setRefreshTokenValues(
+      Authorization authorization, final OAuth2Authorization.Builder builder) {
     if (StringUtils.hasText(authorization.getRefreshTokenValue())) {
       final OAuth2RefreshToken refreshToken =
-          new OAuth2RefreshToken(authorization.getRefreshTokenValue(),
-              authorization.getRefreshTokenIssuedAt(), authorization.getRefreshTokenExpiresAt());
-      builder.token(refreshToken,
+          new OAuth2RefreshToken(
+              authorization.getRefreshTokenValue(),
+              authorization.getRefreshTokenIssuedAt(),
+              authorization.getRefreshTokenExpiresAt());
+      builder.token(
+          refreshToken,
           metadata -> metadata.putAll(parseMap(authorization.getRefreshTokenMetadata())));
     }
   }
 
-  private void setUserCodeTokenValues(Authorization authorization,
-      final OAuth2Authorization.Builder builder) {
+  private void setUserCodeTokenValues(
+      Authorization authorization, final OAuth2Authorization.Builder builder) {
     if (StringUtils.hasText(authorization.getUserCodeValue())) {
-      final OAuth2UserCode userCodeToken = new OAuth2UserCode(authorization.getUserCodeValue(),
-          authorization.getUserCodeIssuedAt(), authorization.getUserCodeExpiresAt());
-      builder.token(userCodeToken,
+      final OAuth2UserCode userCodeToken =
+          new OAuth2UserCode(
+              authorization.getUserCodeValue(),
+              authorization.getUserCodeIssuedAt(),
+              authorization.getUserCodeExpiresAt());
+      builder.token(
+          userCodeToken,
           metadata -> metadata.putAll(parseMap(authorization.getUserCodeMetadata())));
     }
   }
@@ -324,7 +366,8 @@ public class CustomJpaOAuth2AuthorizationService implements OAuth2AuthorizationS
       String authorizationGrantType) {
     if (AuthorizationGrantType.AUTHORIZATION_CODE.getValue().equals(authorizationGrantType)) {
       return AuthorizationGrantType.AUTHORIZATION_CODE;
-    } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue()
+    } else if (AuthorizationGrantType.CLIENT_CREDENTIALS
+        .getValue()
         .equals(authorizationGrantType)) {
       return AuthorizationGrantType.CLIENT_CREDENTIALS;
     } else if (AuthorizationGrantType.REFRESH_TOKEN.getValue().equals(authorizationGrantType)) {

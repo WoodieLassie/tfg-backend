@@ -3,6 +3,8 @@ package es.judith.security;
 import java.security.Principal;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import es.judith.security.service.CustomJpaOAuth2AuthorizationService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -40,11 +42,13 @@ public class CustomPasswordAuthenticationProvider implements AuthenticationProvi
   private final UserDetailsService userDetailsService;
   private final OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator;
   private final PasswordEncoder passwordEncoder;
+  private final CustomJpaOAuth2AuthorizationService customAuthorizationService;
 
   public CustomPasswordAuthenticationProvider(OAuth2AuthorizationService authorizationService,
-      UserDetailsService userDetailsService,
-      OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator, PasswordEncoder passwordEncoder) {
-    Assert.notNull(authorizationService, "authorizationService cannot be null");
+                                              UserDetailsService userDetailsService,
+                                              OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator, PasswordEncoder passwordEncoder, CustomJpaOAuth2AuthorizationService customAuthorizationService) {
+      this.customAuthorizationService = customAuthorizationService;
+      Assert.notNull(authorizationService, "authorizationService cannot be null");
     Assert.notNull(tokenGenerator, "TokenGenerator cannot be null");
     Assert.notNull(userDetailsService, "UserDetailsService cannot be null");
     this.authorizationService = authorizationService;
@@ -126,8 +130,11 @@ public class CustomPasswordAuthenticationProvider implements AuthenticationProvi
     }
 
     final OAuth2Authorization authorization = authorizationBuilder.build();
+    OAuth2Authorization alreadyExistingToken = customAuthorizationService.findByPrincipalName(authorization.getPrincipalName());
+    if (alreadyExistingToken != null) {
+      this.authorizationService.remove(alreadyExistingToken);
+    }
     this.authorizationService.save(authorization);
-
     return new OAuth2AccessTokenAuthenticationToken(registeredClient, clientPrincipal, accessToken,
         refreshToken);
   }

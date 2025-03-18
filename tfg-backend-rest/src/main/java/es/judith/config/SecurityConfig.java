@@ -1,5 +1,6 @@
 package es.judith.config;
 
+import es.judith.security.service.CustomJpaOAuth2AuthorizationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -32,15 +33,18 @@ public class SecurityConfig {
   private final PasswordEncoder passwordEncoder;
   private final UserDetailsService userDetailsService;
   private final OAuth2AuthorizationService oauth2AuthorizationService;
+  private final CustomJpaOAuth2AuthorizationService customAuthorizationService;
 
   public SecurityConfig(
       PasswordEncoder passwordEncoder,
       UserDetailsService userDetailsService,
-      OAuth2AuthorizationService oauth2AuthorizationService) {
+      OAuth2AuthorizationService oauth2AuthorizationService,
+      CustomJpaOAuth2AuthorizationService customAuthorizationService) {
     super();
     this.passwordEncoder = passwordEncoder;
     this.userDetailsService = userDetailsService;
     this.oauth2AuthorizationService = oauth2AuthorizationService;
+    this.customAuthorizationService = customAuthorizationService;
   }
 
   @Bean
@@ -58,7 +62,8 @@ public class SecurityConfig {
                             this.oauth2AuthorizationService,
                             userDetailsService,
                             tokenGenerator(),
-                            passwordEncoder))
+                            passwordEncoder,
+                            customAuthorizationService))
                     .authenticationProvider(
                         new CustomRefreshTokenAuthenticationProvider(
                             oauth2AuthorizationService,
