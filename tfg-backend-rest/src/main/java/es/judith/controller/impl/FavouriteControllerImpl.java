@@ -1,14 +1,17 @@
 package es.judith.controller.impl;
 
 import es.judith.bo.FavouriteBO;
+import es.judith.bo.ShowBO;
 import es.judith.bo.UserBO;
 import es.judith.controller.FavouriteController;
 import es.judith.domain.Favourite;
 import es.judith.domain.Role;
+import es.judith.domain.Show;
 import es.judith.dto.FavouriteDTO;
 import es.judith.dto.FavouriteInputDTO;
 import es.judith.dto.SeasonDTO;
 import es.judith.exceptions.BadInputException;
+import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,11 +40,13 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
   private static final Logger LOG = LoggerFactory.getLogger(FavouriteControllerImpl.class);
   private final FavouriteBO bo;
   private final UserBO userBO;
+  private final ShowBO showBO;
 
-  public FavouriteControllerImpl(FavouriteBO bo, UserBO userBO) {
+  public FavouriteControllerImpl(FavouriteBO bo, UserBO userBO, ShowBO showBO) {
       super(userBO);
       this.bo = bo;
       this.userBO = userBO;
+      this.showBO = showBO;
   }
 
   @Override
@@ -79,10 +84,16 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
     if (!favouriteDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
+    Show show = showBO.findOne(favouriteDTO.getShowId());
+    if (show == null) {
+      throw new NotExistingIdException(
+              "Show with id " + favouriteDTO.getShowId() + " does not exist");
+    }
     Favourite favourite = favouriteDTO.obtainDomainObject();
+    favourite.setShow(show);
     LOG.debug("FavouriteControllerImpl: Saving data");
     bo.save(favourite);
-    return null;
+    return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
 
   @Override
@@ -101,8 +112,8 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
     if (!bo.exists(id)) {
       throw new NotFoundException("Favourite with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getId(), this.getCurrentUser().getId()) && this.getCurrentUser().getRole() != Role.ADMIN) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    if (!Objects.equals(bo.findOne(id).getCreatedBy(), this.getCurrentUser().getId()) && this.getCurrentUser().getRole() != Role.ADMIN) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
     LOG.debug("FavouriteControllerImpl: Deleting data with id {}", id);
     bo.delete(id);

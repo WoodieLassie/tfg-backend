@@ -74,18 +74,29 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             authz ->
                 authz
-                    .requestMatchers("/swagger-ui/**", "/webjars/**", "/v3/api-docs/**, /api/users/**")
+                    .requestMatchers(
+                        "/swagger-ui/**", "/webjars/**", "/v3/api-docs/**, /api/users/**")
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/**")
                     .permitAll()
                     .requestMatchers(
                         HttpMethod.POST,
-                        "/api/actors/**, /api/characters/**, /api/comments/**, /api/episodes/**, /api/images/**, /api/reviews/**, /api/seasons/**, /api/shows/**")
+                        "/api/actors/**, /api/characters/**, /api/episodes/**, /api/images/**, /api/seasons/**, /api/shows/**")
                     .hasAuthority("ADMIN")
+                    .requestMatchers(
+                        HttpMethod.POST, "/api/comments/**, /api/favourites/**, /api/reviews/**")
+                    .hasAuthority("USER")
                     .requestMatchers(HttpMethod.PATCH, "/**")
                     .hasAuthority("ADMIN")
-                    .requestMatchers(HttpMethod.DELETE, "/**")
-                    .hasAuthority("ADMIN").anyRequest().permitAll())
+                    .requestMatchers(
+                        HttpMethod.DELETE,
+                        "/api/actors/**, /api/characters/**, /api/episodes/**, /api/images/**, /api/seasons/**, /api/shows/**")
+                    .hasAuthority("ADMIN")
+                    .requestMatchers(
+                        HttpMethod.DELETE, "/api/favourites/**, /api/comments/**, /api/reviews/**")
+                    .hasAuthority("USER")
+                    .anyRequest()
+                    .permitAll())
         .oauth2ResourceServer(
             configurer ->
                 configurer.opaqueToken(

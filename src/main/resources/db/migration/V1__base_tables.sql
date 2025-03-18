@@ -82,3 +82,9 @@ CREATE TABLE actors (
   character_id BIGINT NOT NULL,
   CONSTRAINT actors_fk_01 FOREIGN KEY (character_id) REFERENCES characters (id) ON DELETE CASCADE
 );
+
+CREATE TABLE favourites (
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  show_id BIGINT NOT NULL,
+  CONSTRAINT favourites_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id) ON DELETE CASCADE
+);

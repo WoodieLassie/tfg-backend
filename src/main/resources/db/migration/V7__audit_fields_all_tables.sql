@@ -70,6 +70,14 @@ ALTER TABLE images ADD update_user_id BIGINT DEFAULT NULL;
 ALTER TABLE images ADD CONSTRAINT images_users_fk_01 FOREIGN KEY (create_user_id) REFERENCES users(id);
 ALTER TABLE images ADD CONSTRAINT images_users_fk_02 FOREIGN KEY (update_user_id) REFERENCES users(id);
 
+ALTER TABLE favourites ADD deleted BIT NOT NULL DEFAULT 0;
+ALTER TABLE favourites ADD create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE favourites ADD create_user_id BIGINT DEFAULT NULL;
+ALTER TABLE favourites ADD update_time DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE favourites ADD update_user_id BIGINT DEFAULT NULL;
+ALTER TABLE favourites ADD CONSTRAINT favourites_users_fk_01 FOREIGN KEY (create_user_id) REFERENCES users(id);
+ALTER TABLE favourites ADD CONSTRAINT favourites_users_fk_02 FOREIGN KEY (update_user_id) REFERENCES users(id);
+
 UPDATE seasons SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
 UPDATE episodes SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
 UPDATE characters SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
