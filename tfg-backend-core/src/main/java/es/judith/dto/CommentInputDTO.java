@@ -1,5 +1,6 @@
 package es.judith.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import es.judith.domain.Comment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,8 @@ import java.io.Serial;
 @Data
 public class CommentInputDTO extends ElvisBaseDTO<Comment> {
     @Serial private static final long serialVersionUID = -652917558111237079L;
+
+    @JsonIgnore private Long id;
 
     @NotNull private String text;
     @NotNull private Long showId;

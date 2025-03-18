@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -14,7 +15,7 @@ import java.util.stream.Stream;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class SeasonInputDTO extends ElvisBaseDTO<Season> {
-  private static final long serialVersionUID = -7833187139596920918L;
+  @Serial private static final long serialVersionUID = -7833187139596920918L;
 
   @JsonIgnore private Long id;
 
@@ -26,7 +27,11 @@ public class SeasonInputDTO extends ElvisBaseDTO<Season> {
   @NotNull
   private String description;
 
+  @Schema(description = "Season identification")
+  @NotNull
+  private Long showId;
+
   public boolean allFieldsArePresent() {
-    return Stream.of(this.seasonNum, this.description).allMatch(Objects::nonNull);
+    return Stream.of(this.seasonNum, this.description, this.showId).allMatch(Objects::nonNull);
   }
 }

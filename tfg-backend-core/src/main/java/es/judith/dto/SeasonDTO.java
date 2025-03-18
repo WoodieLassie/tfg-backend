@@ -1,6 +1,7 @@
 package es.judith.dto;
 
 import es.judith.domain.Season;
+import es.judith.domain.Show;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -29,4 +30,8 @@ public class SeasonDTO extends ElvisBaseDTO<Season> {
 
   @Schema(description = "Season episodes")
   private List<EpisodeNoSeasonDTO> episodes;
+
+  @Schema(description = "Season show")
+  @NotNull
+  private ShowDTO show;
 }
