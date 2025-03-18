@@ -9,7 +9,7 @@ import es.judith.domain.Role;
 import es.judith.domain.Show;
 import es.judith.dto.FavouriteDTO;
 import es.judith.dto.FavouriteInputDTO;
-import es.judith.dto.SeasonDTO;
+import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,10 +42,10 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
   private final ShowBO showBO;
 
   public FavouriteControllerImpl(FavouriteBO bo, UserBO userBO, ShowBO showBO) {
-      super(userBO);
-      this.bo = bo;
-      this.userBO = userBO;
-      this.showBO = showBO;
+    super(userBO);
+    this.bo = bo;
+    this.userBO = userBO;
+    this.showBO = showBO;
   }
 
   @Override
@@ -78,6 +77,10 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
       responseCode = "201",
       description = "Created",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+      responseCode = "409",
+      description = "Conflict",
+      content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Favourite> add(@RequestBody FavouriteInputDTO favouriteDTO) {
@@ -87,7 +90,13 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
     Show show = showBO.findOne(favouriteDTO.getShowId());
     if (show == null) {
       throw new NotExistingIdException(
-              "Show with id " + favouriteDTO.getShowId() + " does not exist");
+          "Show with id " + favouriteDTO.getShowId() + " does not exist");
+    }
+    List<Favourite> userFavourites = bo.findAllByUser(this.getCurrentUser().getId());
+    for (Favourite userFavourite : userFavourites) {
+      if (Objects.equals(userFavourite.getShow().getId(), favouriteDTO.getShowId())) {
+        throw new AlreadyExistsException("Show already favourited");
+      }
     }
     Favourite favourite = favouriteDTO.obtainDomainObject();
     favourite.setShow(show);
@@ -112,7 +121,8 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
     if (!bo.exists(id)) {
       throw new NotFoundException("Favourite with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getCreatedBy(), this.getCurrentUser().getId()) && this.getCurrentUser().getRole() != Role.ADMIN) {
+    if (!Objects.equals(bo.findOne(id).getCreatedBy(), this.getCurrentUser().getId())
+        && this.getCurrentUser().getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
     LOG.debug("FavouriteControllerImpl: Deleting data with id {}", id);
