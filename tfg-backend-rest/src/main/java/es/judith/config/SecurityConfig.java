@@ -74,16 +74,18 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             authz ->
                 authz
+                    .requestMatchers("/swagger-ui/**", "/webjars/**", "/v3/api-docs/**, /api/users/**")
+                    .permitAll()
                     .requestMatchers(HttpMethod.GET, "/**")
                     .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/**")
-                        .hasAuthority("ADMIN")
+                    .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/actors/**, /api/characters/**, /api/comments/**, /api/episodes/**, /api/images/**, /api/reviews/**, /api/seasons/**, /api/shows/**")
+                    .hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.PATCH, "/**")
-                        .hasAuthority("ADMIN")
+                    .hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/**")
-                        .hasAuthority("ADMIN")
-                    .requestMatchers("/swagger-ui/**", "/webjars/**", "/v3/api-docs/**")
-                    .permitAll())
+                    .hasAuthority("ADMIN").anyRequest().permitAll())
         .oauth2ResourceServer(
             configurer ->
                 configurer.opaqueToken(

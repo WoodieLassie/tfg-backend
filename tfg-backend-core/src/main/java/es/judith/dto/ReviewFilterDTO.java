@@ -1,16 +1,18 @@
 package es.judith.dto;
 
-import es.judith.domain.Actor;
+import es.judith.domain.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 
-@Schema(name = "ActorFilterDTO", description = "Actor filter")
+import java.io.Serial;
+
+@Schema(name = "ReviewFilterDTO", description = "Review filter")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ActorFilterDTO extends BaseFilterDTO<Actor> {
-  private static final long serialVersionUID = 5403701927000727599L;
+public class ReviewFilterDTO extends BaseFilterDTO<Review> {
+  @Serial private static final long serialVersionUID = -5414268468633452990L;
 
   @Override
   public Specification obtainFilterSpecification() {

@@ -77,6 +77,5 @@ UPDATE actors SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_
 UPDATE episode_character SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
 UPDATE images SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
 UPDATE shows SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
-UPDATE users SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
 UPDATE comments SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;
 UPDATE reviews SET deleted = 0, create_time = '2021-02-22 00:00:00', create_user_id = 1, update_time = '2021-02-22 00:00:00', update_user_id = 1;

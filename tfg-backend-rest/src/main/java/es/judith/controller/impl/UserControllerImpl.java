@@ -28,12 +28,13 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "users")
-public class UserControllerImpl implements UserController {
+public class UserControllerImpl extends GenericControllerImpl implements UserController {
 
   private final UserBO bo;
   private final transient PasswordEncoder passwordEncoder;
 
   public UserControllerImpl(UserBO bo, PasswordEncoder passwordEncoder) {
+    super(bo);
     this.bo = bo;
     this.passwordEncoder = passwordEncoder;
   }
@@ -50,22 +51,10 @@ public class UserControllerImpl implements UserController {
   @SecurityRequirement(name = "Authorization")
   @GetMapping
   public ResponseEntity<UserDTO> getUser() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (Objects.equals(authentication.getPrincipal().toString(), "anonymousUser")) {
+    UserDTO userDTO = this.getCurrentUser();
+    if (userDTO == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
-    OAuth2IntrospectionAuthenticatedPrincipal principal =
-        (OAuth2IntrospectionAuthenticatedPrincipal) authentication.getPrincipal();
-    LinkedHashMap<String, String> principalAttributes =
-        (LinkedHashMap<String, String>) principal.getAttributes().get("java.security.Principal");
-    Object userDetails = principalAttributes.get("details");
-    LinkedHashMap<String, Object> userDetailsHashMap = (LinkedHashMap<String, Object>) userDetails;
-    assert userDetailsHashMap != null;
-    Integer userId = (Integer) userDetailsHashMap.get("id");
-    Long userLoggedId = Long.valueOf(userId);
-    User user = bo.findOne(userLoggedId);
-    UserDTO userDTO = new UserDTO();
-    userDTO.loadFromDomain(user);
     return ResponseEntity.status(HttpStatus.OK).body(userDTO);
   }
 
@@ -79,7 +68,6 @@ public class UserControllerImpl implements UserController {
       responseCode = "409",
       description = "Conflict",
       content = {@Content(schema = @Schema(hidden = true))})
-  @SecurityRequirement(name = "Authorization")
   public ResponseEntity<User> register(@RequestBody UserInputDTO userInputDTO) {
     if (!userInputDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
