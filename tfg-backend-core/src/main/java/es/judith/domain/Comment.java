@@ -22,6 +22,8 @@ public class Comment extends Audit {
   @Size(max = 255)
   private String text;
 
+  @Transient private String email;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "show_id")
   private Show show;

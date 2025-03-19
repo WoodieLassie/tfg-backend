@@ -17,7 +17,7 @@ public interface CommentRepository
         QuerydslBinderCustomizer<QComment> {
   @Query(
       value =
-          "SELECT c.*, u.email FROM comments c, users u WHERE c.created_user_id = u.id AND c.show_id = :showId",
+          "SELECT c.*, u.email FROM comments c LEFT JOIN users u ON c.create_user_id = u.id WHERE c.show_id = :showId",
       nativeQuery = true)
-  List<Comment> findAll(@Param("showId") Long showId);
+  List<Object[]> findAll(@Param("showId") Long showId);
 }
