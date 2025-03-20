@@ -17,24 +17,26 @@ import java.util.List;
 @Service
 @Transactional
 public class CommentBOImpl
-        extends ElvisGenericCRUDServiceImpl<Comment, Long, QComment, CommentFilterDTO, CommentRepository>
-        implements CommentBO {
+    extends ElvisGenericCRUDServiceImpl<
+        Comment, Long, QComment, CommentFilterDTO, CommentRepository>
+    implements CommentBO {
 
-    public CommentBOImpl(CommentRepository repository) {
-        super(repository);
-    }
+  public CommentBOImpl(CommentRepository repository) {
+    super(repository);
+  }
 
-    @Override
-    public List<CommentDTO> findAllByShowIdWithUser(Long showId) {
-        List<Object[]> commentList = repository.findAll(showId);
-        List<CommentDTO> convertedCommentList = new ArrayList<>();
-        for (Object[] comment : commentList) {
-            CommentDTO convertedComment = new CommentDTO();
-            convertedComment.setId((Long) comment[0]);
-            convertedComment.setText((String) comment[1]);
-            convertedComment.setEmail((String) comment[8]);
-            convertedCommentList.add(convertedComment);
-        }
-        return convertedCommentList;
+  @Override
+  @Transactional(readOnly = true)
+  public List<CommentDTO> findAllByShowIdWithUser(Long showId) {
+    List<Object[]> commentList = repository.findAll(showId);
+    List<CommentDTO> convertedCommentList = new ArrayList<>();
+    for (Object[] comment : commentList) {
+      CommentDTO convertedComment = new CommentDTO();
+      convertedComment.setId((Long) comment[0]);
+      convertedComment.setText((String) comment[1]);
+      convertedComment.setEmail((String) comment[8]);
+      convertedCommentList.add(convertedComment);
     }
+    return convertedCommentList;
+  }
 }

@@ -15,6 +15,8 @@ public interface ReviewRepository
         JpaSpecificationExecutor<Review>,
         QuerydslPredicateExecutor<Review>,
         QuerydslBinderCustomizer<QReview> {
-    @Query("SELECT r FROM Review r WHERE r.show = :showId")
+    @Query(nativeQuery = true, value = "SELECT r.* FROM reviews r WHERE r.show_id = :showId")
     List<Review> findByShow(@Param("showId") Long showId);
+    @Query(nativeQuery = true, value = "SELECT r.* FROM reviews r WHERE r.show_id = :showId AND r.create_user_id = :userId")
+    Review checkIfUserReviewInShow(@Param("showId") Long showId, @Param("userId") Long userId);
 }

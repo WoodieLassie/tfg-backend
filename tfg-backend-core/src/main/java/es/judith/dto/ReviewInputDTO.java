@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Schema(name = "ReviewInputDTO", description = "Data transfer object for input. Review")
 @EqualsAndHashCode(callSuper = true)
@@ -19,4 +21,8 @@ public class ReviewInputDTO extends ElvisBaseDTO<Review> {
 
   @NotNull private Integer rating;
   @NotNull private Long showId;
+
+  public boolean allFieldsArePresent() {
+    return Stream.of(this.rating, this.showId).allMatch(Objects::nonNull);
+  }
 }

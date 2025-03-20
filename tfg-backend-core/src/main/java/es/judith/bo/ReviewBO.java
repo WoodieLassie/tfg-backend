@@ -7,5 +7,6 @@ import es.judith.dto.ReviewFilterDTO;
 import java.util.List;
 
 public interface ReviewBO extends GenericCRUDService<Review, Long, QReview, ReviewFilterDTO> {
-    List<Review> findByShowId(Long showId);
+    List<Review> findAllByShowId(Long showId);
+    Review checkIfUserReviewInShow(Long showId, Long userId);
 }
