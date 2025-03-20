@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface SeasonController extends BaseController {
-    ResponseEntity<List<SeasonDTO>> findAll();
+    ResponseEntity<List<SeasonDTO>> findAll(Long showId);
     ResponseEntity<SeasonDTO> findById(Long id);
     ResponseEntity<List<SeasonDTO>> findAllByCharacters(String characterName);
     ResponseEntity<Season> add(SeasonInputDTO seasonDTO);

@@ -27,6 +27,11 @@ public class SeasonBOImpl
     super(repository);
   }
 
+  @Override
+  public List<Season> findAll(Long showId) {
+    return repository.findAll(showId);
+  }
+
   @Transactional(readOnly = true)
   public List<Season> findAllByCharacters(String name) {
     LOG.debug("SeasonBOImpl: findAllByCharacters");

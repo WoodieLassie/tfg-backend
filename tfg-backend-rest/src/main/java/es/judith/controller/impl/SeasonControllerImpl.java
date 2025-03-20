@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class SeasonControllerImpl implements SeasonController {
   }
 
   @Override
-  @Operation(method = "GET", summary = "Get all seasons")
+  @Operation(method = "GET", summary = "Get all seasons from show")
   @ApiResponse(
       responseCode = "200",
       description = "OK",
@@ -50,9 +51,9 @@ public class SeasonControllerImpl implements SeasonController {
             array = @ArraySchema(schema = @Schema(implementation = SeasonDTO.class)))
       })
   @GetMapping
-  public ResponseEntity<List<SeasonDTO>> findAll() {
+  public ResponseEntity<List<SeasonDTO>> findAll(@Param("showId") Long showId) {
     LOG.debug("SeasonControllerImpl: Fetching all results");
-    List<Season> seasonList = bo.findAll();
+    List<Season> seasonList = bo.findAll(showId);
     List<SeasonDTO> convertedSeasonList = new ArrayList<>();
     for (Season season : seasonList) {
       SeasonDTO seasonDTO = new SeasonDTO();
