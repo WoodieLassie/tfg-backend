@@ -7,9 +7,7 @@ import es.judith.controller.ReviewController;
 import es.judith.domain.Review;
 import es.judith.domain.Role;
 import es.judith.domain.Show;
-import es.judith.dto.ReviewDTO;
 import es.judith.dto.ReviewInputDTO;
-import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
