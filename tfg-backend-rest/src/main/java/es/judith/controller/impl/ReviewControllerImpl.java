@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,7 +42,7 @@ public class ReviewControllerImpl extends GenericControllerImpl implements Revie
 
   @Override
   @GetMapping("/{showId}")
-  public ResponseEntity<Double> findAll(@PathVariable Long showId) {
+  public ResponseEntity<HashMap<String, Double>> findAll(@PathVariable Long showId) {
     LOG.debug("ReviewControllerImpl: Fetching all results");
     List<Review> reviewList = bo.findAllByShowId(showId);
     Double totalReviewScore = 0.0;
@@ -51,7 +52,9 @@ public class ReviewControllerImpl extends GenericControllerImpl implements Revie
     totalReviewScore = totalReviewScore / reviewList.size();
     String totalReviewScoreTruncated = totalReviewScore.toString().substring(0,3);
     totalReviewScore = Double.valueOf(totalReviewScoreTruncated);
-    return ResponseEntity.ok(totalReviewScore);
+    HashMap<String, Double> response = new HashMap<>();
+    response.put("averageRating", totalReviewScore);
+    return ResponseEntity.ok(response);
   }
 
   @Override
