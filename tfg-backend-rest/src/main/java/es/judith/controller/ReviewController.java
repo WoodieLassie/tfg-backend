@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface ReviewController extends BaseController {
-    ResponseEntity<Integer> findAll(Long showId);
+    ResponseEntity<Double> findAll(Long showId);
     ResponseEntity<Review> add(ReviewInputDTO reviewDTO);
     ResponseEntity<Review> delete(Long id);
 }

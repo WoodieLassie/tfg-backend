@@ -41,15 +41,16 @@ public class ReviewControllerImpl extends GenericControllerImpl implements Revie
 
   @Override
   @GetMapping("/{showId}")
-  //TODO: Devolver decimales con un solo punto decimal
-  public ResponseEntity<Integer> findAll(@PathVariable Long showId) {
+  public ResponseEntity<Double> findAll(@PathVariable Long showId) {
     LOG.debug("ReviewControllerImpl: Fetching all results");
     List<Review> reviewList = bo.findAllByShowId(showId);
-    Integer totalReviewScore = 0;
+    Double totalReviewScore = 0.0;
     for (Review review : reviewList) {
       totalReviewScore += review.getRating();
     }
-    totalReviewScore = Math.round((float) totalReviewScore / reviewList.size());
+    totalReviewScore = totalReviewScore / reviewList.size();
+    String totalReviewScoreTruncated = totalReviewScore.toString().substring(0,3);
+    totalReviewScore = Double.valueOf(totalReviewScoreTruncated);
     return ResponseEntity.ok(totalReviewScore);
   }
 
