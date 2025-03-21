@@ -17,8 +17,8 @@ public interface EpisodeRepository
         JpaSpecificationExecutor<Episode>,
         QuerydslPredicateExecutor<Episode>,
         QuerydslBinderCustomizer<QEpisode> {
-  @Query("SELECT e FROM Episode e " + "LEFT JOIN FETCH e.season s")
-  List<Episode> findAll();
+  @Query("SELECT e FROM Episode e " + "LEFT JOIN FETCH e.season s " + "WHERE s.id = :showId")
+  List<Episode> findAllBySeason(@Param("showId") Long showId);
 
   @Query("SELECT e FROM Episode e " + "WHERE e.id IN :ids")
   List<Episode> findAllById(List<Long> ids);

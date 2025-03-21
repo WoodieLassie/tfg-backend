@@ -62,9 +62,9 @@ public class EpisodeControllerImpl implements EpisodeController {
             array = @ArraySchema(schema = @Schema(implementation = EpisodeDTO.class)))
       })
   @GetMapping
-  public ResponseEntity<List<EpisodeDTO>> findAll() {
+  public ResponseEntity<List<EpisodeDTO>> findAll(@Parameter @RequestParam Long seasonId) {
     LOG.debug("EpisodeControllerImpl: Fetching all results");
-    List<Episode> episodeList = bo.findAll();
+    List<Episode> episodeList = bo.findAll(seasonId);
     List<EpisodeDTO> convertedEpisodeList = new ArrayList<>();
     for (Episode episode : episodeList) {
       EpisodeDTO episodeDTO = new EpisodeDTO();

@@ -3,6 +3,7 @@ package es.judith.dao;
 import es.judith.domain.QShow;
 import es.judith.domain.Show;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -16,4 +17,7 @@ public interface ShowRepository extends ElvisBaseRepository<Show, Long, QShow>,
         QuerydslBinderCustomizer<QShow> {
     @Query("SELECT s FROM Show s WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%')) ORDER BY s.id")
     List<Show> findAllByName(@Param("name") String name);
+    @Query("DELETE FROM Season s WHERE s.show.id = :showId")
+    @Modifying
+    void deleteAllSeasons(@Param("showId") Long showId);
 }

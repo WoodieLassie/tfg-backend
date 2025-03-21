@@ -7,7 +7,6 @@ import es.judith.controller.CommentController;
 import es.judith.domain.Comment;
 import es.judith.domain.Role;
 import es.judith.domain.Show;
-import es.judith.dto.ActorDTO;
 import es.judith.dto.CommentDTO;
 import es.judith.dto.CommentInputDTO;
 import es.judith.exceptions.BadInputException;

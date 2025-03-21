@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface EpisodeController extends BaseController {
-  ResponseEntity<List<EpisodeDTO>> findAll();
+  ResponseEntity<List<EpisodeDTO>> findAll(Long seasonId);
   ResponseEntity<EpisodeDTO> findById(Long id);
   ResponseEntity<Page<EpisodeDTO>> findAllSortedAndPaged(
       Long seasonId, String title, Integer episodeNum, Integer page, Pageable pageable);

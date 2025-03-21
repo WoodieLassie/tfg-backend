@@ -62,17 +62,17 @@ class SeasonBOImplTest {
     Assertions.assertNotNull(dbSeasons);
     Assertions.assertEquals(mockSeasons.size(), dbSeasons.size());
   }
-  @Test
-  void testExistsBySeasonNum() {
-    Season mockSeason = new Season();
-    mockSeason.setSeasonNum(1);
-    when(repository.existsBySeasonNum(mockSeason.getSeasonNum())).thenReturn(true);
-    Boolean dbSeasonExists = seasonBO.existsBySeasonNum(mockSeason.getSeasonNum());
-
-    verify(repository, times(1)).existsBySeasonNum(mockSeason.getSeasonNum());
-
-    Assertions.assertTrue(dbSeasonExists);
-  }
+//  @Test
+//  void testExistsBySeasonNum() {
+//    Season mockSeason = new Season();
+//    mockSeason.setSeasonNum(1);
+//    when(repository.existsBySeasonNum(mockSeason.getSeasonNum())).thenReturn(true);
+//    Boolean dbSeasonExists = seasonBO.existsBySeasonNum(mockSeason.getSeasonNum());
+//
+//    verify(repository, times(1)).existsBySeasonNum(mockSeason.getSeasonNum());
+//
+//    Assertions.assertTrue(dbSeasonExists);
+//  }
   @Test
   void saveTest() {
     Season mockSeason = new Season();

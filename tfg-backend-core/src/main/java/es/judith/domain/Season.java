@@ -33,7 +33,7 @@ public class Season extends Audit {
   private List<Episode> episodes;
 
   //En el DTO de lectura NO hace falta mostrar la serie a la que pertenece, pero en el de escritura debe haber un campo para introducir la id de la serie
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
   @JoinColumn(name = "show_id", nullable = false)
   private Show show;
 }

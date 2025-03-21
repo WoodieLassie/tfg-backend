@@ -60,7 +60,7 @@ public class SeasonBOImpl
   }
 
   @Transactional(readOnly = true)
-  public Boolean existsBySeasonNum(Integer seasonNum) {
-    return repository.existsBySeasonNum(seasonNum);
+  public Boolean existsBySeasonNumAndShowId(Integer seasonNum, Long showId) {
+    return repository.existsBySeasonNumAndShowId(seasonNum, showId);
   }
 }

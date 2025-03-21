@@ -34,6 +34,11 @@ public class EpisodeBOImpl
     return repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
   }
 
+  @Override
+  public List<Episode> findAll(Long seasonId) {
+    return repository.findAllBySeason(seasonId);
+  }
+
   @Transactional(readOnly = true)
   @Override
   public Episode findOneWithCharacters(Long id) {

@@ -1,8 +1,10 @@
 package es.judith.controller.impl;
 
 import es.judith.bo.SeasonBO;
+import es.judith.bo.ShowBO;
 import es.judith.controller.SeasonController;
 import es.judith.domain.Season;
+import es.judith.domain.Show;
 import es.judith.dto.SeasonDTO;
 import es.judith.dto.SeasonInputDTO;
 import es.judith.exceptions.AlreadyExistsException;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/seasons")
@@ -35,9 +38,11 @@ public class SeasonControllerImpl implements SeasonController {
 
   private static final Logger LOG = LoggerFactory.getLogger(SeasonControllerImpl.class);
   private final SeasonBO bo;
+  private final ShowBO showBO;
 
-  public SeasonControllerImpl(SeasonBO bo) {
+  public SeasonControllerImpl(SeasonBO bo, ShowBO showBO) {
     this.bo = bo;
+    this.showBO = showBO;
   }
 
   @Override
@@ -51,7 +56,7 @@ public class SeasonControllerImpl implements SeasonController {
             array = @ArraySchema(schema = @Schema(implementation = SeasonDTO.class)))
       })
   @GetMapping
-  public ResponseEntity<List<SeasonDTO>> findAll(@Param("showId") Long showId) {
+  public ResponseEntity<List<SeasonDTO>> findAll(@Parameter @RequestParam Long showId) {
     LOG.debug("SeasonControllerImpl: Fetching all results");
     List<Season> seasonList = bo.findAll(showId);
     List<SeasonDTO> convertedSeasonList = new ArrayList<>();
@@ -117,24 +122,30 @@ public class SeasonControllerImpl implements SeasonController {
   @Override
   @Operation(method = "POST", summary = "Save a new season")
   @ApiResponse(
-          responseCode = "201",
-          description = "Created",
-          content = {@Content(schema = @Schema(hidden = true))})
+      responseCode = "201",
+      description = "Created",
+      content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-          responseCode = "409",
-          description = "Conflict",
-          content = {@Content(schema = @Schema(hidden = true))})
+      responseCode = "409",
+      description = "Conflict",
+      content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @PostMapping
-  //TODO: Revisar a que serie pertenece para tirar este error
   public ResponseEntity<Season> add(@RequestBody SeasonInputDTO seasonDTO) {
     if (!seasonDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
-    if (Boolean.TRUE.equals(bo.existsBySeasonNum(seasonDTO.getSeasonNum()))) {
-      throw new AlreadyExistsException("Season with number " + seasonDTO.getSeasonNum() + " already exists");
+    if (Boolean.TRUE.equals(
+        bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId()))) {
+      throw new AlreadyExistsException(
+          "Season with number " + seasonDTO.getSeasonNum() + " already exists");
+    }
+    Show show = showBO.findOne(seasonDTO.getShowId());
+    if (show == null) {
+      throw new NotFoundException("Show with id " + seasonDTO.getShowId() + " does not exist");
     }
     Season season = seasonDTO.obtainDomainObject();
+    season.setShow(show);
     LOG.debug("SeasonControllerImpl: Saving data");
     bo.save(season);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
@@ -142,32 +153,41 @@ public class SeasonControllerImpl implements SeasonController {
 
   @Override
   @Operation(
-          method = "PATCH",
-          summary = "Edit an existing season",
-          parameters = @Parameter(ref = "id"))
+      method = "PATCH",
+      summary = "Edit an existing season",
+      parameters = @Parameter(ref = "id"))
   @ApiResponse(
-          responseCode = "204",
-          description = "No content",
-          content = {@Content(schema = @Schema(hidden = true))})
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-          responseCode = "404",
-          description = "Not found",
-          content = @Content(schema = @Schema(hidden = true)))
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
-  public ResponseEntity<Season> update(@PathVariable Long id, @RequestBody SeasonInputDTO seasonDTO) {
+  public ResponseEntity<Season> update(
+      @PathVariable Long id, @RequestBody SeasonInputDTO seasonDTO) {
     if (!seasonDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
-    }
-    if (Boolean.TRUE.equals(bo.existsBySeasonNum(seasonDTO.getSeasonNum()))) {
-      throw new AlreadyExistsException("Season with number " + seasonDTO.getSeasonNum() + " already exists");
     }
     Season newSeasonInfo = seasonDTO.obtainDomainObject();
     Season season = bo.findOne(id);
     if (season == null) {
       throw new NotExistingIdException("Actor with id " + id + " does not exist");
     }
+    Show show = showBO.findOne(seasonDTO.getShowId());
+    if (show == null) {
+      throw new NotFoundException("Show with id " + seasonDTO.getShowId() + " does not exist");
+    }
+    if (Boolean.TRUE.equals(
+        bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId())
+            && !Objects.equals(seasonDTO.getShowId(), season.getShow().getId()))) {
+      throw new AlreadyExistsException(
+          "Season with number " + seasonDTO.getSeasonNum() + " already exists");
+    }
     newSeasonInfo.setId(id);
+    newSeasonInfo.setShow(show);
     LOG.debug("SeasonControllerImpl: Modifying data with id {}", id);
     bo.save(newSeasonInfo);
     return ResponseEntity.noContent().build();
@@ -176,13 +196,13 @@ public class SeasonControllerImpl implements SeasonController {
   @Override
   @Operation(method = "DELETE", summary = "Delete a season", parameters = @Parameter(ref = "id"))
   @ApiResponse(
-          responseCode = "204",
-          description = "No content",
-          content = {@Content(schema = @Schema(hidden = true))})
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-          responseCode = "404",
-          description = "Not found",
-          content = @Content(schema = @Schema(hidden = true)))
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<SeasonDTO> delete(@PathVariable Long id) {

@@ -1,11 +1,12 @@
 DROP TABLE IF EXISTS images;
+DROP TABLE IF EXISTS favourites;
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS episode_character;
 DROP TABLE IF EXISTS actors;
 DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS episodes;
 DROP TABLE IF EXISTS seasons;
-DROP TABLE IF EXISTS comments;
-DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS shows;
 DROP TABLE IF EXISTS users;
 
@@ -42,7 +43,6 @@ CREATE TABLE seasons (
   season_num INT NOT NULL,
   description VARCHAR(100) NOT NULL,
   show_id BIGINT NOT NULL,
-  CONSTRAINT seasons_unq_01 UNIQUE (season_num),
   CONSTRAINT seasons_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id)
 );
 
