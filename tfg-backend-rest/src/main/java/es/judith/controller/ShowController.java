@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface ShowController extends BaseController {
     ResponseEntity<List<ShowDTO>> findAll();
+    ResponseEntity<ShowDTO> findById(Long id);
     ResponseEntity<List<ShowDTO>> findAllByName(String name);
     ResponseEntity<Show> add(ShowInputDTO showDTO);
     ResponseEntity<Show> update(Long id, ShowInputDTO showDTO);

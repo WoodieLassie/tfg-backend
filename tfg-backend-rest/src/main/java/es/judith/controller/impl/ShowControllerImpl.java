@@ -50,6 +50,15 @@ public class ShowControllerImpl implements ShowController {
   }
 
   @Override
+  @GetMapping("/{id}")
+  public ResponseEntity<ShowDTO> findById(@PathVariable Long id) {
+    Show show = bo.findOne(id);
+    ShowDTO showDTO = new ShowDTO();
+    showDTO.loadFromDomain(show);
+    return ResponseEntity.ok(showDTO);
+  }
+
+  @Override
   @GetMapping("/sorted")
   public ResponseEntity<List<ShowDTO>> findAllByName(
       @Parameter @RequestParam(defaultValue = "") String name) {

@@ -41,6 +41,7 @@ public class CorsConfig {
     config.addAllowedHeader("jwt");
     config.addAllowedHeader("apikey");
     config.addAllowedHeader("apiCache");
+    config.addAllowedHeader("Access-Control-Allow-Origin");
     config.addAllowedMethod("POST");
     config.addAllowedMethod("PATCH");
     config.addAllowedMethod("GET");
@@ -48,6 +49,8 @@ public class CorsConfig {
     config.addAllowedMethod("PUT");
     config.addAllowedMethod("OPTIONS");
     config.addAllowedMethod("PATCH");
+    config.addAllowedOrigin("http://localhost:5173");
+    config.setAllowCredentials(true);
     source.registerCorsConfiguration("/**", config); // Global for all paths
 
     FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
