@@ -4,6 +4,7 @@ import es.judith.dto.UserDTO;
 import es.judith.dto.UserInputDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
+import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -50,11 +51,27 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
       content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @GetMapping
-  public ResponseEntity<UserDTO> getUser() {
+  public ResponseEntity<UserDTO> getLoggedUser() {
     UserDTO userDTO = this.getCurrentUser();
     if (userDTO == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
+    return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+  }
+
+  @Operation(method = "GET", summary = "Fetch data of currently logged in user")
+  @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {@Content(schema = @Schema(implementation = UserDTO.class))})
+  @GetMapping("/{userId}")
+  public ResponseEntity<UserDTO> getUser(@PathVariable Long userId) {
+    UserDTO userDTO = new UserDTO();
+    User user = bo.findOne(userId);
+    if (user == null) {
+      throw new NotFoundException();
+    }
+    userDTO.loadFromDomain(user);
     return ResponseEntity.status(HttpStatus.OK).body(userDTO);
   }
 

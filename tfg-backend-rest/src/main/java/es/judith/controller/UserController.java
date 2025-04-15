@@ -8,5 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 @SuppressWarnings("unused")
 public interface UserController extends BaseController {
+    ResponseEntity<UserDTO> getLoggedUser();
     ResponseEntity<User> register(UserInputDTO userDTO);
+    ResponseEntity<UserDTO> getUser(Long userId);
 }

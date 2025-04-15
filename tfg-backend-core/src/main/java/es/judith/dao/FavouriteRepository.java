@@ -17,6 +17,6 @@ public interface FavouriteRepository
         QuerydslBinderCustomizer<QFavourite> {
   @Query(
       nativeQuery = true,
-      value = "SELECT f.* FROM favourites f WHERE f.create_user_id = :userId")
+      value = "SELECT f.*, s.id AS id2, s.name FROM favourites f LEFT JOIN shows s ON f.show_id = s.id WHERE f.create_user_id = :userId")
   List<Favourite> findAllByUser(@Param("userId") Long userId);
 }
