@@ -5,12 +5,14 @@ import es.judith.domain.Character;
 import es.judith.dao.CharacterRepository;
 import es.judith.domain.QCharacter;
 import es.judith.dto.CharacterFilterDTO;
+import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -30,6 +32,13 @@ public class CharacterBOImpl
   public List<Character> findAllById(List<Long> ids) {
     LOG.debug("CharacterBOImpl: findAllById");
     return repository.findAllById(ids);
+  }
+
+  @Override
+  public byte[] findImageById(Long id) {
+    LOG.debug("ActorBOImpl: findImageById");
+    Optional<Character> character = repository.findById(id);
+    return character.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
   }
 
   @Override

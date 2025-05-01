@@ -41,6 +41,11 @@ public class Character extends Audit {
   @NotNull
   private Integer age;
 
+  @Lob
+  @Column(name = "image_data", length = 65535)
+  @Size(max = 65535)
+  private byte[] imageData;
+
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "character", cascade = CascadeType.REMOVE)
   private List<Actor> actors;
 }

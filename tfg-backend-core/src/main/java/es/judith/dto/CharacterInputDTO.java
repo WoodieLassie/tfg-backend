@@ -1,6 +1,7 @@
 package es.judith.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import es.judith.domain.Character;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -37,6 +38,11 @@ public class CharacterInputDTO extends ElvisBaseDTO<Character> {
   @Schema(description = "Character age")
   @NotNull
   private Integer age;
+
+  @JsonIgnore private byte[] imageData;
+
+  @JsonInclude(value = JsonInclude.Include.NON_NULL)
+  private String imageUrl;
 
   public boolean allFieldsArePresent() {
     return Stream.of(this.name, this.description, this.gender, this.nationality, this.age)
