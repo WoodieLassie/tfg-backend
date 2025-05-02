@@ -39,11 +39,6 @@ public class CharacterInputDTO extends ElvisBaseDTO<Character> {
   @NotNull
   private Integer age;
 
-  @JsonIgnore private byte[] imageData;
-
-  @JsonInclude(value = JsonInclude.Include.NON_NULL)
-  private String imageUrl;
-
   public boolean allFieldsArePresent() {
     return Stream.of(this.name, this.description, this.gender, this.nationality, this.age)
         .allMatch(Objects::nonNull);

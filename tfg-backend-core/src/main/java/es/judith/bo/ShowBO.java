@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ShowBO extends GenericCRUDService<Show, Long, QShow, ShowFilterDTO> {
     List<Show> findAllByName(String name);
+    byte[] findImageById(Long id);
 }

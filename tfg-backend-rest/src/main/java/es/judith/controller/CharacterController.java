@@ -16,6 +16,6 @@ public interface CharacterController extends BaseController {
     ResponseEntity<byte[]> findImageById(Long id);
     ResponseEntity<Character> add(CharacterInputDTO characterDTO);
     ResponseEntity<Character> update(Long id, CharacterInputDTO characterDTO);
-    ResponseEntity<Actor> updateImageById(Long id, MultipartFile file);
+    ResponseEntity<Character> updateImageById(Long id, MultipartFile file);
     ResponseEntity<CharacterDTO> delete(Long id);
 }

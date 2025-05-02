@@ -3,23 +3,36 @@ package es.judith.controller.impl;
 import es.judith.bo.SeasonBO;
 import es.judith.bo.ShowBO;
 import es.judith.controller.ShowController;
+import es.judith.domain.Actor;
+import es.judith.domain.Character;
 import es.judith.domain.Show;
 import es.judith.dto.ShowDTO;
 import es.judith.dto.ShowInputDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
+import es.judith.utils.ImageUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/shows")
@@ -45,6 +58,14 @@ public class ShowControllerImpl implements ShowController {
       ShowDTO showDTO = new ShowDTO();
       showDTO.loadFromDomain(show);
       convertedShowList.add(showDTO);
+      if (showDTO.getImageData() != null) {
+        String characterImageDownloadURL =
+            ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/shows/images/")
+                .path(String.valueOf(showDTO.getId()))
+                .toUriString();
+        showDTO.setImageUrl(characterImageDownloadURL);
+      }
     }
     return ResponseEntity.ok(convertedShowList);
   }
@@ -55,6 +76,14 @@ public class ShowControllerImpl implements ShowController {
     Show show = bo.findOne(id);
     ShowDTO showDTO = new ShowDTO();
     showDTO.loadFromDomain(show);
+    if (showDTO.getImageData() != null) {
+      String characterImageDownloadURL =
+          ServletUriComponentsBuilder.fromCurrentContextPath()
+              .path("/shows/images/")
+              .path(String.valueOf(showDTO.getId()))
+              .toUriString();
+      showDTO.setImageUrl(characterImageDownloadURL);
+    }
     return ResponseEntity.ok(showDTO);
   }
 
@@ -71,6 +100,29 @@ public class ShowControllerImpl implements ShowController {
       convertedShowList.add(showDTO);
     }
     return ResponseEntity.ok(convertedShowList);
+  }
+
+  @Override
+  @Operation(
+      method = "GET",
+      summary = "Get a show image by show identification",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "200",
+      description = "OK",
+      content = {@Content(mediaType = "image/png", schema = @Schema(hidden = true))})
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
+  @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
+  public ResponseEntity<byte[]> findImageById(@PathVariable Long id) {
+    LOG.debug("ShowControllerImpl: Fetching image results with character id {}", id);
+    byte[] image = bo.findImageById(id);
+    if (image == null || image.length == 0) {
+      throw new NotFoundException();
+    }
+    return ResponseEntity.ok(image);
   }
 
   @Override
@@ -99,6 +151,44 @@ public class ShowControllerImpl implements ShowController {
     newShowInfo.setId(id);
     LOG.debug("ShowControllerImpl: Modifying data with id {}", id);
     bo.save(newShowInfo);
+    return ResponseEntity.noContent().build();
+  }
+
+  @Override
+  @Operation(
+      method = "PATCH",
+      summary = "Edit an existing show image",
+      parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
+  @PatchMapping(value = "/image/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Show> updateImageById(
+      @PathVariable Long id, @RequestParam("image") MultipartFile file) {
+    if (file.getSize() == 0) {
+      throw new BadInputException("A file must be attached to request");
+    }
+    if (!Objects.equals(file.getContentType(), "image/png")
+        && !Objects.equals(file.getContentType(), "image/jpeg")) {
+      throw new BadInputException("File must be png or jpg");
+    }
+    Show show = bo.findOne(id);
+    if (show == null) {
+      throw new NotExistingIdException("Show with id " + id + " does not exist");
+    }
+    try {
+      show.setImageData(ImageUtil.compressImage(file.getBytes()));
+    } catch (IOException e) {
+      throw new BadInputException(e);
+    }
+    LOG.debug("ShowControllerImpl: Modifying image data with show id {}", id);
+    bo.save(show);
     return ResponseEntity.noContent().build();
   }
 

@@ -1,6 +1,7 @@
 package es.judith.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import es.judith.domain.Role;
 import es.judith.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,4 +27,9 @@ public class UserDTO extends ElvisBaseDTO<User> {
   private Role role;
 
   @JsonIgnore private String password;
+
+  @JsonIgnore private byte[] imageData;
+
+  @JsonInclude(value = JsonInclude.Include.NON_NULL)
+  private String imageUrl;
 }

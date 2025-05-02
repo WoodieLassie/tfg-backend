@@ -63,6 +63,14 @@ public class CharacterControllerImpl implements CharacterController {
     for (Character character : characterList) {
       CharacterDTO characterDTO = new CharacterDTO();
       characterDTO.loadFromDomain(character);
+      if (character.getImageData() != null) {
+        String characterImageDownloadURL =
+            ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/characters/images/")
+                .path(String.valueOf(character.getId()))
+                .toUriString();
+        characterDTO.setImageUrl(characterImageDownloadURL);
+      }
       for (ActorNoCharacterDTO actor : characterDTO.getActors()) {
         if (actor.getImageData() != null) {
           String actorImageDownloadUrl =
@@ -104,6 +112,14 @@ public class CharacterControllerImpl implements CharacterController {
     }
     CharacterDTO convertedCharacter = new CharacterDTO();
     convertedCharacter.loadFromDomain(character);
+    if (character.getImageData() != null) {
+      String characterImageDownloadURL =
+          ServletUriComponentsBuilder.fromCurrentContextPath()
+              .path("/characters/images/")
+              .path(String.valueOf(character.getId()))
+              .toUriString();
+      convertedCharacter.setImageUrl(characterImageDownloadURL);
+    }
     for (ActorNoCharacterDTO actor : convertedCharacter.getActors()) {
       if (actor.getImageData() != null) {
         String actorImageDownloadUrl =
@@ -119,17 +135,17 @@ public class CharacterControllerImpl implements CharacterController {
 
   @Override
   @Operation(
-          method = "GET",
-          summary = "Get a character image by character identification",
-          parameters = @Parameter(ref = "id"))
+      method = "GET",
+      summary = "Get a character image by character identification",
+      parameters = @Parameter(ref = "id"))
   @ApiResponse(
-          responseCode = "200",
-          description = "OK",
-          content = {@Content(mediaType = "image/png", schema = @Schema(hidden = true))})
+      responseCode = "200",
+      description = "OK",
+      content = {@Content(mediaType = "image/png", schema = @Schema(hidden = true))})
   @ApiResponse(
-          responseCode = "404",
-          description = "Not found",
-          content = @Content(schema = @Schema(hidden = true)))
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> findImageById(@PathVariable Long id) {
     LOG.debug("CharacterControllerImpl: Fetching image results with character id {}", id);
@@ -139,7 +155,6 @@ public class CharacterControllerImpl implements CharacterController {
     }
     return ResponseEntity.ok(image);
   }
-
 
   @Override
   @Operation(method = "POST", summary = "Save a new character")
@@ -192,26 +207,26 @@ public class CharacterControllerImpl implements CharacterController {
 
   @Override
   @Operation(
-          method = "PATCH",
-          summary = "Edit an existing character image",
-          parameters = @Parameter(ref = "id"))
+      method = "PATCH",
+      summary = "Edit an existing character image",
+      parameters = @Parameter(ref = "id"))
   @ApiResponse(
-          responseCode = "204",
-          description = "No content",
-          content = {@Content(schema = @Schema(hidden = true))})
+      responseCode = "204",
+      description = "No content",
+      content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-          responseCode = "404",
-          description = "Not found",
-          content = @Content(schema = @Schema(hidden = true)))
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PatchMapping(value = "/image/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Actor> updateImageById(
-          @PathVariable Long id, @RequestParam("image") MultipartFile file) {
+  public ResponseEntity<Character> updateImageById(
+      @PathVariable Long id, @RequestParam("image") MultipartFile file) {
     if (file.getSize() == 0) {
       throw new BadInputException("A file must be attached to request");
     }
     if (!Objects.equals(file.getContentType(), "image/png")
-            && !Objects.equals(file.getContentType(), "image/jpeg")) {
+        && !Objects.equals(file.getContentType(), "image/jpeg")) {
       throw new BadInputException("File must be png or jpg");
     }
     Character character = bo.findOne(id);
@@ -235,9 +250,9 @@ public class CharacterControllerImpl implements CharacterController {
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-          responseCode = "404",
-          description = "Not found",
-          content = @Content(schema = @Schema(hidden = true)))
+      responseCode = "404",
+      description = "Not found",
+      content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<CharacterDTO> delete(@PathVariable Long id) {

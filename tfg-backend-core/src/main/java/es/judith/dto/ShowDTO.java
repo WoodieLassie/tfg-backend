@@ -1,5 +1,7 @@
 package es.judith.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import es.judith.domain.Show;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -16,4 +18,10 @@ public class ShowDTO extends ElvisBaseDTO<Show> {
 
   @NotNull private String name;
   @NotNull private String description;
+
+  @JsonIgnore
+  private byte[] imageData;
+
+  @JsonInclude(value = JsonInclude.Include.NON_NULL)
+  private String imageUrl;
 }

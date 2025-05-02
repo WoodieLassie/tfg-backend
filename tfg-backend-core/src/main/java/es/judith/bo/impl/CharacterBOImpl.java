@@ -36,7 +36,7 @@ public class CharacterBOImpl
 
   @Override
   public byte[] findImageById(Long id) {
-    LOG.debug("ActorBOImpl: findImageById");
+    LOG.debug("CharacterBOImpl: findImageById");
     Optional<Character> character = repository.findById(id);
     return character.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
   }

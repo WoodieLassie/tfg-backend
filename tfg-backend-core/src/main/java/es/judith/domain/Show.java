@@ -26,4 +26,9 @@ public class Show extends Audit {
   @NotNull
   @Size(max = 100)
   private String description;
+
+  @Lob
+  @Column(name = "image_data", length = 65535)
+  @Size(max = 65535)
+  private byte[] imageData;
 }

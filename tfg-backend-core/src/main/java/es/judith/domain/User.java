@@ -40,4 +40,9 @@ public class User extends ElvisEntity {
   @NotNull
   @Enumerated(EnumType.STRING)
   private Role role;
+
+  @Lob
+  @Column(name = "image_data", length = 65535)
+  @Size(max = 65535)
+  private byte[] imageData;
 }
