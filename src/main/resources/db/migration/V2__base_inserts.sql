@@ -335,7 +335,7 @@ INSERT INTO episode_character (episode_id, character_id) VALUES (60, 4);
 INSERT INTO episode_character (episode_id, character_id) VALUES (60, 3);
 
 INSERT INTO users (email, password, role)
-VALUES ('judith@gmail.com', '$2a$06$5jNY3ZlK8Dx4/XcyBnJ1iOIeEPcNy.fTrPIQpGBDUxX0qGvRzgXo6', 'ADMIN');
+VALUES ('judith@gmail.com', '$2a$10$2fi0MJ8ZxgPKwFv6TuCPaO96ztdTSW89qtV/Qm9kyWmpReGfhcI5C', 'ADMIN');
 
 INSERT INTO comments (text, show_id)
 VALUES ('hola', 1);

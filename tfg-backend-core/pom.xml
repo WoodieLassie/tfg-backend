@@ -64,19 +64,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!--QueryDSL-->
-		<dependency>
-			<groupId>com.querydsl</groupId>
-			<artifactId>querydsl-jpa</artifactId>
-			<classifier>jakarta</classifier>
-		</dependency>
-		<dependency>
-			<groupId>com.querydsl</groupId>
-			<artifactId>querydsl-apt</artifactId>
-			<scope>provided</scope>
-			<classifier>jakarta</classifier>
-		</dependency>
-
 		<!-- Dozer -->
 		<dependency>
 			<groupId>net.sf.dozer</groupId>

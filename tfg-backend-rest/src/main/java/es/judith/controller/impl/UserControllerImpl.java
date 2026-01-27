@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -42,10 +43,13 @@ import java.util.Objects;
 public class UserControllerImpl extends GenericControllerImpl implements UserController {
 
   private final UserBO bo;
-  private final transient PasswordEncoder passwordEncoder;
-  private static final Logger LOG = LoggerFactory.getLogger(UserControllerImpl.class);
+  private final BCryptPasswordEncoder passwordEncoder;
+    {
+        new BCryptPasswordEncoder(10);
+    }
+    private static final Logger LOG = LoggerFactory.getLogger(UserControllerImpl.class);
 
-  public UserControllerImpl(UserBO bo, PasswordEncoder passwordEncoder) {
+  public UserControllerImpl(UserBO bo, BCryptPasswordEncoder passwordEncoder) {
     super(bo);
     this.bo = bo;
     this.passwordEncoder = passwordEncoder;
