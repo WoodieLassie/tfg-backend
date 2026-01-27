@@ -6,8 +6,6 @@ import lombok.Data;
 
 /**
  * Interface to mark every entity in the system.
- *
- * @author rbarroso
  */
 @MappedSuperclass
 @Data

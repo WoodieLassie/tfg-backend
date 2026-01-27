@@ -1,10 +1,9 @@
 package es.judith.controller;
 
-import es.judith.domain.Actor;
 import es.judith.domain.User;
 import es.judith.dto.UserDTO;
 import es.judith.dto.UserInputDTO;
-import es.judith.web.BaseController;
+import es.judith.rest.BaseController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 

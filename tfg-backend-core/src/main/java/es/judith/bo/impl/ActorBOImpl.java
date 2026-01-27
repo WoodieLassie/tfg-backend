@@ -3,8 +3,6 @@ package es.judith.bo.impl;
 import es.judith.bo.ActorBO;
 import es.judith.dao.ActorRepository;
 import es.judith.domain.Actor;
-import es.judith.domain.QActor;
-import es.judith.dto.ActorFilterDTO;
 import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +14,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ActorBOImpl
-    extends ElvisGenericCRUDServiceImpl<Actor, Long, QActor, ActorFilterDTO, ActorRepository>
+    extends ElvisGenericCRUDServiceImpl<Actor, Long, ActorRepository>
     implements ActorBO {
 
   private static final long serialVersionUID = -2327250805753457217L;

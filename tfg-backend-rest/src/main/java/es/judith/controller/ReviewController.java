@@ -2,7 +2,7 @@ package es.judith.controller;
 
 import es.judith.domain.Review;
 import es.judith.dto.ReviewInputDTO;
-import es.judith.web.BaseController;
+import es.judith.rest.BaseController;
 import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;

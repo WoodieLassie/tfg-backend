@@ -1,22 +1,17 @@
 package es.judith.dao;
 
 import es.judith.domain.Character;
-import es.judith.domain.QCharacter;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CharacterRepository
-        extends ElvisBaseRepository<Character, Long, QCharacter>,
-        JpaSpecificationExecutor<Character>,
-        QuerydslPredicateExecutor<Character>,
-        QuerydslBinderCustomizer<QCharacter> {
+        extends ElvisBaseRepository<Character, Long>,
+        JpaSpecificationExecutor<Character> {
     @Query("SELECT c from Character c LEFT JOIN FETCH c.actors a")
     List<Character> findAll();
     @Query("SELECT c from Character c LEFT JOIN FETCH c.actors a WHERE c.id = :id")

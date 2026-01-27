@@ -5,15 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.EntityPathBase;
 import es.judith.bo.GenericCRUDService;
 import es.judith.dao.ElvisBaseRepository;
 import es.judith.domain.ElvisEntity;
-import es.judith.dto.BaseFilterDTO;
 
-public class ElvisGenericCRUDServiceImpl<T extends ElvisEntity, I extends Serializable, Q extends EntityPathBase<T>, F extends BaseFilterDTO<T>, R extends ElvisBaseRepository<T, I, Q>>
-    implements GenericCRUDService<T, I, Q, F> {
+public class ElvisGenericCRUDServiceImpl<T extends ElvisEntity, I extends Serializable, R extends ElvisBaseRepository<T, I>>
+    implements GenericCRUDService<T, I> {
 
   private static final long serialVersionUID = -4005659813031548678L;
 
@@ -158,52 +155,4 @@ public class ElvisGenericCRUDServiceImpl<T extends ElvisEntity, I extends Serial
     repository.deleteAll();
   }
 
-  /**
-   * Find entities that fix with querydsl conditions established by predicate. Result is returned
-   * listed.
-   *
-   * @param predicate filter
-   * @return filter
-   */
-  @Override
-  public List<T> findByQueryDsl(final Predicate predicate) {
-    return repository.findAll(predicate);
-  }
-
-  /**
-   * Find entities that fix with filter conditions established by filter object. Result is returned
-   * paged.
-   *
-   * @param predicate Search conditions.
-   * @param pageable Page information to return.
-   * @return Page with entities that fix with filter conditions.
-   */
-  @Override
-  public Page<T> findByQueryDsl(Predicate predicate, Pageable pageable) {
-    return null;
-  }
-
-  /**
-   * Find entities that fix with filter conditions established by filter object. Result is returned
-   * paged.
-   *
-   * @param filter Search conditions.
-   * @param pageable Page information to return.
-   * @return Page with entities that fix with filter conditions.
-   */
-  @Override
-  public Page<T> findByFilter(F filter, Pageable pageable) {
-    return repository.findAll(filter.obtainFilterSpecification(), pageable);
-  }
-
-  /**
-   * Find entities that fix with filter conditions established by filter object.
-   *
-   * @param filter Search conditions.
-   * @return List with entities that fix with filter conditions.
-   */
-  @Override
-  public List<T> findByFilter(F filter) {
-    return repository.findAll(filter.obtainFilterSpecification());
-  }
 }

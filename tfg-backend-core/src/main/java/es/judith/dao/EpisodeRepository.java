@@ -2,21 +2,16 @@ package es.judith.dao;
 
 import es.judith.domain.Character;
 import es.judith.domain.Episode;
-import es.judith.domain.QEpisode;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface EpisodeRepository
-    extends ElvisBaseRepository<Episode, Long, QEpisode>,
-        JpaSpecificationExecutor<Episode>,
-        QuerydslPredicateExecutor<Episode>,
-        QuerydslBinderCustomizer<QEpisode> {
+    extends ElvisBaseRepository<Episode, Long>,
+        JpaSpecificationExecutor<Episode> {
   @Query("SELECT e FROM Episode e " + "LEFT JOIN FETCH e.season s " + "WHERE s.id = :showId")
   List<Episode> findAllBySeason(@Param("showId") Long showId);
 

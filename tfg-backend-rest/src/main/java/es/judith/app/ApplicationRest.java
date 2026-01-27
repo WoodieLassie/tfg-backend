@@ -23,7 +23,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import es.judith.web.i18n.CustomReloadableResourceBundleMessageSource;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.MultipartConfigElement;
 
@@ -55,16 +54,6 @@ public class ApplicationRest extends SpringBootServletInitializer {
   @Bean(name = "multipartResolver")
   public StandardServletMultipartResolver multipartResolver() {
     return new StandardServletMultipartResolver();
-  }
-
-  @Bean(name = "messageSource")
-  public MessageSource messageSource() {
-    CustomReloadableResourceBundleMessageSource messageSource =
-        new CustomReloadableResourceBundleMessageSource();
-    messageSource.setBasename("classpath:/i18n/messages");
-    messageSource.setCacheSeconds(-1);
-    messageSource.setLocaleResolver(localeResolver());
-    return messageSource;
   }
 
   @Bean

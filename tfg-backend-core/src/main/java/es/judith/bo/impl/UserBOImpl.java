@@ -2,10 +2,7 @@ package es.judith.bo.impl;
 
 import es.judith.bo.UserBO;
 import es.judith.dao.UserRepository;
-import es.judith.domain.Character;
-import es.judith.domain.QUser;
 import es.judith.domain.User;
-import es.judith.dto.UserFilterDTO;
 import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +19,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserBOImpl
-    extends ElvisGenericCRUDServiceImpl<User, Long, QUser, UserFilterDTO, UserRepository>
+    extends ElvisGenericCRUDServiceImpl<User, Long, UserRepository>
     implements UserBO {
 
   private static final long serialVersionUID = -4166529873832767435L;

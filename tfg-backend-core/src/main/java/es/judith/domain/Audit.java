@@ -69,6 +69,7 @@ public class Audit extends ElvisEntity {
     Date now = dateFormatter.parse(Instant.now().toString());
     this.updateDate = now;
 
+    //TODO: Todo a partir de aqui debe ser modificado para seguir la nueva configuracion de seguridad que haga
     if (SecurityContextHolder.getContext().getAuthentication() != null
         && SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
       Long userLoggedId = Constants.ANONYMOUS_USER;

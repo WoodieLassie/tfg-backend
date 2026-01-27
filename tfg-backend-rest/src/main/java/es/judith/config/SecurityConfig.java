@@ -111,6 +111,7 @@ public class SecurityConfig {
     return http.build();
   }
 
+  //TODO: Cambiar?
   @Bean
   OAuth2TokenGenerator<OAuth2Token> tokenGenerator() {
     final OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();

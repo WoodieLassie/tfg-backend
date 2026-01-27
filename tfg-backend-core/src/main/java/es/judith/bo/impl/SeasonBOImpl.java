@@ -3,9 +3,7 @@ package es.judith.bo.impl;
 import es.judith.bo.SeasonBO;
 import es.judith.dao.SeasonRepository;
 import es.judith.domain.Episode;
-import es.judith.domain.QSeason;
 import es.judith.domain.Season;
-import es.judith.dto.SeasonFilterDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,7 @@ import java.util.List;
 @Service
 @Transactional
 public class SeasonBOImpl
-    extends ElvisGenericCRUDServiceImpl<Season, Long, QSeason, SeasonFilterDTO, SeasonRepository>
+    extends ElvisGenericCRUDServiceImpl<Season, Long, SeasonRepository>
     implements SeasonBO {
 
   private static final long serialVersionUID = 7842584807701349758L;

@@ -1,12 +1,10 @@
 package es.judith.bo;
 
 import es.judith.domain.Episode;
-import es.judith.domain.QEpisode;
-import es.judith.dto.EpisodeFilterDTO;
 
 import java.util.List;
 
-public interface EpisodeBO extends GenericCRUDService<Episode, Long, QEpisode, EpisodeFilterDTO> {
+public interface EpisodeBO extends GenericCRUDService<Episode, Long> {
   List<Episode> findAll(Long seasonId);
   Episode findOneWithCharacters(Long id);
   List<Episode> findAllSortedAndPaged(

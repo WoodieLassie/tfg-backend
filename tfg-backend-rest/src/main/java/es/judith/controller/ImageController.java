@@ -2,7 +2,7 @@ package es.judith.controller;
 
 import es.judith.domain.Image;
 import es.judith.dto.ImageDTO;
-import es.judith.web.BaseController;
+import es.judith.rest.BaseController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 

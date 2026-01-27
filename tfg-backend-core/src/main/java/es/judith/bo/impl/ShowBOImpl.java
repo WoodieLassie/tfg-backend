@@ -2,10 +2,7 @@ package es.judith.bo.impl;
 
 import es.judith.bo.ShowBO;
 import es.judith.dao.ShowRepository;
-import es.judith.domain.Character;
-import es.judith.domain.QShow;
 import es.judith.domain.Show;
-import es.judith.dto.ShowFilterDTO;
 import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +15,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ShowBOImpl
-    extends ElvisGenericCRUDServiceImpl<Show, Long, QShow, ShowFilterDTO, ShowRepository>
+    extends ElvisGenericCRUDServiceImpl<Show, Long, ShowRepository>
     implements ShowBO {
 
   private final static long serialVersionUID = -3276571133320739328L;

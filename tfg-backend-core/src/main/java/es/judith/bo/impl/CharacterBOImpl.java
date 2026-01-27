@@ -3,8 +3,6 @@ package es.judith.bo.impl;
 import es.judith.bo.CharacterBO;
 import es.judith.domain.Character;
 import es.judith.dao.CharacterRepository;
-import es.judith.domain.QCharacter;
-import es.judith.dto.CharacterFilterDTO;
 import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +16,7 @@ import java.util.Optional;
 @Transactional
 public class CharacterBOImpl
     extends ElvisGenericCRUDServiceImpl<
-        Character, Long, QCharacter, CharacterFilterDTO, CharacterRepository>
+        Character, Long, CharacterRepository>
     implements CharacterBO {
 
   private static final long serialVersionUID = 5582874611771949151L;

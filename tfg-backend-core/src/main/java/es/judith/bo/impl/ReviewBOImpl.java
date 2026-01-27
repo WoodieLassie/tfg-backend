@@ -2,9 +2,7 @@ package es.judith.bo.impl;
 
 import es.judith.bo.ReviewBO;
 import es.judith.dao.ReviewRepository;
-import es.judith.domain.QReview;
 import es.judith.domain.Review;
-import es.judith.dto.ReviewFilterDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +11,7 @@ import java.util.List;
 @Service
 @Transactional
 public class ReviewBOImpl extends ElvisGenericCRUDServiceImpl<
-        Review, Long, QReview, ReviewFilterDTO, ReviewRepository>
+        Review, Long, ReviewRepository>
         implements ReviewBO {
 
     public ReviewBOImpl(ReviewRepository repository) {

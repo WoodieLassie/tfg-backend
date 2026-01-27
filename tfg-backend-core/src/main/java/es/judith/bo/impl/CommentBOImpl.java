@@ -3,9 +3,7 @@ package es.judith.bo.impl;
 import es.judith.bo.CommentBO;
 import es.judith.dao.CommentRepository;
 import es.judith.domain.Comment;
-import es.judith.domain.QComment;
 import es.judith.dto.CommentDTO;
-import es.judith.dto.CommentFilterDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +14,7 @@ import java.util.List;
 @Transactional
 public class CommentBOImpl
     extends ElvisGenericCRUDServiceImpl<
-        Comment, Long, QComment, CommentFilterDTO, CommentRepository>
+        Comment, Long, CommentRepository>
     implements CommentBO {
 
   public CommentBOImpl(CommentRepository repository) {

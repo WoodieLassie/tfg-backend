@@ -1,9 +1,6 @@
 package es.judith.bo;
 
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.EntityPathBase;
 import es.judith.domain.ElvisEntity;
-import es.judith.dto.BaseFilterDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,16 +12,12 @@ import java.util.List;
  *
  * @param <T> Entity class to use in the pattern.
  * @param <I> Class identifier of the entity.
- * @param <F> Filter search DTO class to use in the pattern.
- * @param <Q> Q object
  * @author delivery
  * @noinspection unused
  */
 public interface GenericCRUDService<
         T extends ElvisEntity,
-        I extends Serializable,
-        Q extends EntityPathBase<T>,
-        F extends BaseFilterDTO<T>>
+        I extends Serializable>
     extends Serializable {
 
   /**
@@ -89,33 +82,6 @@ public interface GenericCRUDService<
    */
   List<T> findAll();
 
-  /**
-   * Find entities that fix with filter conditions established by filter object. Result is returned
-   * paged.
-   *
-   * @param predicate Search conditions.
-   * @param pageable Page information to return.
-   * @return Page with entities that fix with filter conditions.
-   * @noinspection unused
-   */
-  Page<T> findByQueryDsl(Predicate predicate, Pageable pageable);
-
-  /**
-   * Find entities that fix with querydsl conditions established by predicate. Result is returned
-   * listed.
-   *
-   * @param predicate filter
-   * @return filter
-   * @noinspection unused
-   */
-  List<T> findByQueryDsl(Predicate predicate);
-
-  /**
-   * Returns the number of entities available.
-   *
-   * @return the number of entities
-   * @noinspection unused
-   */
   long count();
 
   /**
@@ -146,23 +112,4 @@ public interface GenericCRUDService<
 
   /** Deletes all entities managed by the repository. */
   void deleteAll();
-
-  /**
-   * Find entities that fix with filter conditions established by filter object. Result is returned
-   * paged.
-   *
-   * @param filter Search conditions.
-   * @param pageable Page information to return.
-   * @return Page with entities that fix with filter conditions.
-   */
-  Page<T> findByFilter(F filter, Pageable pageable);
-
-  /**
-   * Find entities that fix with filter conditions established by filter object.
-   *
-   * @param filter Search conditions.
-   * @return List with entities that fix with filter conditions.
-   * @noinspection unused
-   */
-  List<T> findByFilter(F filter);
 }

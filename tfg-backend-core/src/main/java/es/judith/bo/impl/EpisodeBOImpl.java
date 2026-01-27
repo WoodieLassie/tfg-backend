@@ -4,7 +4,6 @@ import es.judith.bo.EpisodeBO;
 import es.judith.dao.EpisodeRepository;
 import es.judith.domain.*;
 import es.judith.domain.Character;
-import es.judith.dto.EpisodeFilterDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import java.util.Optional;
 @Transactional
 public class EpisodeBOImpl
     extends ElvisGenericCRUDServiceImpl<
-        Episode, Long, QEpisode, EpisodeFilterDTO, EpisodeRepository>
+        Episode, Long, EpisodeRepository>
     implements EpisodeBO {
 
   private static final long serialVersionUID = -4565303369232666607L;
