@@ -63,11 +63,23 @@ public class UserBOImpl
 
   @Override
   public String encryptPassword(String password) {
+    LOG.debug("UserBOImpl: encryptPassword");
     return passwordEncoder.encode(password);
   }
 
   @Override
   public Role getRoleByEmail(String email) {
+    LOG.debug("UserBOImpl: getRoleByEmail");
     return repository.findByEmail(email).getRole();
+  }
+
+  @Override
+  public void promoteUser(Long id) {
+    LOG.debug("UserBOImpl: promoteUser");
+    Optional<User> user = repository.findById(id);
+    if (user.isPresent()) {
+      user.get().setRole(Role.ADMIN);
+      repository.save(user.get());
+    }
   }
 }

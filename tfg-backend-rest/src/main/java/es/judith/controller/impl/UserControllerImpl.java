@@ -134,10 +134,10 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
           responseCode = "404",
           description = "Not found",
           content = @Content(schema = @Schema(hidden = true)))
-  @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
-  public ResponseEntity<byte[]> findImageById(@PathVariable Long id) {
-    LOG.debug("UserControllerImpl: Fetching image results with user id {}", id);
-    byte[] image = userBO.findImageById(id);
+  @GetMapping(value = "/image/{userId}", produces = MediaType.IMAGE_PNG_VALUE)
+  public ResponseEntity<byte[]> findImageById(@PathVariable Long userId) {
+    LOG.debug("UserControllerImpl: Fetching image results with user id {}", userId);
+    byte[] image = userBO.findImageById(userId);
     if (image == null || image.length == 0) {
       throw new NotFoundException();
     }
@@ -160,7 +160,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
   @SecurityRequirement(name = "Authorization")
   @PatchMapping(value = "/image/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<User> updateImageById(
-          @PathVariable Long id, @RequestParam("image") MultipartFile file) {
+          @PathVariable Long userId, @RequestParam("image") MultipartFile file) {
     if (file.getSize() == 0) {
       throw new BadInputException("A file must be attached to request");
     }
@@ -168,17 +168,24 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
             && !Objects.equals(file.getContentType(), "image/jpeg")) {
       throw new BadInputException("File must be png or jpg");
     }
-    User user = userBO.findOne(id);
+    User user = userBO.findOne(userId);
     if (user == null) {
-      throw new NotExistingIdException("User with id " + id + " does not exist");
+      throw new NotExistingIdException("User with id " + userId + " does not exist");
     }
     try {
       user.setImageData(ImageUtil.compressImage(file.getBytes()));
     } catch (IOException e) {
       throw new BadInputException(e);
     }
-    LOG.debug("UserControllerImpl: Modifying image data with user id {}", id);
+    LOG.debug("UserControllerImpl: Modifying image data with user id {}", userId);
     userBO.save(user);
+    return ResponseEntity.noContent().build();
+  }
+
+  @PatchMapping("/promote/{userId}")
+  public ResponseEntity<User>  promoteUser(@PathVariable Long userId) {
+    LOG.debug("UserControllerImpl: Promoting user with id {}", userId);
+    userBO.promoteUser(userId);
     return ResponseEntity.noContent().build();
   }
 }

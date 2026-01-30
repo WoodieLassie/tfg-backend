@@ -15,3 +15,4 @@ Ademas, pendiente de hacer:
 - Sistema de recomendaciones entre amistades
 - Añadir username a los users (por que no estaba hecho esto antes?)
 - Cambiar todo el sistema de edicion de imagen de perfil, obtencion de datos de perfiles ajenos, y obtencion de datos del propio perfil (quizas no haga falta con los tokens JWT?)
+- Cambiar forma de obtener la ID del usuario creador de un comentario, valoracion, etc (se extraera el username del token JWT, y se buscara la ID del usuario a traves de ese email. Optimizar buscando otra forma? Incluir ID en el token JWT si es seguro?)
