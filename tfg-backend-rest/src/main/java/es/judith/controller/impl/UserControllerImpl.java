@@ -1,7 +1,7 @@
 package es.judith.controller.impl;
 
-import es.judith.domain.Actor;
-import es.judith.domain.Character;
+import es.judith.bo.JwtBO;
+import es.judith.domain.Role;
 import es.judith.dto.UserDTO;
 import es.judith.dto.UserInputDTO;
 import es.judith.exceptions.AlreadyExistsException;
@@ -20,11 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal;
 import org.springframework.web.bind.annotation.*;
 import es.judith.bo.UserBO;
 import es.judith.controller.UserController;
@@ -33,8 +29,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.Principal;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -42,17 +38,52 @@ import java.util.Objects;
 @Tag(name = "users")
 public class UserControllerImpl extends GenericControllerImpl implements UserController {
 
-  private final UserBO bo;
-  private final BCryptPasswordEncoder passwordEncoder;
-    {
-        new BCryptPasswordEncoder(10);
-    }
-    private static final Logger LOG = LoggerFactory.getLogger(UserControllerImpl.class);
+  private final UserBO userBO;
+  private final JwtBO jwtBO;
+  private static final Logger LOG = LoggerFactory.getLogger(UserControllerImpl.class);
 
-  public UserControllerImpl(UserBO bo, BCryptPasswordEncoder passwordEncoder) {
+  public UserControllerImpl(UserBO bo, JwtBO jwtBO) {
     super(bo);
-    this.bo = bo;
-    this.passwordEncoder = passwordEncoder;
+    this.userBO = bo;
+    this.jwtBO = jwtBO;
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<Map<String, String>> login(@RequestBody UserInputDTO userInputDTO) {
+    boolean areCredentialsCorrect = userBO.verify(userInputDTO.getEmail(), userInputDTO.getPassword());
+    if (areCredentialsCorrect){
+      Role userRole = userBO.getRoleByEmail(userInputDTO.getEmail());
+      String token = jwtBO.generateToken(userInputDTO.getEmail(), userRole.toString());
+      Map<String, String> generatedToken = new HashMap<>();
+      generatedToken.put("token", token);
+      return ResponseEntity.status(HttpStatus.OK).body(generatedToken);
+    }
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  }
+
+  @PostMapping("/register")
+  @Operation(method = "POST", summary = "Save a new user")
+  @ApiResponse(
+          responseCode = "201",
+          description = "Created",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "409",
+          description = "Conflict",
+          content = {@Content(schema = @Schema(hidden = true))})
+  public ResponseEntity<User> register(@RequestBody UserInputDTO userInputDTO) {
+    if (!userInputDTO.allFieldsArePresent()) {
+      throw new BadInputException("All fields must be present in request body");
+    }
+    User dbUser = userBO.findByEmail(userInputDTO.getEmail());
+    if (dbUser != null) {
+      throw new AlreadyExistsException(
+              "User with email " + userInputDTO.getEmail() + " already exists");
+    }
+    userInputDTO.setPassword(userBO.encryptPassword(userInputDTO.getPassword()));
+    userInputDTO.setRole(Role.USER);
+    userBO.save(userInputDTO.obtainDomainObject());
+    return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
 
   @Operation(method = "GET", summary = "Fetch data of currently logged in user")
@@ -74,7 +105,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
     return ResponseEntity.status(HttpStatus.OK).body(userDTO);
   }
 
-  @Operation(method = "GET", summary = "Fetch data of currently logged in user")
+  @Operation(method = "GET", summary = "Fetch data of another user")
   @ApiResponse(
           responseCode = "200",
           description = "OK",
@@ -82,36 +113,12 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
   @GetMapping("/{userId}")
   public ResponseEntity<UserDTO> getUser(@PathVariable Long userId) {
     UserDTO userDTO = new UserDTO();
-    User user = bo.findOne(userId);
+    User user = userBO.findOne(userId);
     if (user == null) {
       throw new NotFoundException();
     }
     userDTO.loadFromDomain(user);
     return ResponseEntity.status(HttpStatus.OK).body(userDTO);
-  }
-
-  @PostMapping
-  @Operation(method = "POST", summary = "Save a new user")
-  @ApiResponse(
-      responseCode = "201",
-      description = "Created",
-      content = {@Content(schema = @Schema(hidden = true))})
-  @ApiResponse(
-      responseCode = "409",
-      description = "Conflict",
-      content = {@Content(schema = @Schema(hidden = true))})
-  public ResponseEntity<User> register(@RequestBody UserInputDTO userInputDTO) {
-    if (!userInputDTO.allFieldsArePresent()) {
-      throw new BadInputException("All fields must be present in request body");
-    }
-    User dbUser = bo.findByEmail(userInputDTO.getEmail());
-    if (dbUser != null) {
-      throw new AlreadyExistsException(
-          "User with email " + userInputDTO.getEmail() + " already exists");
-    }
-    userInputDTO.setPassword(passwordEncoder.encode(userInputDTO.getPassword()));
-    bo.save(userInputDTO.obtainDomainObject());
-    return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
 
   @Override
@@ -130,7 +137,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
   @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> findImageById(@PathVariable Long id) {
     LOG.debug("UserControllerImpl: Fetching image results with user id {}", id);
-    byte[] image = bo.findImageById(id);
+    byte[] image = userBO.findImageById(id);
     if (image == null || image.length == 0) {
       throw new NotFoundException();
     }
@@ -161,7 +168,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
             && !Objects.equals(file.getContentType(), "image/jpeg")) {
       throw new BadInputException("File must be png or jpg");
     }
-    User user = bo.findOne(id);
+    User user = userBO.findOne(id);
     if (user == null) {
       throw new NotExistingIdException("User with id " + id + " does not exist");
     }
@@ -171,7 +178,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
       throw new BadInputException(e);
     }
     LOG.debug("UserControllerImpl: Modifying image data with user id {}", id);
-    bo.save(user);
+    userBO.save(user);
     return ResponseEntity.noContent().build();
   }
 }

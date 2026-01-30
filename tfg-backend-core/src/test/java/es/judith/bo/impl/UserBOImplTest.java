@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import es.judith.dao.UserRepository;
 import es.judith.domain.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -29,12 +30,13 @@ class UserBOImplTest {
 
   @Mock
   UserRepository repository;
+  BCryptPasswordEncoder passwordEncoder;
 
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
 
-    this.userBO = new UserBOImpl(repository);
+    this.userBO = new UserBOImpl(repository, passwordEncoder);
   }
 
   @Test

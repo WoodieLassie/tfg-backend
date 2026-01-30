@@ -14,4 +14,4 @@ Ademas, pendiente de hacer:
 - Sistema de mensajeria entre amistades
 - Sistema de recomendaciones entre amistades
 - Añadir username a los users (por que no estaba hecho esto antes?)
-- Cambiar UserControllerImpl y UserBOImpl para que la lógica de encripción este en el BO
+- Cambiar todo el sistema de edicion de imagen de perfil, obtencion de datos de perfiles ajenos, y obtencion de datos del propio perfil (quizas no haga falta con los tokens JWT?)
