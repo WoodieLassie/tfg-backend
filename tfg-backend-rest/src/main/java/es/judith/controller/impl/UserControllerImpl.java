@@ -96,12 +96,14 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
       content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @GetMapping
-  public ResponseEntity<User> getLoggedUser() {
+  public ResponseEntity<UserDTO> getLoggedUser() {
+    UserDTO userDTO = new UserDTO();
     User user = this.getCurrentUser();
     if (user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
-    return ResponseEntity.status(HttpStatus.OK).body(user);
+    userDTO.loadFromDomain(user);
+    return ResponseEntity.status(HttpStatus.OK).body(userDTO);
   }
 
   @Operation(method = "GET", summary = "Fetch data of another user")
@@ -124,7 +126,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
   @Operation(
           method = "GET",
           summary = "Get a user image by user identification",
-          parameters = @Parameter(ref = "id"))
+          parameters = @Parameter(ref = "userId"))
   @ApiResponse(
           responseCode = "200",
           description = "OK",
@@ -147,7 +149,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
   @Operation(
           method = "PATCH",
           summary = "Edit an existing user image",
-          parameters = @Parameter(ref = "id"))
+          parameters = @Parameter(ref = "userId"))
   @ApiResponse(
           responseCode = "204",
           description = "No content",
@@ -157,7 +159,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
           description = "Not found",
           content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
-  @PatchMapping(value = "/image/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PatchMapping(value = "/image/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<User> updateImageById(
           @PathVariable Long userId, @RequestParam("image") MultipartFile file) {
     if (file.getSize() == 0) {

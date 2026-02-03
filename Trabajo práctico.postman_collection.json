@@ -77,11 +77,11 @@
           "name": "Get logged user",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgxNjgsImV4cCI6MTc3MDEyMzM1Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.YJQBt0mzxHARqbb2Mj4n26ljhI-bUggYU_3Xc2kc_Og",
                   "type": "string"
                 }
               ]
@@ -127,7 +127,14 @@
           "name": "Update user image",
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgyODAsImV4cCI6MTc3MDEyMzQ2NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.Porhk8AYCDkThf2hIrpUMF0Rg04S4TUEsIMBqgIGUAE",
+                  "type": "string"
+                }
+              ]
             },
             "method": "PATCH",
             "header": [],
@@ -208,7 +215,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/shows/sorted?name=",
+              "raw": "localhost:8080/api/shows/sorted?name=test",
               "host": [
                 "localhost"
               ],
@@ -221,7 +228,7 @@
               "query": [
                 {
                   "key": "name",
-                  "value": ""
+                  "value": "test"
                 }
               ]
             }
@@ -253,11 +260,11 @@
           "name": "Save show",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTYxNzAsImV4cCI6MTc3MDEyMTM1NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.5Ke9-X0xewkiZEsT-L1Zi5jWrutkYr4G6cI4e6Byyrk",
                   "type": "string"
                 }
               ]
@@ -291,11 +298,11 @@
           "name": "Update show",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgyODAsImV4cCI6MTc3MDEyMzQ2NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.Porhk8AYCDkThf2hIrpUMF0Rg04S4TUEsIMBqgIGUAE",
                   "type": "string"
                 }
               ]
@@ -330,11 +337,11 @@
           "name": "Update show image",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgyODAsImV4cCI6MTc3MDEyMzQ2NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.Porhk8AYCDkThf2hIrpUMF0Rg04S4TUEsIMBqgIGUAE",
                   "type": "string"
                 }
               ]
@@ -347,7 +354,7 @@
                 {
                   "key": "image",
                   "type": "file",
-                  "src": "/C:/Users/judie/Downloads/a.png"
+                  "src": "/home/judy/Descargas/77371b56a8decd0d685d4c8eeb79f389-3148938474.jpg"
                 }
               ]
             },
@@ -371,11 +378,11 @@
           "name": "Delete show",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgyODAsImV4cCI6MTc3MDEyMzQ2NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.Porhk8AYCDkThf2hIrpUMF0Rg04S4TUEsIMBqgIGUAE",
                   "type": "string"
                 }
               ]
@@ -383,7 +390,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/shows/3",
+              "raw": "localhost:8080/api/shows/2",
               "host": [
                 "localhost"
               ],
@@ -391,7 +398,7 @@
               "path": [
                 "api",
                 "shows",
-                "3"
+                "2"
               ]
             }
           },
@@ -440,7 +447,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/seasons/4",
+              "raw": "localhost:8080/api/seasons/1",
               "host": [
                 "localhost"
               ],
@@ -448,7 +455,7 @@
               "path": [
                 "api",
                 "seasons",
-                "4"
+                "1"
               ],
               "query": [
                 {
@@ -491,46 +498,11 @@
           "name": "Save season",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "authUrl",
-                  "value": "",
-                  "type": "string"
-                },
-                {
-                  "key": "client_authentication",
-                  "value": "header",
-                  "type": "string"
-                },
-                {
-                  "key": "grant_type",
-                  "value": "authorization_code",
-                  "type": "string"
-                },
-                {
-                  "key": "redirect_uri",
-                  "value": "http://localhost:8080/redirect",
-                  "type": "string"
-                },
-                {
-                  "key": "scope",
-                  "value": "admin",
-                  "type": "string"
-                },
-                {
-                  "key": "clientSecret",
-                  "value": "secret",
-                  "type": "string"
-                },
-                {
-                  "key": "clientId",
-                  "value": "client",
-                  "type": "string"
-                },
-                {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -539,7 +511,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"seasonNum\": 1,\r\n    \"description\": \"Temporada cuatro\",\r\n    \"showId\": 3\r\n}",
+              "raw": "{\r\n    \"seasonNum\": 4,\r\n    \"description\": \"Temporada cuatro\",\r\n    \"showId\": 1\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -564,11 +536,11 @@
           "name": "Update season",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgyODAsImV4cCI6MTc3MDEyMzQ2NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.Porhk8AYCDkThf2hIrpUMF0Rg04S4TUEsIMBqgIGUAE",
                   "type": "string"
                 }
               ]
@@ -577,7 +549,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"seasonNum\": 1,\r\n    \"description\": \"Primerassss temporada\",\r\n    \"showId\": 2\r\n}",
+              "raw": "{\r\n    \"seasonNum\": 5,\r\n    \"description\": \"Temporada cinco\",\r\n    \"showId\": 1\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -603,46 +575,11 @@
           "name": "Delete season",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "authUrl",
-                  "value": "",
-                  "type": "string"
-                },
-                {
-                  "key": "client_authentication",
-                  "value": "header",
-                  "type": "string"
-                },
-                {
-                  "key": "grant_type",
-                  "value": "authorization_code",
-                  "type": "string"
-                },
-                {
-                  "key": "redirect_uri",
-                  "value": "http://localhost:8080/redirect",
-                  "type": "string"
-                },
-                {
-                  "key": "scope",
-                  "value": "admin",
-                  "type": "string"
-                },
-                {
-                  "key": "clientSecret",
-                  "value": "secret",
-                  "type": "string"
-                },
-                {
-                  "key": "clientId",
-                  "value": "client",
-                  "type": "string"
-                },
-                {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -675,7 +612,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/episodes?seasonId=2",
+              "raw": "localhost:8080/api/episodes?seasonId=3",
               "host": [
                 "localhost"
               ],
@@ -687,7 +624,7 @@
               "query": [
                 {
                   "key": "seasonId",
-                  "value": "2"
+                  "value": "3"
                 }
               ]
             }
@@ -700,7 +637,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/episodes/sorted?seasonId=4",
+              "raw": "localhost:8080/api/episodes/sorted?seasonId=2",
               "host": [
                 "localhost"
               ],
@@ -712,10 +649,6 @@
               ],
               "query": [
                 {
-                  "key": "seasonId",
-                  "value": "4"
-                },
-                {
                   "key": "episodeNum",
                   "value": "32",
                   "disabled": true
@@ -724,6 +657,10 @@
                   "key": "title",
                   "value": "día",
                   "disabled": true
+                },
+                {
+                  "key": "seasonId",
+                  "value": "2"
                 }
               ]
             }
@@ -754,11 +691,11 @@
           "name": "Save episode",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -791,11 +728,21 @@
         {
           "name": "Update episode",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PATCH",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"episodeNum\": 1,\r\n    \"title\": \"Episode edited through patch\",\r\n    \"summary\": \"hi\",\r\n    \"season\": {\r\n        \"id\": 3\r\n    },\r\n    \"characters\": [\r\n        {\r\n            \"id\": 7\r\n        },\r\n        {\r\n            \"id\": 5\r\n        }\r\n    ]\r\n}",
+              "raw": "{\r\n    \"episodeNum\": 1,\r\n    \"title\": \"Episode edited through patch\",\r\n    \"summary\": \"hi\",\r\n    \"seasonId\": 3,\r\n    \"characterIds\": [2, 5]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -803,7 +750,7 @@
               }
             },
             "url": {
-              "raw": "localhost:8080/api/episodes/63",
+              "raw": "localhost:8080/api/episodes/61",
               "host": [
                 "localhost"
               ],
@@ -811,7 +758,7 @@
               "path": [
                 "api",
                 "episodes",
-                "63"
+                "61"
               ]
             }
           },
@@ -821,46 +768,11 @@
           "name": "Delete episode",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "authUrl",
-                  "value": "",
-                  "type": "string"
-                },
-                {
-                  "key": "client_authentication",
-                  "value": "header",
-                  "type": "string"
-                },
-                {
-                  "key": "grant_type",
-                  "value": "authorization_code",
-                  "type": "string"
-                },
-                {
-                  "key": "redirect_uri",
-                  "value": "http://localhost:8080/redirect",
-                  "type": "string"
-                },
-                {
-                  "key": "scope",
-                  "value": "admin",
-                  "type": "string"
-                },
-                {
-                  "key": "clientSecret",
-                  "value": "secret",
-                  "type": "string"
-                },
-                {
-                  "key": "clientId",
-                  "value": "client",
-                  "type": "string"
-                },
-                {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -868,7 +780,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/episodes/34",
+              "raw": "localhost:8080/api/episodes/61",
               "host": [
                 "localhost"
               ],
@@ -876,7 +788,7 @@
               "path": [
                 "api",
                 "episodes",
-                "34"
+                "61"
               ]
             }
           },
@@ -912,7 +824,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/characters/1",
+              "raw": "localhost:8080/api/characters/15",
               "host": [
                 "localhost"
               ],
@@ -920,7 +832,7 @@
               "path": [
                 "api",
                 "characters",
-                "1"
+                "15"
               ]
             }
           },
@@ -951,11 +863,11 @@
           "name": "Save character",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -988,6 +900,16 @@
         {
           "name": "Update character",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PATCH",
             "header": [],
             "body": {
@@ -1018,11 +940,11 @@
           "name": "Update character image",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -1035,7 +957,7 @@
                 {
                   "key": "image",
                   "type": "file",
-                  "src": "/C:/Users/judie/Downloads/a.png"
+                  "src": "/home/judy/Descargas/77371b56a8decd0d685d4c8eeb79f389-3148938474.jpg"
                 }
               ]
             },
@@ -1173,7 +1095,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/actors/image/21",
+              "raw": "localhost:8080/api/actors/image/18",
               "host": [
                 "localhost"
               ],
@@ -1182,7 +1104,7 @@
                 "api",
                 "actors",
                 "image",
-                "21"
+                "18"
               ]
             }
           },
@@ -1192,46 +1114,11 @@
           "name": "Save actor",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "authUrl",
-                  "value": "",
-                  "type": "string"
-                },
-                {
-                  "key": "client_authentication",
-                  "value": "header",
-                  "type": "string"
-                },
-                {
-                  "key": "grant_type",
-                  "value": "authorization_code",
-                  "type": "string"
-                },
-                {
-                  "key": "redirect_uri",
-                  "value": "http://localhost:8080/redirect",
-                  "type": "string"
-                },
-                {
-                  "key": "scope",
-                  "value": "admin",
-                  "type": "string"
-                },
-                {
-                  "key": "clientSecret",
-                  "value": "secret",
-                  "type": "string"
-                },
-                {
-                  "key": "clientId",
-                  "value": "client",
-                  "type": "string"
-                },
-                {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -1240,7 +1127,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n        \"name\": \"Test actor\",\r\n        \"birthDate\": \"1968-06-18\",\r\n        \"nationality\": \"Española\",\r\n        \"gender\": \"Femenino\",\r\n        \"birthLocation\": \"Valencia\",\r\n        \"character\": {\r\n            \"id\": 11\r\n        }\r\n}",
+              "raw": "{\r\n        \"name\": \"Test actor\",\r\n        \"birthDate\": \"1968-06-18\",\r\n        \"nationality\": \"Española\",\r\n        \"gender\": \"Femenino\",\r\n        \"birthLocation\": \"Valencia\",\r\n        \"characterId\": 11\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1264,11 +1151,21 @@
         {
           "name": "Update actor",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PATCH",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n        \"name\": \"Test character 2\",\r\n        \"birthDate\": \"1968-06-18\",\r\n        \"nationality\": \"Española\",\r\n        \"gender\": \"TEST\",\r\n        \"birthLocation\": \"Valencia\",\r\n        \"character\": {\r\n            \"id\": 27\r\n        }\r\n}",
+              "raw": "{\r\n        \"name\": \"Test character 2\",\r\n        \"birthDate\": \"1968-06-18\",\r\n        \"nationality\": \"Española\",\r\n        \"gender\": \"TEST\",\r\n        \"birthLocation\": \"Valencia\",\r\n        \"characterId\": 16\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1276,7 +1173,7 @@
               }
             },
             "url": {
-              "raw": "localhost:8080/api/actors/3",
+              "raw": "localhost:8080/api/actors/18",
               "host": [
                 "localhost"
               ],
@@ -1284,7 +1181,7 @@
               "path": [
                 "api",
                 "actors",
-                "3"
+                "18"
               ]
             }
           },
@@ -1294,11 +1191,11 @@
           "name": "Update actor image",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -1311,12 +1208,12 @@
                 {
                   "key": "image",
                   "type": "file",
-                  "src": "/C:/Users/judie/Downloads/a.png"
+                  "src": "/home/judy/Descargas/77371b56a8decd0d685d4c8eeb79f389-3148938474.jpg"
                 }
               ]
             },
             "url": {
-              "raw": "localhost:8080/api/actors/image/1",
+              "raw": "localhost:8080/api/actors/image/18",
               "host": [
                 "localhost"
               ],
@@ -1325,7 +1222,7 @@
                 "api",
                 "actors",
                 "image",
-                "1"
+                "18"
               ]
             }
           },
@@ -1335,46 +1232,11 @@
           "name": "Delete actor",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "authUrl",
-                  "value": "",
-                  "type": "string"
-                },
-                {
-                  "key": "client_authentication",
-                  "value": "header",
-                  "type": "string"
-                },
-                {
-                  "key": "grant_type",
-                  "value": "authorization_code",
-                  "type": "string"
-                },
-                {
-                  "key": "redirect_uri",
-                  "value": "http://localhost:8080/redirect",
-                  "type": "string"
-                },
-                {
-                  "key": "scope",
-                  "value": "admin",
-                  "type": "string"
-                },
-                {
-                  "key": "clientSecret",
-                  "value": "secret",
-                  "type": "string"
-                },
-                {
-                  "key": "clientId",
-                  "value": "client",
-                  "type": "string"
-                },
-                {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -1382,7 +1244,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/actors/24",
+              "raw": "localhost:8080/api/actors/18",
               "host": [
                 "localhost"
               ],
@@ -1390,7 +1252,7 @@
               "path": [
                 "api",
                 "actors",
-                "24"
+                "18"
               ]
             }
           },
@@ -1669,11 +1531,11 @@
           "name": "Save favourite",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -1707,11 +1569,11 @@
           "name": "Delete favourite",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -1719,7 +1581,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/favourites/5",
+              "raw": "localhost:8080/api/favourites/1",
               "host": [
                 "localhost"
               ],
@@ -1727,7 +1589,7 @@
               "path": [
                 "api",
                 "favourites",
-                "5"
+                "1"
               ]
             }
           },
@@ -1762,11 +1624,11 @@
           "name": "Save comment",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -1800,11 +1662,11 @@
           "name": "Delete comment",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -1812,7 +1674,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/comments/4",
+              "raw": "localhost:8080/api/comments/2",
               "host": [
                 "localhost"
               ],
@@ -1820,7 +1682,7 @@
               "path": [
                 "api",
                 "comments",
-                "4"
+                "2"
               ]
             }
           },
@@ -1855,11 +1717,11 @@
           "name": "Save review",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -1890,14 +1752,14 @@
           "response": []
         },
         {
-          "name": "New Request",
+          "name": "Delete rating",
           "request": {
             "auth": {
-              "type": "oauth2",
-              "oauth2": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "addTokenTo",
-                  "value": "header",
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
                   "type": "string"
                 }
               ]
@@ -1905,7 +1767,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/reviews/5",
+              "raw": "localhost:8080/api/reviews/1",
               "host": [
                 "localhost"
               ],
@@ -1913,7 +1775,7 @@
               "path": [
                 "api",
                 "reviews",
-                "5"
+                "1"
               ]
             }
           },

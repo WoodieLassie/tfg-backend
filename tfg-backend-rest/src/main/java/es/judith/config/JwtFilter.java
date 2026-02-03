@@ -39,7 +39,22 @@ public class JwtFilter extends OncePerRequestFilter {
         String username = null;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
-            username = jwtBO.extractUsername(token);
+            try {
+                username = jwtBO.extractUsername(token);
+            }
+            catch (RuntimeException ex) {
+                String sb = "{ " +
+                        "\"error\": \"Unauthorized\" " +
+                        "\"message\": \"Token invalido\" " +
+                        "\"path\": \"" +
+                        request.getRequestURL() +
+                        "\"" +
+                        "} ";
+                response.setContentType("application/json");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write(sb);
+                return;
+            }
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = applicationContext.getBean(CustomUserDetailsService.class).loadUserByUsername(username);

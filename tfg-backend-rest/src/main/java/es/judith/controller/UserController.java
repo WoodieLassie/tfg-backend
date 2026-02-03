@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @SuppressWarnings("unused")
 public interface UserController extends BaseController {
-    ResponseEntity<User> getLoggedUser();
+    ResponseEntity<UserDTO> getLoggedUser();
     ResponseEntity<User> register(UserInputDTO userDTO);
     ResponseEntity<byte[]> findImageById(Long id);
     ResponseEntity<User> updateImageById(Long id, MultipartFile file);
