@@ -14,8 +14,12 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "comments")
-public class Comment extends Audit {
+public class Comment extends ElvisEntity {
   @Serial static final long serialVersionUID = 8182917368975655915L;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
 
   @Column(name = "text", nullable = false)
   @NotNull

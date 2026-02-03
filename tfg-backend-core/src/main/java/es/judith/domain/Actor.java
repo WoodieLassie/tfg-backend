@@ -15,7 +15,7 @@ import java.sql.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "actors")
-public class Actor extends Audit {
+public class Actor extends ElvisEntity {
   @Serial private static final long serialVersionUID = 1887096612684365214L;
 
   @Column(name = "name", nullable = false, length = 100)

@@ -12,8 +12,12 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "favourites")
-public class Favourite extends Audit {
+public class Favourite extends ElvisEntity {
   @Serial private static final long serialVersionUID = -3076389732947119269L;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
 
   @JoinColumn(name = "show_id", nullable = false)
   @OneToOne

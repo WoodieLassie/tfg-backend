@@ -1,7 +1,8 @@
 package es.judith.domain;
 
 import java.io.Serializable;
-import jakarta.persistence.MappedSuperclass;
+
+import jakarta.persistence.*;
 import lombok.Data;
 
 /**
@@ -10,6 +11,11 @@ import lombok.Data;
 @MappedSuperclass
 @Data
 public abstract class ElvisEntity implements Serializable, Cloneable {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", unique = true, nullable = false)
+  private Long id;
 
   /*
    * (non-Javadoc)

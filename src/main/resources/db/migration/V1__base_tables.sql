@@ -27,15 +27,19 @@ CREATE TABLE shows (
 CREATE TABLE comments (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   text VARCHAR(255) NOT NULL,
+  user_id BIGINT NOT NULL,
   show_id BIGINT NOT NULL,
-  CONSTRAINT comments_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id)
+  CONSTRAINT comments_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id),
+  CONSTRAINT user_comments_fk_01 FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE reviews (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   rating INT NOT NULL,
+  user_id BIGINT NOT NULL,
   show_id BIGINT NOT NULL,
-  CONSTRAINT reviews_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id)
+  CONSTRAINT reviews_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id),
+  CONSTRAINT user_reviews_fk_01 FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE seasons (
@@ -85,6 +89,8 @@ CREATE TABLE actors (
 
 CREATE TABLE favourites (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT NOT NULL,
   show_id BIGINT NOT NULL,
-  CONSTRAINT favourites_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id) ON DELETE CASCADE
+  CONSTRAINT favourites_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id) ON DELETE CASCADE,
+  CONSTRAINT user_favourites_fk_01 FOREIGN KEY (user_id) REFERENCES users (id)
 );

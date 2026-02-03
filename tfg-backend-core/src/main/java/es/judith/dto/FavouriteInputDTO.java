@@ -19,6 +19,8 @@ public class FavouriteInputDTO extends ElvisBaseDTO<Favourite> {
 
   @JsonIgnore private Long id;
 
+  @JsonIgnore private Long userId;
+
   @Schema(description = "Show identification")
   @NotNull
   private Long showId;

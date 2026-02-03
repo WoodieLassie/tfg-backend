@@ -9,6 +9,5 @@ public interface UserBO extends GenericCRUDService<User, Long> {
   byte[] findImageById(Long id);
   boolean verify(String email, String password);
   String encryptPassword(String password);
-  Role getRoleByEmail(String email);
   void promoteUser(Long id);
 }

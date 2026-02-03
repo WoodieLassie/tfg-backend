@@ -30,7 +30,7 @@ public class CommentBOImpl
       CommentDTO convertedComment = new CommentDTO();
       convertedComment.setId((Long) comment[0]);
       convertedComment.setText((String) comment[1]);
-      convertedComment.setEmail((String) comment[8]);
+      convertedComment.setEmail((String) comment[4]);
       convertedCommentList.add(convertedComment);
     }
     return convertedCommentList;

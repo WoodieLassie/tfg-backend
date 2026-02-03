@@ -12,7 +12,7 @@ public interface CommentRepository
         JpaSpecificationExecutor<Comment> {
   @Query(
       value =
-          "SELECT c.*, u.email FROM comments c LEFT JOIN users u ON c.create_user_id = u.id WHERE c.show_id = :showId",
+          "SELECT c.*, u.email FROM comments c LEFT JOIN users u ON c.user_id = u.id WHERE c.show_id = :showId",
       nativeQuery = true)
   List<Object[]> findAll(@Param("showId") Long showId);
 }

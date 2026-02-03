@@ -20,6 +20,7 @@ public class CommentInputDTO extends ElvisBaseDTO<Comment> {
   @JsonIgnore private Long id;
 
   @NotNull private String text;
+  @JsonIgnore private Long userId;
   @NotNull private Long showId;
 
   public boolean allFieldsArePresent() {

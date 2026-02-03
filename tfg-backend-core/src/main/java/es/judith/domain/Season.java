@@ -16,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "seasons")
-public class Season extends Audit {
+public class Season extends ElvisEntity {
   @Serial private static final long serialVersionUID = -789744819989480524L;
 
   @Column(name = "season_num", nullable = false, unique = true)

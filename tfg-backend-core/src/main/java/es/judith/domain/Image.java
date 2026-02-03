@@ -12,7 +12,7 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "images")
-public class Image extends Audit {
+public class Image extends ElvisEntity {
     @Serial private static final long serialVersionUID = 7040125363430892302L;
 
     @Column(name = "name", nullable = false)

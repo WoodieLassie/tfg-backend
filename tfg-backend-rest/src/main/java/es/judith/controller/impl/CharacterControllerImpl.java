@@ -2,7 +2,6 @@ package es.judith.controller.impl;
 
 import es.judith.bo.CharacterBO;
 import es.judith.controller.CharacterController;
-import es.judith.domain.Actor;
 import es.judith.domain.Character;
 import es.judith.dto.ActorNoCharacterDTO;
 import es.judith.dto.CharacterDTO;

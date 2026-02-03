@@ -20,6 +20,7 @@ public class ReviewInputDTO extends ElvisBaseDTO<Review> {
   @JsonIgnore private Long id;
 
   @NotNull private Integer rating;
+  @JsonIgnore private Long userId;
   @NotNull private Long showId;
 
   public boolean allFieldsArePresent() {

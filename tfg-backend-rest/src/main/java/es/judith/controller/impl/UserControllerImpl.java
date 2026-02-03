@@ -52,8 +52,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
   public ResponseEntity<Map<String, String>> login(@RequestBody UserInputDTO userInputDTO) {
     boolean areCredentialsCorrect = userBO.verify(userInputDTO.getEmail(), userInputDTO.getPassword());
     if (areCredentialsCorrect){
-      Role userRole = userBO.getRoleByEmail(userInputDTO.getEmail());
-      String token = jwtBO.generateToken(userInputDTO.getEmail(), userRole.toString());
+      String token = jwtBO.generateToken(userInputDTO.getEmail());
       Map<String, String> generatedToken = new HashMap<>();
       generatedToken.put("token", token);
       return ResponseEntity.status(HttpStatus.OK).body(generatedToken);
@@ -97,12 +96,12 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
       content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @GetMapping
-  public ResponseEntity<UserDTO> getLoggedUser() {
-    UserDTO userDTO = this.getCurrentUser();
-    if (userDTO == null) {
+  public ResponseEntity<User> getLoggedUser() {
+    User user = this.getCurrentUser();
+    if (user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
-    return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+    return ResponseEntity.status(HttpStatus.OK).body(user);
   }
 
   @Operation(method = "GET", summary = "Fetch data of another user")

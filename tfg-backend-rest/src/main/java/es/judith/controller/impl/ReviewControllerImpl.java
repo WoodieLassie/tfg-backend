@@ -7,7 +7,9 @@ import es.judith.controller.ReviewController;
 import es.judith.domain.Review;
 import es.judith.domain.Role;
 import es.judith.domain.Show;
+import es.judith.domain.User;
 import es.judith.dto.ReviewInputDTO;
+import es.judith.dto.UserDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -63,14 +65,16 @@ public class ReviewControllerImpl extends GenericControllerImpl implements Revie
     if (reviewDTO.getRating() < 1 || reviewDTO.getRating() > 5) {
       throw new BadInputException("Rating value must not be greater than 5 or less than 1");
     }
+    User user = this.getCurrentUser();
     Review existingUserReviewInShow =
-        bo.checkIfUserReviewInShow(reviewDTO.getShowId(), this.getCurrentUser().getId());
+        bo.checkIfUserReviewInShow(reviewDTO.getShowId(), user.getId());
     Review newReviewInfo = reviewDTO.obtainDomainObject();
     Show show = showBO.findOne(reviewDTO.getShowId());
     if (show == null) {
       throw new NotFoundException("Show with id " + reviewDTO.getShowId() +  "does not exist");
     }
     newReviewInfo.setShow(show);
+    newReviewInfo.setUser(user);
     if (existingUserReviewInShow != null) {
       newReviewInfo.setId(existingUserReviewInShow.getId());
       bo.save(newReviewInfo);
@@ -86,7 +90,7 @@ public class ReviewControllerImpl extends GenericControllerImpl implements Revie
     if (!bo.exists(id)) {
       throw new NotFoundException("Review with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getCreatedBy(), this.getCurrentUser().getId())
+    if (!Objects.equals(bo.findOne(id).getUser().getId(), this.getCurrentUser().getId())
         && this.getCurrentUser().getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }

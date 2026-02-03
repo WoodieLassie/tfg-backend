@@ -7,6 +7,7 @@ import es.judith.controller.FavouriteController;
 import es.judith.domain.Favourite;
 import es.judith.domain.Role;
 import es.judith.domain.Show;
+import es.judith.domain.User;
 import es.judith.dto.FavouriteDTO;
 import es.judith.dto.FavouriteInputDTO;
 import es.judith.exceptions.AlreadyExistsException;
@@ -92,7 +93,8 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
       throw new NotExistingIdException(
           "Show with id " + favouriteDTO.getShowId() + " does not exist");
     }
-    List<Favourite> userFavourites = bo.findAllByUser(this.getCurrentUser().getId());
+    User user = this.getCurrentUser();
+    List<Favourite> userFavourites = bo.findAllByUser(user.getId());
     for (Favourite userFavourite : userFavourites) {
       if (Objects.equals(userFavourite.getShow().getId(), favouriteDTO.getShowId())) {
         throw new AlreadyExistsException("Show already favourited");
@@ -100,6 +102,7 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
     }
     Favourite favourite = favouriteDTO.obtainDomainObject();
     favourite.setShow(show);
+    favourite.setUser(user);
     LOG.debug("FavouriteControllerImpl: Saving data");
     bo.save(favourite);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
@@ -121,7 +124,7 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
     if (!bo.exists(id)) {
       throw new NotFoundException("Favourite with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getCreatedBy(), this.getCurrentUser().getId())
+    if (!Objects.equals(bo.findOne(id).getUser().getId(), this.getCurrentUser().getId())
         && this.getCurrentUser().getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }

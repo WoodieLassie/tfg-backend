@@ -14,7 +14,7 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "shows")
-public class Show extends Audit {
+public class Show extends ElvisEntity {
   @Serial
   private static final long serialVersionUID = 7575277469267296146L;
 

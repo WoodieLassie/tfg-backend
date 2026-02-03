@@ -7,8 +7,10 @@ import es.judith.controller.CommentController;
 import es.judith.domain.Comment;
 import es.judith.domain.Role;
 import es.judith.domain.Show;
+import es.judith.domain.User;
 import es.judith.dto.CommentDTO;
 import es.judith.dto.CommentInputDTO;
+import es.judith.dto.UserDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
@@ -24,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,7 +36,7 @@ import java.util.Objects;
 @Tag(name = "comments")
 public class CommentControllerImpl extends GenericControllerImpl implements CommentController {
 
-  private static final Logger LOG = LoggerFactory.getLogger(FavouriteControllerImpl.class);
+  private static final Logger LOG = LoggerFactory.getLogger(CommentControllerImpl.class);
   private final CommentBO bo;
   private final ShowBO showBO;
 
@@ -73,8 +74,10 @@ public class CommentControllerImpl extends GenericControllerImpl implements Comm
       throw new NotExistingIdException(
           "Show with id " + commentDTO.getShowId() + " does not exist");
     }
+    User user = this.getCurrentUser();
     Comment comment = commentDTO.obtainDomainObject();
     comment.setShow(show);
+    comment.setUser(user);
     LOG.debug("CommentControllerImpl: Saving data");
     bo.save(comment);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
@@ -86,7 +89,7 @@ public class CommentControllerImpl extends GenericControllerImpl implements Comm
     if (!bo.exists(id)) {
       throw new NotFoundException("Comment with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getCreatedBy(), this.getCurrentUser().getId())
+    if (!Objects.equals(bo.findOne(id).getUser().getId(), this.getCurrentUser().getId())
         && this.getCurrentUser().getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }

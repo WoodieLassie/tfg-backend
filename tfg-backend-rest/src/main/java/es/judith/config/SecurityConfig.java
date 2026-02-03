@@ -12,8 +12,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -25,45 +27,50 @@ public class SecurityConfig {
         new BCryptPasswordEncoder(10);
     }
   private final CustomUserDetailsService userDetailsService;
+  private final JwtFilter jwtFilter;
 
   public SecurityConfig(
-      BCryptPasswordEncoder passwordEncoder,
-      CustomUserDetailsService userDetailsService) {
+          BCryptPasswordEncoder passwordEncoder,
+          CustomUserDetailsService userDetailsService, JwtFilter jwtFilter) {
     super();
     this.passwordEncoder = passwordEncoder;
     this.userDetailsService = userDetailsService;
+    this.jwtFilter = jwtFilter;
   }
 
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(AbstractHttpConfigurer::disable)
+    return http.csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             authz ->
-                authz
-                    .requestMatchers(
+            authz
+                .requestMatchers("error").permitAll()
+                .requestMatchers("/api/users/login", "/api/users/register").permitAll()
+                .requestMatchers(
                         "/swagger-ui/**", "/webjars/**", "/v3/api-docs/**, /api/users/login/**, /api/users/register/**")
-                    .permitAll()
-                    .requestMatchers(HttpMethod.GET, "/**")
-                    .permitAll()
-                    .requestMatchers(
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "/**")
+                .permitAll()
+                .requestMatchers(
                         HttpMethod.POST,
                         "/api/actors/**, /api/characters/**, /api/episodes/**, /api/images/**, /api/seasons/**, /api/shows/**")
-                    .hasAuthority("ADMIN")
-                    .requestMatchers(
+                .hasAuthority("ADMIN")
+                .requestMatchers(
                         HttpMethod.POST, "/api/comments/**, /api/favourites/**, /api/reviews/**")
-                    .hasAuthority("USER")
-                    .requestMatchers(HttpMethod.PATCH, "/**")
-                    .hasAuthority("ADMIN")
-                    .requestMatchers(
+                .authenticated()
+                .requestMatchers(HttpMethod.PATCH, "/**")
+                .hasAuthority("ADMIN")
+                .requestMatchers(
                         HttpMethod.DELETE,
                         "/api/actors/**, /api/characters/**, /api/episodes/**, /api/images/**, /api/seasons/**, /api/shows/**")
-                    .hasAuthority("ADMIN")
-                    .requestMatchers(
+                .hasAuthority("ADMIN")
+                .requestMatchers(
                         HttpMethod.DELETE, "/api/favourites/**, /api/comments/**, /api/reviews/**")
-                    .hasAuthority("USER")
-                    .anyRequest()
-                    .permitAll());
-    return http.build();
+                .authenticated()
+                .anyRequest().hasAuthority("ADMIN"))
+                .userDetailsService(userDetailsService)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
   }
 
   @Bean
