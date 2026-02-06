@@ -9,6 +9,7 @@ import es.judith.domain.Episode;
 import es.judith.domain.Season;
 import es.judith.dto.EpisodeDTO;
 import es.judith.dto.EpisodeInputDTO;
+import es.judith.dto.EpisodeNoSeasonDTO;
 import es.judith.dto.EpisodeSwaggerDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
@@ -52,29 +53,6 @@ public class EpisodeControllerImpl implements EpisodeController {
   }
 
   @Override
-  @Operation(summary = "Get all episodes")
-  @ApiResponse(
-      responseCode = "200",
-      description = "OK",
-      content = {
-        @Content(
-            mediaType = "application/json",
-            array = @ArraySchema(schema = @Schema(implementation = EpisodeDTO.class)))
-      })
-  @GetMapping
-  public ResponseEntity<List<EpisodeDTO>> findAll(@Parameter @RequestParam Long seasonId) {
-    LOG.debug("EpisodeControllerImpl: Fetching all results");
-    List<Episode> episodeList = bo.findAll(seasonId);
-    List<EpisodeDTO> convertedEpisodeList = new ArrayList<>();
-    for (Episode episode : episodeList) {
-      EpisodeDTO episodeDTO = new EpisodeDTO();
-      episodeDTO.loadFromDomain(episode);
-      convertedEpisodeList.add(episodeDTO);
-    }
-    return ResponseEntity.ok(convertedEpisodeList);
-  }
-
-  @Override
   @Operation(
       method = "GET",
       summary = "Get an episode by identification",
@@ -92,51 +70,15 @@ public class EpisodeControllerImpl implements EpisodeController {
           description = "Not found",
           content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
-  public ResponseEntity<EpisodeDTO> findById(@PathVariable Long id) {
+  public ResponseEntity<EpisodeNoSeasonDTO> findById(@PathVariable Long id) {
     LOG.debug("EpisodeControllerImpl: Fetching results with id {}", id);
     if (bo.findOne(id) == null) {
       throw new NotFoundException();
     }
     Episode episode = bo.findOneWithCharacters(id);
-    EpisodeDTO convertedEpisode = new EpisodeDTO();
+    EpisodeNoSeasonDTO convertedEpisode = new EpisodeNoSeasonDTO();
     convertedEpisode.loadFromDomain(episode);
     return ResponseEntity.ok(convertedEpisode);
-  }
-
-  @Operation(summary = "Get all episodes by season identification, title and episode number")
-  @ApiResponse(
-      responseCode = "200",
-      description = "OK",
-      content = {
-        @Content(
-            mediaType = "application/json",
-            array = @ArraySchema(schema = @Schema(implementation = EpisodeDTO.class)))
-      })
-  @GetMapping(value = "/sorted", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Page<EpisodeDTO>> findAllSortedAndPaged(
-      @Parameter @RequestParam(required = false) Long seasonId,
-      @Parameter @RequestParam(required = false, defaultValue = "") String title,
-      @Parameter @RequestParam(required = false) Integer episodeNum,
-      @Parameter @RequestParam(defaultValue = "0") Integer page,
-      @Parameter(hidden = true) @PageableDefault(size = 5) Pageable pageable) {
-    LOG.debug(
-        "Fetching results with season id {} and title {} and episode number {}",
-        seasonId,
-        title,
-        episodeNum);
-    List<Episode> episodeList = bo.findAllSortedAndPaged(seasonId, title, episodeNum);
-    List<EpisodeDTO> convertedEpisodeList = new ArrayList<>();
-    for (Episode episode : episodeList) {
-      EpisodeDTO episodeDTO = new EpisodeDTO();
-      episodeDTO.loadFromDomain(episode);
-      convertedEpisodeList.add(episodeDTO);
-    }
-    int start = (int) pageable.getOffset();
-    int end = Math.min((start + pageable.getPageSize()), convertedEpisodeList.size());
-    Page<EpisodeDTO> episodes =
-        new PageImpl<>(
-            convertedEpisodeList.subList(start, end), pageable, convertedEpisodeList.size());
-    return ResponseEntity.ok(episodes);
   }
 
   @Override

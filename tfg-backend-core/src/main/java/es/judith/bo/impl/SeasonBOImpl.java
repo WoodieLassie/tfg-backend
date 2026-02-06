@@ -31,33 +31,6 @@ public class SeasonBOImpl
   }
 
   @Transactional(readOnly = true)
-  public List<Season> findAllByCharacters(String name) {
-    LOG.debug("SeasonBOImpl: findAllByCharacters");
-    List<Season> seasonList = repository.findAll();
-    List<Episode> episodeSortedList = repository.findAllByCharacter(name);
-    List<Season> newSeasonList = new ArrayList<>();
-    for (Season season : seasonList) {
-      List<Episode> newEpisodeSortedList = new ArrayList<>();
-      for (Episode episode : episodeSortedList) {
-        if (episode.getSeason().getId().equals(season.getId())) {
-          episode.setId(episode.getId());
-          episode.setEpisodeNum(episode.getEpisodeNum());
-          episode.setTitle(episode.getTitle());
-          episode.setSummary(episode.getSummary());
-          episode.setCharacters(null);
-          newEpisodeSortedList.add(episode);
-        }
-      }
-      season.setId(season.getId());
-      season.setSeasonNum(season.getSeasonNum());
-      season.setDescription(season.getDescription());
-      season.setEpisodes(newEpisodeSortedList);
-      newSeasonList.add(season);
-    }
-    return newSeasonList;
-  }
-
-  @Transactional(readOnly = true)
   public Boolean existsBySeasonNumAndShowId(Integer seasonNum, Long showId) {
     return repository.existsBySeasonNumAndShowId(seasonNum, showId);
   }

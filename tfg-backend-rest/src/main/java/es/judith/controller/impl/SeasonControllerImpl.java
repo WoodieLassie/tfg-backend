@@ -46,29 +46,6 @@ public class SeasonControllerImpl implements SeasonController {
   }
 
   @Override
-  @Operation(method = "GET", summary = "Get all seasons from show")
-  @ApiResponse(
-      responseCode = "200",
-      description = "OK",
-      content = {
-        @Content(
-            mediaType = "application/json",
-            array = @ArraySchema(schema = @Schema(implementation = SeasonDTO.class)))
-      })
-  @GetMapping
-  public ResponseEntity<List<SeasonDTO>> findAll(@Parameter @RequestParam Long showId) {
-    LOG.debug("SeasonControllerImpl: Fetching all results");
-    List<Season> seasonList = bo.findAll(showId);
-    List<SeasonDTO> convertedSeasonList = new ArrayList<>();
-    for (Season season : seasonList) {
-      SeasonDTO seasonDTO = new SeasonDTO();
-      seasonDTO.loadFromDomain(season);
-      convertedSeasonList.add(seasonDTO);
-    }
-    return ResponseEntity.ok(convertedSeasonList);
-  }
-
-  @Override
   @Operation(
       method = "GET",
       summary = "Get a season by identification",
@@ -93,30 +70,6 @@ public class SeasonControllerImpl implements SeasonController {
     SeasonDTO convertedSeason = new SeasonDTO();
     convertedSeason.loadFromDomain(season);
     return ResponseEntity.ok(convertedSeason);
-  }
-
-  @Override
-  @Operation(method = "GET", summary = "Get all seasons by character name")
-  @ApiResponse(
-      responseCode = "200",
-      description = "OK",
-      content = {
-        @Content(
-            mediaType = "application/json",
-            array = @ArraySchema(schema = @Schema(implementation = SeasonDTO.class)))
-      })
-  @GetMapping(value = "/sorted", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<SeasonDTO>> findAllByCharacters(
-      @Parameter @RequestParam(required = false, defaultValue = "") String characterName) {
-    LOG.debug("Fetching results with character name {}", characterName);
-    List<Season> seasonList = bo.findAllByCharacters(characterName);
-    List<SeasonDTO> convertedSeasonList = new ArrayList<>();
-    for (Season season : seasonList) {
-      SeasonDTO seasonDTO = new SeasonDTO();
-      seasonDTO.loadFromDomain(season);
-      convertedSeasonList.add(seasonDTO);
-    }
-    return ResponseEntity.ok(convertedSeasonList);
   }
 
   @Override

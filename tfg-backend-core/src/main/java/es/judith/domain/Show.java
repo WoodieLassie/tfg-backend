@@ -1,5 +1,6 @@
 package es.judith.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
+import java.util.List;
 
 @Entity
 @XmlRootElement
@@ -31,4 +33,9 @@ public class Show extends ElvisEntity {
   @Column(name = "image_data", length = 65535)
   @Size(max = 65535)
   private byte[] imageData;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "show", cascade = CascadeType.REMOVE)
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private List<Season> seasons;
+
 }

@@ -16,3 +16,5 @@ Ademas, pendiente de hacer:
 - Delete season provoca error 500
 - Actor solo puede tener un personaje. Cambiar a que pueda tener muchos personajes
 - Eliminar image, sus BO, repositorios, tablas... Todo. No tiene ninguna utilidad ahora que las imagenes se vinculan por un campo a las tablas que lo necesiten
+- Añadir logs
+- Todos los endpoints GET deben estar paginados

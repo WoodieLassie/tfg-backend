@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
+import java.util.List;
 
 @Schema(name = "ShowDTO", description = "Data transfer object. Show")
 @EqualsAndHashCode(callSuper = true)
@@ -24,4 +25,8 @@ public class ShowDTO extends ElvisBaseDTO<Show> {
 
   @JsonInclude(value = JsonInclude.Include.NON_NULL)
   private String imageUrl;
+
+  @Schema(description = "Show seasons")
+  @JsonInclude(value = JsonInclude.Include.NON_NULL)
+  private List<SeasonNoEpisodesDTO> seasons;
 }

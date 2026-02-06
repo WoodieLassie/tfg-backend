@@ -27,14 +27,14 @@ public class ShowBOImpl
 
   @Override
   public List<Show> findAllByName(String name) {
-    LOG.debug("CharacterBOImpl: findAllByName");
+    LOG.debug("ShowBOImpl: findAllByName");
     return repository.findAllByName(name);
   }
 
   @Override
   public byte[] findImageById(Long id) {
-    LOG.debug("CharacterBOImpl: findImageById");
-    Optional<Show> character = repository.findById(id);
-    return character.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
+    LOG.debug("ShowBOImpl: findImageById");
+    Optional<Show> show = repository.findById(id);
+    return show.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
   }
 }

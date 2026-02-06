@@ -74,6 +74,9 @@ public class ShowControllerImpl implements ShowController {
   @GetMapping("/{id}")
   public ResponseEntity<ShowDTO> findById(@PathVariable Long id) {
     Show show = bo.findOne(id);
+    if (show == null) {
+      throw new NotFoundException();
+    }
     ShowDTO showDTO = new ShowDTO();
     showDTO.loadFromDomain(show);
     if (showDTO.getImageData() != null) {

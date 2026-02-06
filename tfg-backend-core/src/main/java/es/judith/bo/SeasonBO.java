@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface SeasonBO extends GenericCRUDService<Season, Long> {
     List<Season> findAll(Long showId);
-    List<Season> findAllByCharacters(String name);
     Boolean existsBySeasonNumAndShowId(Integer seasonNum, Long showId);
 }

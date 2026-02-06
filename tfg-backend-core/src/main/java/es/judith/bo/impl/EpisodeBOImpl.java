@@ -4,6 +4,7 @@ import es.judith.bo.EpisodeBO;
 import es.judith.dao.EpisodeRepository;
 import es.judith.domain.*;
 import es.judith.domain.Character;
+import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -31,11 +32,6 @@ public class EpisodeBOImpl
   public List<Episode> findAllSortedAndPaged(Long seasonId, String title, Integer episodeNum) {
     LOG.debug("EpisodeBOImpl: findAllSortedAndPaged");
     return repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
-  }
-
-  @Override
-  public List<Episode> findAll(Long seasonId) {
-    return repository.findAllBySeason(seasonId);
   }
 
   @Transactional(readOnly = true)
