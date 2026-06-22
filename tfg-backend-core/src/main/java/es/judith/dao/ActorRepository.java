@@ -11,8 +11,8 @@ import java.util.Optional;
 public interface ActorRepository
         extends ElvisBaseRepository<Actor, Long>,
         JpaSpecificationExecutor<Actor> {
-    @Query("SELECT a from Actor a LEFT JOIN FETCH a.character c")
+    @Query("SELECT a from Actor a LEFT JOIN FETCH a.characters c")
     List<Actor> findAll();
-    @Query("SELECT a from Actor a LEFT JOIN FETCH a.character c where a.id = :id")
+    @Query("SELECT a from Actor a LEFT JOIN FETCH a.characters c where a.id = :id")
     Optional<Actor> findById(@Param("id") Long id);
 }

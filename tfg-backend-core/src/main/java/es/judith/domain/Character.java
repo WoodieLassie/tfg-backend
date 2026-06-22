@@ -46,6 +46,6 @@ public class Character extends ElvisEntity {
   @Size(max = 65535)
   private byte[] imageData;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "character", cascade = CascadeType.REMOVE)
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "characters")
   private List<Actor> actors;
 }

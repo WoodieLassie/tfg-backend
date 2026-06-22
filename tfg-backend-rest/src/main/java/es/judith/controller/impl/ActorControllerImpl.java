@@ -148,11 +148,12 @@ public class ActorControllerImpl implements ActorController {
       throw new BadInputException("All fields must be present in request body");
     }
     Actor actor = actorDTO.obtainDomainObject();
-    Character character = characterBO.findOne(actorDTO.getCharacterId());
-    if (character == null) {
-      throw new NotExistingIdException("Character with id " + actorDTO.getCharacterId() + " does not exist");
+    List<Long> characterIds = actorDTO.getCharacterIds();
+    List<Character> charactersInfo = characterBO.findAllById(characterIds);
+    if (characterIds.size() != charactersInfo.size()) {
+      throw new NotExistingIdException("Some characters provided in request body do not exist");
     }
-    actor.setCharacter(character);
+    actor.setCharacters(charactersInfo);
     LOG.debug("ActorControllerImpl: Saving data");
     bo.save(actor);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
@@ -182,12 +183,12 @@ public class ActorControllerImpl implements ActorController {
     if (actor == null) {
       throw new NotExistingIdException("Actor with id " + id + " does not exist");
     }
-    Character character = characterBO.findOne(actorDTO.getCharacterId());
-    if (character == null) {
-      throw new NotExistingIdException(
-          "Character with id " + actorDTO.getCharacterId() + " does not exist");
+    List<Long> characterIds = actorDTO.getCharacterIds();
+    List<Character> charactersInfo = characterBO.findAllById(characterIds);
+    if (characterIds.size() != charactersInfo.size()) {
+      throw new NotExistingIdException("Some characters provided in request body do not exist");
     }
-    newActorInfo.setCharacter(character);
+    newActorInfo.setCharacters(charactersInfo);
     newActorInfo.setId(id);
     LOG.debug("ActorControllerImpl: Modifying data with id {}", id);
     bo.save(newActorInfo);

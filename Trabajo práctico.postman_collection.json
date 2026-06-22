@@ -51,7 +51,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"judyyjudyjudyy@gmail.com\",\n    \"password\": \"12345678\"\n}",
+              "raw": "{\n    \"email\": \"judith@gmail.com\",\n    \"password\": \"12345\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -108,7 +108,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/users/1",
+              "raw": "localhost:8080/api/users/2",
               "host": [
                 "localhost"
               ],
@@ -116,7 +116,7 @@
               "path": [
                 "api",
                 "users",
-                "1"
+                "2"
               ]
             }
           },
@@ -187,10 +187,20 @@
         {
           "name": "Promote user to admin",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_07u5}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PATCH",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/users/promote/4",
+              "raw": "localhost:8080/api/users/promote/2",
               "host": [
                 "localhost"
               ],
@@ -199,7 +209,7 @@
                 "api",
                 "users",
                 "promote",
-                "4"
+                "2"
               ]
             }
           },
@@ -1039,7 +1049,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "value": "{{json_web_token_11d3}}",
                   "type": "string"
                 }
               ]
@@ -1048,7 +1058,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n        \"name\": \"Test actor\",\r\n        \"birthDate\": \"1968-06-18\",\r\n        \"nationality\": \"Española\",\r\n        \"gender\": \"Femenino\",\r\n        \"birthLocation\": \"Valencia\",\r\n        \"characterId\": 11\r\n}",
+              "raw": "{\r\n        \"name\": \"Test actor\",\r\n        \"birthDate\": \"1968-06-18\",\r\n        \"nationality\": \"Española\",\r\n        \"gender\": \"Femenino\",\r\n        \"birthLocation\": \"Valencia\",\r\n        \"characterIds\": [12, 1\r\n        ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1077,7 +1087,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "value": "{{json_web_token_11d3}}",
                   "type": "string"
                 }
               ]
@@ -1086,7 +1096,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n        \"name\": \"Test character 2\",\r\n        \"birthDate\": \"1968-06-18\",\r\n        \"nationality\": \"Española\",\r\n        \"gender\": \"TEST\",\r\n        \"birthLocation\": \"Valencia\",\r\n        \"characterId\": 16\r\n}",
+              "raw": "{\r\n        \"name\": \"Test character 2\",\r\n        \"birthDate\": \"1968-06-18\",\r\n        \"nationality\": \"Española\",\r\n        \"gender\": \"TEST\",\r\n        \"birthLocation\": \"Valencia\",\r\n        \"characterIds\": [12, 2]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1157,7 +1167,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "value": "{{auth_secret_11d3}}",
                   "type": "string"
                 }
               ]
@@ -1471,6 +1481,18 @@
     },
     {
       "key": "auth_secret_0qmz",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_11d3",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_11d3",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_07u5",
       "secret": true
     }
   ]

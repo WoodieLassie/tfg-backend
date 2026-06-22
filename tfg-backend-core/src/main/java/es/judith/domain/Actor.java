@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @XmlRootElement
@@ -42,9 +43,12 @@ public class Actor extends ElvisEntity {
   @Size(max = 100)
   private String birthLocation;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "character_id", nullable = false)
-  private Character character;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+          name = "actor_character",
+          joinColumns = {@JoinColumn(name = "actor_id")},
+          inverseJoinColumns = {@JoinColumn(name = "character_id")})
+  private List<Character> characters;
 
   @Lob
   @Column(name = "image_data", length = 65535)

@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS favourites;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS episode_character;
+DROP TABLE IF EXISTS actor_character;
 DROP TABLE IF EXISTS actors;
 DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS episodes;
@@ -84,9 +85,15 @@ CREATE TABLE actors (
   birth_date DATE NOT NULL,
   nationality VARCHAR(100) NOT NULL,
   gender VARCHAR(100) NOT NULL,
-  birth_location VARCHAR(100) NOT NULL,
-  character_id BIGINT NOT NULL,
-  CONSTRAINT actors_fk_01 FOREIGN KEY (character_id) REFERENCES characters (id) ON DELETE CASCADE
+  birth_location VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE actor_character (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    actor_id BIGINT NOT NULL,
+    character_id BIGINT NOT NULL,
+    CONSTRAINT actor_character_fk_01 FOREIGN KEY (actor_id) REFERENCES actors (id),
+    CONSTRAINT actor_character_fk_02 FOREIGN KEY (character_id) REFERENCES characters (id)
 );
 
 CREATE TABLE favourites (

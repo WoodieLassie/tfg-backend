@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -40,8 +41,7 @@ public class ActorInputDTO extends ElvisBaseDTO<Actor> {
   private String birthLocation;
 
   @Schema(description = "Identification of the character that this actor interprets")
-  @NotNull
-  private Long characterId;
+  private List<Long> characterIds;
 
   public boolean allFieldsArePresent() {
     return Stream.of(
@@ -50,7 +50,7 @@ public class ActorInputDTO extends ElvisBaseDTO<Actor> {
             this.nationality,
             this.gender,
             this.birthLocation,
-            this.characterId)
+            this.characterIds)
         .allMatch(Objects::nonNull);
   }
 }
