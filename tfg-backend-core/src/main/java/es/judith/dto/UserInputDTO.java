@@ -21,6 +21,8 @@ public class UserInputDTO extends ElvisBaseDTO<User> {
 
   @NotNull private String email;
 
+  @NotNull private String username;
+
   @NotNull private String password;
 
   @Enumerated(EnumType.STRING)
@@ -28,6 +30,6 @@ public class UserInputDTO extends ElvisBaseDTO<User> {
   private Role role;
 
   public boolean allFieldsArePresent() {
-    return Stream.of(this.email, this.password).allMatch(Objects::nonNull);
+    return Stream.of(this.email, this.username, this.password).allMatch(Objects::nonNull);
   }
 }

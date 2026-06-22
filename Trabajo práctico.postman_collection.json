@@ -19,7 +19,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"judyyjudyjudyy@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
+              "raw": "{\r\n    \"email\": \"judyyjudyjudyy@gmail.com\",\r\n    \"username\": \"woodielassie\",\r\n    \"password\": \"12345678\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -51,7 +51,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"judith@gmail.com\",\n    \"password\": \"12345\"\n}",
+              "raw": "{\n    \"email\": \"judyyjudyjudyy@gmail.com\",\n    \"password\": \"12345678\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -81,7 +81,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgxNjgsImV4cCI6MTc3MDEyMzM1Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.YJQBt0mzxHARqbb2Mj4n26ljhI-bUggYU_3Xc2kc_Og",
+                  "value": "{{auth_secret_0qau}}",
                   "type": "string"
                 }
               ]
@@ -97,6 +97,26 @@
               "path": [
                 "api",
                 "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get user data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/users/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "1"
               ]
             }
           },
@@ -230,6 +250,26 @@
                   "key": "name",
                   "value": "test"
                 }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get show by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/shows/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "shows",
+                "1"
               ]
             }
           },
@@ -410,38 +450,6 @@
       "name": "Seasons",
       "item": [
         {
-          "name": "Get seasons for a show",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": []
-            },
-            "url": {
-              "raw": "localhost:8080/api/seasons?showId=1",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "seasons"
-              ],
-              "query": [
-                {
-                  "key": "showId",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "Get season by id",
           "request": {
             "method": "GET",
@@ -462,32 +470,6 @@
                   "key": "showId",
                   "value": "1",
                   "disabled": true
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get season with episodes by character name",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "localhost:8080/api/seasons/sorted?characterName=alcantara",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "seasons",
-                "sorted"
-              ],
-              "query": [
-                {
-                  "key": "characterName",
-                  "value": "alcantara"
                 }
               ]
             }
@@ -579,7 +561,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "value": "{{auth_secret_0qmz}}",
                   "type": "string"
                 }
               ]
@@ -587,7 +569,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/seasons/4",
+              "raw": "localhost:8080/api/seasons/1",
               "host": [
                 "localhost"
               ],
@@ -595,7 +577,7 @@
               "path": [
                 "api",
                 "seasons",
-                "4"
+                "1"
               ]
             }
           },
@@ -607,73 +589,12 @@
       "name": "Episodes",
       "item": [
         {
-          "name": "Get episodes by season",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "localhost:8080/api/episodes?seasonId=3",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "episodes"
-              ],
-              "query": [
-                {
-                  "key": "seasonId",
-                  "value": "3"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get episodes filtered and sorted",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "localhost:8080/api/episodes/sorted?seasonId=2",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "episodes",
-                "sorted"
-              ],
-              "query": [
-                {
-                  "key": "episodeNum",
-                  "value": "32",
-                  "disabled": true
-                },
-                {
-                  "key": "title",
-                  "value": "día",
-                  "disabled": true
-                },
-                {
-                  "key": "seasonId",
-                  "value": "2"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "Get episode by id",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "localhost:8080/api/episodes/61",
+              "raw": "localhost:8080/api/episodes/60",
               "host": [
                 "localhost"
               ],
@@ -681,7 +602,7 @@
               "path": [
                 "api",
                 "episodes",
-                "61"
+                "60"
               ]
             }
           },
@@ -1261,247 +1182,6 @@
       ]
     },
     {
-      "name": "Images",
-      "item": [
-        {
-          "name": "Get images",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "localhost:8080/api/images",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "images"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get images by name",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "localhost:8080/api/images?name=trabajo",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "images"
-              ],
-              "query": [
-                {
-                  "key": "name",
-                  "value": "trabajo"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get image by id",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "localhost:8080/api/images/1",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "images",
-                "1"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Save image",
-          "request": {
-            "auth": {
-              "type": "oauth2",
-              "oauth2": [
-                {
-                  "key": "authUrl",
-                  "value": "",
-                  "type": "string"
-                },
-                {
-                  "key": "client_authentication",
-                  "value": "header",
-                  "type": "string"
-                },
-                {
-                  "key": "grant_type",
-                  "value": "authorization_code",
-                  "type": "string"
-                },
-                {
-                  "key": "redirect_uri",
-                  "value": "http://localhost:8080/redirect",
-                  "type": "string"
-                },
-                {
-                  "key": "scope",
-                  "value": "admin",
-                  "type": "string"
-                },
-                {
-                  "key": "clientSecret",
-                  "value": "secret",
-                  "type": "string"
-                },
-                {
-                  "key": "clientId",
-                  "value": "client",
-                  "type": "string"
-                },
-                {
-                  "key": "addTokenTo",
-                  "value": "header",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "image",
-                  "type": "file",
-                  "src": "/C:/Users/judie/Downloads/a.png"
-                }
-              ]
-            },
-            "url": {
-              "raw": "localhost:8080/api/images",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "images"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update image",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "image",
-                  "type": "file",
-                  "src": "/C:/Users/judith.coello/Downloads/Trabajo practico ER jpg.jpg"
-                }
-              ]
-            },
-            "url": {
-              "raw": "localhost:8080/api/images/1",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "images",
-                "1"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete image",
-          "request": {
-            "auth": {
-              "type": "oauth2",
-              "oauth2": [
-                {
-                  "key": "authUrl",
-                  "value": "",
-                  "type": "string"
-                },
-                {
-                  "key": "client_authentication",
-                  "value": "header",
-                  "type": "string"
-                },
-                {
-                  "key": "grant_type",
-                  "value": "authorization_code",
-                  "type": "string"
-                },
-                {
-                  "key": "redirect_uri",
-                  "value": "http://localhost:8080/redirect",
-                  "type": "string"
-                },
-                {
-                  "key": "scope",
-                  "value": "admin",
-                  "type": "string"
-                },
-                {
-                  "key": "clientSecret",
-                  "value": "secret",
-                  "type": "string"
-                },
-                {
-                  "key": "clientId",
-                  "value": "client",
-                  "type": "string"
-                },
-                {
-                  "key": "addTokenTo",
-                  "value": "header",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "localhost:8080/api/images/1",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "images",
-                "1"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
       "name": "Favourites",
       "item": [
         {
@@ -1782,6 +1462,16 @@
           "response": []
         }
       ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "auth_secret_0qau",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_0qmz",
+      "secret": true
     }
   ]
 }

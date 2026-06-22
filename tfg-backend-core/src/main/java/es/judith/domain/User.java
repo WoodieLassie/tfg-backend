@@ -31,6 +31,11 @@ public class User extends ElvisEntity {
   @Size(max = 100)
   private String email;
 
+  @Column(name = "username", nullable = false, length = 20)
+  @NotNull
+  @Size(max = 100)
+  private String username;
+
   @Column(name = "password", nullable = false, length = 100)
   @NotNull
   @Size(max = 100)

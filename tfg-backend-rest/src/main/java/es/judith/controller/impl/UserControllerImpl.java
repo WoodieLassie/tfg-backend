@@ -79,6 +79,11 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
       throw new AlreadyExistsException(
               "User with email " + userInputDTO.getEmail() + " already exists");
     }
+    dbUser = userBO.findByUsername(userInputDTO.getUsername());
+    if (dbUser != null) {
+      throw new AlreadyExistsException(
+              "User with username " + userInputDTO.getUsername() + " already exists");
+    }
     userInputDTO.setPassword(userBO.encryptPassword(userInputDTO.getPassword()));
     userInputDTO.setRole(Role.USER);
     userBO.save(userInputDTO.obtainDomainObject());
@@ -112,6 +117,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
           description = "OK",
           content = {@Content(schema = @Schema(implementation = UserDTO.class))})
   @GetMapping("/{userId}")
+  //TODO: Mostrar un DTO de usuario amigo u otro de usuario estándar según si el usuario es amistad o no? Comprobar condición en BO?
   public ResponseEntity<UserDTO> getUser(@PathVariable Long userId) {
     UserDTO userDTO = new UserDTO();
     User user = userBO.findOne(userId);

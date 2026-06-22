@@ -22,6 +22,8 @@ public class UserDTO extends ElvisBaseDTO<User> {
 
   @NotNull private String email;
 
+  @NotNull private String username;
+
   @Enumerated(EnumType.STRING)
   @NotNull
   private Role role;

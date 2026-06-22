@@ -12,4 +12,5 @@ public interface UserRepository
         JpaSpecificationExecutor<User> {
 
   User findByEmail(String email);
+  User findByUsername(String username);
 }

@@ -13,9 +13,11 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(100) NOT NULL,
+  username VARCHAR(20) NOT NULL,
   password VARCHAR(100) NOT NULL,
   role VARCHAR(100) NOT NULL,
-  CONSTRAINT users_unq_01 UNIQUE (email)
+  CONSTRAINT users_unq_01 UNIQUE (email),
+  CONSTRAINT users_unq_02 UNIQUE (username)
 );
 
 CREATE TABLE shows (

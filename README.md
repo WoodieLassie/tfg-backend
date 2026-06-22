@@ -10,9 +10,9 @@ Ademas, pendiente de hacer:
 - Solo poder ver perfiles de amistades (puedes ver sus datos de usuario, reviews y listas)
 - Sistema de mensajeria entre amistades
 - Sistema de recomendaciones entre amistades
-- Añadir username a los users (por que no estaba hecho esto antes?)
 - Documentar correctamente nuevos endpoints y cambios en el sistema de seguridad en swagger
-- Delete season provoca error 500
 - Actor solo puede tener un personaje. Cambiar a que pueda tener muchos personajes
 - Añadir logs
 - Todos los endpoints GET deben estar paginados
+- DTO para cuando saques datos de un usuario a raiz de su perfil (esconder email y datos sensibles)
+- Otro DTO para cuando el usuario sea una amistad? Y según el estado de amistad (amigo o no amigo) sacar un DTO u otro?

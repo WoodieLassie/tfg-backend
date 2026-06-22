@@ -49,6 +49,12 @@ public class UserBOImpl
   }
 
   @Override
+  public User findByUsername(String username) {
+    LOG.debug("UserBOImpl: findByUsername");
+    return this.repository.findByUsername(username);
+  }
+
+  @Override
   public byte[] findImageById(Long id) {
     LOG.debug("UserBOImpl: findImageById");
     Optional<User> user = repository.findById(id);
