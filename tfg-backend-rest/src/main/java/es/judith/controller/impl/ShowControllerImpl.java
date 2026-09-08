@@ -3,8 +3,6 @@ package es.judith.controller.impl;
 import es.judith.bo.SeasonBO;
 import es.judith.bo.ShowBO;
 import es.judith.controller.ShowController;
-import es.judith.domain.Actor;
-import es.judith.domain.Character;
 import es.judith.domain.Show;
 import es.judith.dto.ShowDTO;
 import es.judith.dto.ShowInputDTO;
@@ -21,13 +19,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,22 +46,24 @@ public class ShowControllerImpl implements ShowController {
 
   @Override
   @GetMapping
-  public ResponseEntity<List<ShowDTO>> findAll() {
-    LOG.debug("ShowControllerImpl: Fetching all results");
-    List<Show> showList = bo.findAll();
+  public ResponseEntity<List<ShowDTO>> findAll(
+      @Parameter @RequestParam(defaultValue = "") String name) {
+    if (Objects.equals(name, "")) {
+      LOG.debug("ShowControllerImpl: Fetching all results");
+      List<Show> showList = bo.findAll();
+      List<ShowDTO> convertedShowList = new ArrayList<>();
+      for (Show show : showList) {
+        ShowDTO showDTO = bo.convertToDTO(show);
+        convertedShowList.add(showDTO);
+      }
+      return ResponseEntity.ok(convertedShowList);
+    }
+    LOG.debug("ShowControllerImpl: Fetching all results with name {}", name);
+    List<Show> showList = bo.findAllByName(name);
     List<ShowDTO> convertedShowList = new ArrayList<>();
     for (Show show : showList) {
-      ShowDTO showDTO = new ShowDTO();
-      showDTO.loadFromDomain(show);
+      ShowDTO showDTO = bo.convertToDTO(show);
       convertedShowList.add(showDTO);
-      if (showDTO.getImageData() != null) {
-        String characterImageDownloadURL =
-            ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/shows/images/")
-                .path(String.valueOf(showDTO.getId()))
-                .toUriString();
-        showDTO.setImageUrl(characterImageDownloadURL);
-      }
     }
     return ResponseEntity.ok(convertedShowList);
   }
@@ -77,32 +75,8 @@ public class ShowControllerImpl implements ShowController {
     if (show == null) {
       throw new NotFoundException();
     }
-    ShowDTO showDTO = new ShowDTO();
-    showDTO.loadFromDomain(show);
-    if (showDTO.getImageData() != null) {
-      String characterImageDownloadURL =
-          ServletUriComponentsBuilder.fromCurrentContextPath()
-              .path("/shows/images/")
-              .path(String.valueOf(showDTO.getId()))
-              .toUriString();
-      showDTO.setImageUrl(characterImageDownloadURL);
-    }
+    ShowDTO showDTO = bo.convertToDTO(show);
     return ResponseEntity.ok(showDTO);
-  }
-
-  @Override
-  @GetMapping("/sorted")
-  public ResponseEntity<List<ShowDTO>> findAllByName(
-      @Parameter @RequestParam(defaultValue = "") String name) {
-    LOG.debug("ShowControllerImpl: Fetching all results with name {}", name);
-    List<Show> showList = bo.findAllByName(name);
-    List<ShowDTO> convertedShowList = new ArrayList<>();
-    for (Show show : showList) {
-      ShowDTO showDTO = new ShowDTO();
-      showDTO.loadFromDomain(show);
-      convertedShowList.add(showDTO);
-    }
-    return ResponseEntity.ok(convertedShowList);
   }
 
   @Override

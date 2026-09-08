@@ -10,10 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ShowController extends BaseController {
-    ResponseEntity<List<ShowDTO>> findAll();
+    ResponseEntity<List<ShowDTO>> findAll(String name);
     ResponseEntity<ShowDTO> findById(Long id);
     ResponseEntity<byte[]> findImageById(Long id);
-    ResponseEntity<List<ShowDTO>> findAllByName(String name);
     ResponseEntity<Show> add(ShowInputDTO showDTO);
     ResponseEntity<Show> update(Long id, ShowInputDTO showDTO);
     ResponseEntity<Show> updateImageById(Long id, MultipartFile file);

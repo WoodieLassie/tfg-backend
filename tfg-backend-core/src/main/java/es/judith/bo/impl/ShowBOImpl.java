@@ -3,11 +3,13 @@ package es.judith.bo.impl;
 import es.judith.bo.ShowBO;
 import es.judith.dao.ShowRepository;
 import es.judith.domain.Show;
+import es.judith.dto.ShowDTO;
 import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,5 +38,20 @@ public class ShowBOImpl
     LOG.debug("ShowBOImpl: findImageById");
     Optional<Show> show = repository.findById(id);
     return show.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
+  }
+
+  @Override
+  public ShowDTO convertToDTO(Show show) {
+    ShowDTO showDTO = new ShowDTO();
+    showDTO.loadFromDomain(show);
+    if (showDTO.getImageData() != null) {
+      String characterImageDownloadURL =
+              ServletUriComponentsBuilder.fromCurrentContextPath()
+                      .path("/shows/images/")
+                      .path(String.valueOf(showDTO.getId()))
+                      .toUriString();
+      showDTO.setImageUrl(characterImageDownloadURL);
+    }
+    return showDTO;
   }
 }

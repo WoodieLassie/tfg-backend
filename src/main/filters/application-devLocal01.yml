@@ -39,3 +39,7 @@ logging-file: @logging-path@/@project.parent.artifactId@.log
 logging-level-root: INFO
 logging-level-hibernate-sql: DEBUG
 logging-level-hibernate-descriptor: DEBUG
+
+# Swagger config
+springdoc-swagger-ui-disable-swagger-default-url: true
+springdoc-swagger-ui-path: /api/swagger
