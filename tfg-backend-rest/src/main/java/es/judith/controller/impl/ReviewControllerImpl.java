@@ -1,5 +1,6 @@
 package es.judith.controller.impl;
 
+import es.judith.bo.AuthBO;
 import es.judith.bo.ReviewBO;
 import es.judith.bo.ShowBO;
 import es.judith.bo.UserBO;
@@ -9,7 +10,6 @@ import es.judith.domain.Role;
 import es.judith.domain.Show;
 import es.judith.domain.User;
 import es.judith.dto.ReviewInputDTO;
-import es.judith.dto.UserDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,17 +26,16 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/reviews")
 @Tag(name = "reviews")
-public class ReviewControllerImpl extends GenericControllerImpl implements ReviewController {
-  private static final Logger LOG = LoggerFactory.getLogger(SeasonControllerImpl.class);
+public class ReviewControllerImpl implements ReviewController {
+  private static final Logger LOG = LoggerFactory.getLogger(ReviewControllerImpl.class);
   private final ReviewBO bo;
-  private final UserBO userBO;
   private final ShowBO showBO;
+  private final AuthBO authBO;
 
-  public ReviewControllerImpl(ReviewBO bo, UserBO userBO, ShowBO showBO) {
-    super(userBO);
+  public ReviewControllerImpl(ReviewBO bo, UserBO userBO, ShowBO showBO, AuthBO authBO) {
     this.bo = bo;
-    this.userBO = userBO;
-      this.showBO = showBO;
+    this.showBO = showBO;
+    this.authBO = authBO;
   }
 
   @Override
@@ -65,7 +64,7 @@ public class ReviewControllerImpl extends GenericControllerImpl implements Revie
     if (reviewDTO.getRating() < 1 || reviewDTO.getRating() > 5) {
       throw new BadInputException("Rating value must not be greater than 5 or less than 1");
     }
-    User user = this.getCurrentUser();
+    User user = authBO.getCurrentUser();
     Review existingUserReviewInShow =
         bo.checkIfUserReviewInShow(reviewDTO.getShowId(), user.getId());
     Review newReviewInfo = reviewDTO.obtainDomainObject();
@@ -90,8 +89,8 @@ public class ReviewControllerImpl extends GenericControllerImpl implements Revie
     if (!bo.exists(id)) {
       throw new NotFoundException("Review with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getUser().getId(), this.getCurrentUser().getId())
-        && this.getCurrentUser().getRole() != Role.ADMIN) {
+    if (!Objects.equals(bo.findOne(id).getUser().getId(), authBO.getCurrentUser().getId())
+        && authBO.getCurrentUser().getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
     LOG.debug("ReviewControllerImpl: Deleting data with id {}", id);

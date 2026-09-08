@@ -6,7 +6,6 @@ import es.judith.rest.BaseController;
 import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
-import java.util.List;
 
 public interface ReviewController extends BaseController {
     ResponseEntity<HashMap<String, Double>> findAll(Long showId);

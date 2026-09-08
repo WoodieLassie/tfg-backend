@@ -1,5 +1,6 @@
 package es.judith.controller.impl;
 
+import es.judith.bo.AuthBO;
 import es.judith.bo.CommentBO;
 import es.judith.bo.ShowBO;
 import es.judith.bo.UserBO;
@@ -10,7 +11,6 @@ import es.judith.domain.Show;
 import es.judith.domain.User;
 import es.judith.dto.CommentDTO;
 import es.judith.dto.CommentInputDTO;
-import es.judith.dto.UserDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
@@ -34,16 +34,17 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/comments")
 @Tag(name = "comments")
-public class CommentControllerImpl extends GenericControllerImpl implements CommentController {
+public class CommentControllerImpl implements CommentController {
 
   private static final Logger LOG = LoggerFactory.getLogger(CommentControllerImpl.class);
   private final CommentBO bo;
   private final ShowBO showBO;
+  private final AuthBO authBO;
 
-  public CommentControllerImpl(UserBO userBO, CommentBO bo, ShowBO showBO) {
-    super(userBO);
+  public CommentControllerImpl(CommentBO bo, ShowBO showBO, AuthBO authBO) {
     this.bo = bo;
     this.showBO = showBO;
+    this.authBO = authBO;
   }
 
   @Override
@@ -74,7 +75,7 @@ public class CommentControllerImpl extends GenericControllerImpl implements Comm
       throw new NotExistingIdException(
           "Show with id " + commentDTO.getShowId() + " does not exist");
     }
-    User user = this.getCurrentUser();
+    User user = authBO.getCurrentUser();
     Comment comment = commentDTO.obtainDomainObject();
     comment.setShow(show);
     comment.setUser(user);
@@ -89,8 +90,8 @@ public class CommentControllerImpl extends GenericControllerImpl implements Comm
     if (!bo.exists(id)) {
       throw new NotFoundException("Comment with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getUser().getId(), this.getCurrentUser().getId())
-        && this.getCurrentUser().getRole() != Role.ADMIN) {
+    if (!Objects.equals(bo.findOne(id).getUser().getId(), authBO.getCurrentUser().getId())
+        && authBO.getCurrentUser().getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
     LOG.debug("CommentControllerImpl: Deleting data with id {}", id);

@@ -1,6 +1,5 @@
 package es.judith.bo;
 
-import es.judith.domain.Role;
 import es.judith.domain.User;
 
 /** Define services to work with Users. */

@@ -20,7 +20,7 @@ public class ShowBOImpl
     extends ElvisGenericCRUDServiceImpl<Show, Long, ShowRepository>
     implements ShowBO {
 
-  private final static long serialVersionUID = -3276571133320739328L;
+  private static final long serialVersionUID = -3276571133320739328L;
   private static final Logger LOG = LoggerFactory.getLogger(ShowBOImpl.class);
 
   public ShowBOImpl(ShowRepository repository) {

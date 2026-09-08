@@ -1,5 +1,6 @@
 package es.judith.controller.impl;
 
+import es.judith.bo.AuthBO;
 import es.judith.bo.FavouriteBO;
 import es.judith.bo.ShowBO;
 import es.judith.bo.UserBO;
@@ -35,18 +36,17 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/favourites")
 @Tag(name = "favourites")
-public class FavouriteControllerImpl extends GenericControllerImpl implements FavouriteController {
+public class FavouriteControllerImpl implements FavouriteController {
 
   private static final Logger LOG = LoggerFactory.getLogger(FavouriteControllerImpl.class);
   private final FavouriteBO bo;
-  private final UserBO userBO;
   private final ShowBO showBO;
+  private final AuthBO authBO;
 
-  public FavouriteControllerImpl(FavouriteBO bo, UserBO userBO, ShowBO showBO) {
-    super(userBO);
+  public FavouriteControllerImpl(FavouriteBO bo, UserBO userBO, ShowBO showBO, AuthBO authBO) {
     this.bo = bo;
-    this.userBO = userBO;
     this.showBO = showBO;
+    this.authBO = authBO;
   }
 
   @Override
@@ -93,7 +93,7 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
       throw new NotExistingIdException(
           "Show with id " + favouriteDTO.getShowId() + " does not exist");
     }
-    User user = this.getCurrentUser();
+    User user = authBO.getCurrentUser();
     List<Favourite> userFavourites = bo.findAllByUser(user.getId());
     for (Favourite userFavourite : userFavourites) {
       if (Objects.equals(userFavourite.getShow().getId(), favouriteDTO.getShowId())) {
@@ -124,8 +124,8 @@ public class FavouriteControllerImpl extends GenericControllerImpl implements Fa
     if (!bo.exists(id)) {
       throw new NotFoundException("Favourite with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getUser().getId(), this.getCurrentUser().getId())
-        && this.getCurrentUser().getRole() != Role.ADMIN) {
+    if (!Objects.equals(bo.findOne(id).getUser().getId(), authBO.getCurrentUser().getId())
+        && authBO.getCurrentUser().getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
     LOG.debug("FavouriteControllerImpl: Deleting data with id {}", id);

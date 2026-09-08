@@ -2,14 +2,13 @@ package es.judith.bo.impl;
 
 import es.judith.bo.SeasonBO;
 import es.judith.dao.SeasonRepository;
-import es.judith.domain.Episode;
 import es.judith.domain.Season;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.io.Serial;
 import java.util.List;
 
 @Service
@@ -18,6 +17,7 @@ public class SeasonBOImpl
     extends ElvisGenericCRUDServiceImpl<Season, Long, SeasonRepository>
     implements SeasonBO {
 
+  @Serial
   private static final long serialVersionUID = 7842584807701349758L;
   private static final Logger LOG = LoggerFactory.getLogger(SeasonBOImpl.class);
 
@@ -27,11 +27,13 @@ public class SeasonBOImpl
 
   @Override
   public List<Season> findAll(Long showId) {
+    LOG.debug("SeasonBOImpl: findAll");
     return repository.findAll(showId);
   }
 
   @Transactional(readOnly = true)
   public Boolean existsBySeasonNumAndShowId(Integer seasonNum, Long showId) {
+    LOG.debug("SeasonBOImpl: existsBySeasonNumAndShowId");
     return repository.existsBySeasonNumAndShowId(seasonNum, showId);
   }
 }

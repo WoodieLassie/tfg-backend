@@ -1,7 +1,6 @@
 package es.judith.dto;
 
 import es.judith.domain.Season;
-import es.judith.domain.Show;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

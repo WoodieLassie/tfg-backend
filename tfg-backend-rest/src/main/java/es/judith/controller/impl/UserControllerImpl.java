@@ -1,5 +1,6 @@
 package es.judith.controller.impl;
 
+import es.judith.bo.AuthBO;
 import es.judith.bo.JwtBO;
 import es.judith.domain.Role;
 import es.judith.dto.UserDTO;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import es.judith.bo.UserBO;
 import es.judith.controller.UserController;
@@ -36,15 +36,16 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "users")
-public class UserControllerImpl extends GenericControllerImpl implements UserController {
+public class UserControllerImpl implements UserController {
 
   private final UserBO userBO;
-  private final JwtBO jwtBO;
+  private final AuthBO authBO;
+  private final transient JwtBO jwtBO;
   private static final Logger LOG = LoggerFactory.getLogger(UserControllerImpl.class);
 
-  public UserControllerImpl(UserBO bo, JwtBO jwtBO) {
-    super(bo);
+  public UserControllerImpl(UserBO bo, AuthBO authBO, JwtBO jwtBO) {
     this.userBO = bo;
+    this.authBO = authBO;
     this.jwtBO = jwtBO;
   }
 
@@ -103,7 +104,7 @@ public class UserControllerImpl extends GenericControllerImpl implements UserCon
   @GetMapping
   public ResponseEntity<UserDTO> getLoggedUser() {
     UserDTO userDTO = new UserDTO();
-    User user = this.getCurrentUser();
+    User user = authBO.getCurrentUser();
     if (user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }

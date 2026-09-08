@@ -6,8 +6,6 @@ import es.judith.dto.SeasonInputDTO;
 import es.judith.rest.BaseController;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
 public interface SeasonController extends BaseController {
     ResponseEntity<SeasonDTO> findById(Long id);
     ResponseEntity<Season> add(SeasonInputDTO seasonDTO);
