@@ -28,4 +28,7 @@ public class Friend extends ElvisEntity {
     @JoinColumn(name = "receiver_id")
     private User userReceiver;
 
+    @Column(name = "request_status", nullable = false)
+    private boolean requestStatus;
+
 }

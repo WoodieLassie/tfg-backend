@@ -20,4 +20,5 @@ public class FriendDTO extends ElvisBaseDTO<Friend> {
     @NotNull private Long id;
     @NotNull private User userSender;
     @NotNull private User userReceiver;
+    @NotNull private boolean requestStatus;
 }

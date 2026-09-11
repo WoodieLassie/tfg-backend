@@ -15,4 +15,5 @@ public class FriendInputDTO extends ElvisBaseDTO<Friend> {
     @JsonIgnore private Long id;
     @JsonIgnore private User userSender;
     @NotNull private User userReceiver;
+    @JsonIgnore private boolean requestStatus;
 }
