@@ -11,11 +11,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
+
 @Schema(name = "UserDTO", description = "Data transfer object: user")
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class UserDTO extends ElvisBaseDTO<User> {
 
+  @Serial
   private static final long serialVersionUID = 883832912345648321L;
 
   @NotNull private Long id;

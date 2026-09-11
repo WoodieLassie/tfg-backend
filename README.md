@@ -22,5 +22,4 @@ Pulir:
 - Añadir logs
 - Todos los endpoints GET deben estar paginados
 - Mover código a funciones en los servicios, para limpiar el código de los controladores
-- Eliminar el controlador /sorted de Show, y unificarlo con el findall, para que se pueda buscar todas las series o solo las que coincidan con una búsqueda
 - Sonar sin advertencias

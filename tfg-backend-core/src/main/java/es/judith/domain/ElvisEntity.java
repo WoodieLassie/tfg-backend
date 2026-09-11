@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @MappedSuperclass
 @Data
-public abstract class ElvisEntity implements Serializable, Cloneable {
+public abstract class ElvisEntity implements Serializable{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

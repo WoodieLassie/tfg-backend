@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS episodes;
 DROP TABLE IF EXISTS seasons;
 DROP TABLE IF EXISTS shows;
+DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -19,6 +20,14 @@ CREATE TABLE users (
   role VARCHAR(100) NOT NULL,
   CONSTRAINT users_unq_01 UNIQUE (email),
   CONSTRAINT users_unq_02 UNIQUE (username)
+);
+
+CREATE TABLE friendships (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  sender_id BIGINT NOT NULL,
+  receiver_id BIGINT NOT NULL,
+  request_status BOOLEAN NOT NULL,
+  PRIMARY KEY (id, sender_id, receiver_id)
 );
 
 CREATE TABLE shows (
