@@ -11,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @Transactional
+//TODO: función boolean isFriend(userId, friendId) para instancias en las que la web necesite verificar el estado de amistad de un usuario, para mensajería, visualización de perfil, y recomendaciones
 public class FriendBOImpl extends ElvisGenericCRUDServiceImpl<Friend, Long, FriendRepository> implements FriendBO {
 
     private final transient UserRepository userRepository;
@@ -42,6 +44,35 @@ public class FriendBOImpl extends ElvisGenericCRUDServiceImpl<Friend, Long, Frie
     public List<UserDTO> getAllReceivedRequests(Long userId) {
         List<Long> requestedByIds = this.repository.getAllReceivedRequests(userId);
         return convertToDTO(requestedByIds);
+    }
+    @Transactional(readOnly = true)
+    @Override
+    public boolean checkIfRelated(Long userId, Long friendId) {
+        Friend friendship = repository.getBySenderAndReceiverId(userId, friendId);
+        if (friendship == null) {
+            friendship = repository.getBySenderAndReceiverId(friendId, userId);
+            return friendship != null;
+        }
+        return true;
+    }
+    @Transactional(readOnly = true)
+    @Override
+    public boolean checkIfFriend(Long userId, Long friendId) {
+        Friend friendship = repository.getBySenderAndReceiverId(userId, friendId);
+        if (!friendship.isRequestStatus()) {
+            friendship = repository.getBySenderAndReceiverId(friendId, userId);
+            return friendship.isRequestStatus();
+        }
+        return true;
+    }
+    @Transactional(readOnly = true)
+    @Override
+    public boolean checkIfRequestReceiver(Long userId, Long friendId) {
+        Friend friendship = repository.getBySenderAndReceiverId(friendId, userId);
+        if (friendship == null) {
+            return false;
+        }
+        return Objects.equals(friendship.getUserReceiver().getId(), userId);
     }
 
     public List<UserDTO> convertToDTO(List<Long> userIds) {

@@ -46,26 +46,30 @@ public class SecurityConfig {
                 .requestMatchers("error").permitAll()
                 .requestMatchers("/api/users/login", "/api/users/register").permitAll()
                 .requestMatchers(
-                        "/swagger-ui/**", "/webjars/**", "/v3/api-docs/**, /api/users/login/**, /api/users/register/**")
+                        "/swagger-ui/**", "/webjars/**", "/v3/api-docs/**", "/api/users/login/**", "/api/users/register/**")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/**")
                 .permitAll()
                 .requestMatchers(
                         HttpMethod.POST,
-                        "/api/actors/**, /api/characters/**, /api/episodes/**, /api/images/**, /api/seasons/**, /api/shows/**")
-                .hasAuthority("ADMIN")
+                        "/api/actors/**", "/api/characters/**", "/api/episodes/**", "/api/seasons/**", "/api/shows/**")
+                        .hasAuthority("ADMIN")
                 .requestMatchers(
-                        HttpMethod.POST, "/api/comments/**, /api/favourites/**, /api/reviews/**")
-                .authenticated()
-                .requestMatchers(HttpMethod.PATCH, "/**")
-                .hasAuthority("ADMIN")
+                        HttpMethod.POST, "/api/comments/**", "/api/favourites/**", "/api/reviews/**", "/api/friends/**")
+                        .hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers(
+                        HttpMethod.PATCH, "/api/actors/**", "/api/characters/**", "/api/episodes/**", "/api/seasons/**", "/api/shows/**", "/api/users/promote/**")
+                        .hasAuthority("ADMIN")
+                .requestMatchers(
+                        HttpMethod.PATCH, "/api/friends/**", "/api/users/image/**")
+                        .hasAnyAuthority("ADMIN", "USER")
                 .requestMatchers(
                         HttpMethod.DELETE,
-                        "/api/actors/**, /api/characters/**, /api/episodes/**, /api/images/**, /api/seasons/**, /api/shows/**")
-                .hasAuthority("ADMIN")
+                        "/api/actors/**", "/api/characters/**", "/api/episodes/**", "/api/images/**", "/api/seasons/**", "/api/shows/**")
+                        .hasAuthority("ADMIN")
                 .requestMatchers(
-                        HttpMethod.DELETE, "/api/favourites/**, /api/comments/**, /api/reviews/**")
-                .authenticated()
+                        HttpMethod.DELETE, "/api/favourites/**", "/api/comments/**", "/api/reviews/**")
+                        .hasAnyAuthority("ADMIN", "USER")
                 .anyRequest().hasAuthority("ADMIN"))
                 .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

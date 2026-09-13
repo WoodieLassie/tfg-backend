@@ -9,7 +9,6 @@ Ademas, pendiente de hacer:
 Features:
 
 - Sistema de amistades
-- En la relación de user a user para amistades (many to many), user1 (userSender?) es el que manda la solicitud y user2 (userReceiver?) es el que la recibe. Sacar datos según estos campos para sacar solicitudes de amistad pendientes enviadas y recibidas por separado, para el frontend. También usar para validar quién puede aceptar la solicitud (evitar que el sender envie un patch de aceptar solicitud)
 - Solo poder ver perfiles de amistades (puedes ver sus datos de usuario, reviews y listas)
 - Sistema de mensajeria entre amistades
 - Sistema de recomendaciones entre amistades

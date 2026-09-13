@@ -10,7 +10,7 @@ import java.util.List;
 public interface FriendRepository extends ElvisBaseRepository<Friend, Long>, JpaSpecificationExecutor<Friend> {
     @Query(
             nativeQuery = true,
-            value = "SELECT f.* FROM friendships f WHERE f.sender_id = :userId OR f.receiver_id = :userId AND f.request_status = 1"
+            value = "SELECT f.* FROM friendships f WHERE f.sender_id = :userId AND f.request_status = 1 OR f.receiver_id = :userId AND f.request_status = 1"
     )
     List<Long> getAllFriends(@Param("userId") Long userId);
     @Query(
@@ -23,4 +23,9 @@ public interface FriendRepository extends ElvisBaseRepository<Friend, Long>, Jpa
             value = "SELECT f.* FROM friendships f WHERE f.receiver_id = :userId AND f.request_status = 0"
     )
     List<Long> getAllReceivedRequests(@Param("userId") Long userId);
+    @Query(
+            nativeQuery = true,
+            value = "SELECT f.* FROM friendships f WHERE f.sender_id = :user1 AND f.receiver_id = :user2 OR f.sender_id = :user2 AND f.receiver_id = :user1"
+    )
+    Friend getBySenderAndReceiverId(@Param("user1") Long user1, @Param("user2") Long user2);
 }

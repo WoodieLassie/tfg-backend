@@ -12,6 +12,6 @@ public interface UserController extends BaseController {
     ResponseEntity<UserDTO> getLoggedUser();
     ResponseEntity<User> register(UserInputDTO userDTO);
     ResponseEntity<byte[]> findImageById(Long id);
-    ResponseEntity<User> updateImageById(Long id, MultipartFile file);
+    ResponseEntity<User> updateImageById(MultipartFile file);
     ResponseEntity<UserDTO> getUser(Long userId);
 }

@@ -9,4 +9,7 @@ public interface FriendBO extends GenericCRUDService<Friend, Long>{
     List<UserDTO> getAllFriends(Long userId);
     List<UserDTO> getAllSentRequests(Long userId);
     List<UserDTO> getAllReceivedRequests(Long userId);
+    boolean checkIfRelated(Long userId, Long friendId);
+    boolean checkIfFriend(Long userId, Long friendId);
+    boolean checkIfRequestReceiver(Long userId, Long friendId);
 }

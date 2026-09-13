@@ -36,6 +36,8 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "users")
+
+//TODO: Implementar visionado de favoritos del usuario loggeado (insertar favouriteBO), y de otros usuarios (solo si son amistades, mediante isFriend de friendBO)
 public class UserControllerImpl implements UserController {
 
   private final UserBO userBO;
@@ -166,9 +168,10 @@ public class UserControllerImpl implements UserController {
           description = "Not found",
           content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
-  @PatchMapping(value = "/image/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PatchMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<User> updateImageById(
-          @PathVariable Long userId, @RequestParam("image") MultipartFile file) {
+          @RequestParam("image") MultipartFile file) {
+    User user = authBO.getCurrentUser();
     if (file.getSize() == 0) {
       throw new BadInputException("A file must be attached to request");
     }
@@ -176,16 +179,12 @@ public class UserControllerImpl implements UserController {
             && !Objects.equals(file.getContentType(), "image/jpeg")) {
       throw new BadInputException("File must be png or jpg");
     }
-    User user = userBO.findOne(userId);
-    if (user == null) {
-      throw new NotExistingIdException("User with id " + userId + " does not exist");
-    }
     try {
       user.setImageData(ImageUtil.compressImage(file.getBytes()));
     } catch (IOException e) {
       throw new BadInputException(e);
     }
-    LOG.debug("UserControllerImpl: Modifying image data with user id {}", userId);
+    LOG.debug("UserControllerImpl: Modifying image data with user id {}", user.getId());
     userBO.save(user);
     return ResponseEntity.noContent().build();
   }

@@ -13,7 +13,7 @@ import net.minidev.json.annotate.JsonIgnore;
 @Data
 public class FriendInputDTO extends ElvisBaseDTO<Friend> {
     @JsonIgnore private Long id;
-    @JsonIgnore private User userSender;
-    @NotNull private User userReceiver;
+    @JsonIgnore private Long userSenderId;
+    @NotNull private Long userReceiverId;
     @JsonIgnore private boolean requestStatus;
 }
