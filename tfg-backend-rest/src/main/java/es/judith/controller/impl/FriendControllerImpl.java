@@ -77,7 +77,7 @@ public class FriendControllerImpl implements FriendController {
         User requestedUser = userBO.findOne(friendDTO.getUserReceiverId());
         if (requestedUser == null) {
             throw new NotExistingIdException(
-                    "User with id " + friendDTO.getUserReceiverId() + "does not exists"
+                    "User with id " + friendDTO.getUserReceiverId() + "does not exist"
             );
         }
         if (friendBO.checkIfRelated(currentUser.getId(), friendDTO.getUserReceiverId())) {
@@ -86,18 +86,19 @@ public class FriendControllerImpl implements FriendController {
             );
         }
         Friend friend = friendDTO.obtainDomainObject();
-        if (friend == null) {
-            throw new NotExistingIdException(
-                    "User with id " + friendDTO.getUserReceiverId() + " does not exist");
-        }
+// ESTE CODIGO NO TENIA SENTIDO QUE ESTUVIESE AQUI PERO LO COMENTO PORQUE SERA UN CHECK NECESARIO EN ACCEPTREQUEST
+//        if (friend == null) {
+//            throw new NotExistingIdException(
+//                    "Friend request " + friendDTO.getId() + " does not exist");
+//        }
         friend.setUserReceiver(requestedUser);
         friend.setUserSender(currentUser);
         friendBO.save(friend);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
-    //Solo posible si el usuario loggeado es el receiver. Si no lo es, error 401
-    //PATCH. Solo cambia el requestStatus
+    //Solo posible si el usuario loggeado es el receiver. Si no lo es, error 403
+    //PATCH. Solo cambia el requestStatus. Usará checkIfRequestReceiver para verificar que el usuario forma parte de la request y que es el "receiver"
     @Override
     @PatchMapping("/requested/{requestId}")
     public ResponseEntity<FriendDTO> acceptRequest(@PathVariable Long requestId) {
@@ -105,6 +106,7 @@ public class FriendControllerImpl implements FriendController {
     }
 
     //Servirá tanto para requests por parte del sender y el receiver, como para amistades ya aceptadas
+    //Usará checkIfRelated como check para evitar eliminaciones no autorizadas. Error 403 si no esta autorizado
     @Override
     @DeleteMapping("/{requestId}")
     public ResponseEntity<FriendDTO> delete(@PathVariable Long requestId) {

@@ -59,11 +59,13 @@ public class FriendBOImpl extends ElvisGenericCRUDServiceImpl<Friend, Long, Frie
     @Override
     public boolean checkIfFriend(Long userId, Long friendId) {
         Friend friendship = repository.getBySenderAndReceiverId(userId, friendId);
-        if (!friendship.isRequestStatus()) {
+        if (friendship == null) {
             friendship = repository.getBySenderAndReceiverId(friendId, userId);
-            return friendship.isRequestStatus();
+            if (friendship == null) {
+                return false;
+            }
         }
-        return true;
+        return friendship.isRequestStatus();
     }
     @Transactional(readOnly = true)
     @Override

@@ -68,7 +68,7 @@ public class SecurityConfig {
                         "/api/actors/**", "/api/characters/**", "/api/episodes/**", "/api/images/**", "/api/seasons/**", "/api/shows/**")
                         .hasAuthority("ADMIN")
                 .requestMatchers(
-                        HttpMethod.DELETE, "/api/favourites/**", "/api/comments/**", "/api/reviews/**")
+                        HttpMethod.DELETE, "/api/favourites/**", "/api/comments/**", "/api/reviews/**", "/api/friends/**")
                         .hasAnyAuthority("ADMIN", "USER")
                 .anyRequest().hasAuthority("ADMIN"))
                 .userDetailsService(userDetailsService)
