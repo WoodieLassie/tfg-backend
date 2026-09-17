@@ -9,14 +9,11 @@ import es.judith.dto.UserDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
-//TODO: función boolean isFriend(userId, friendId) para instancias en las que la web necesite verificar el estado de amistad de un usuario, para mensajería, visualización de perfil, y recomendaciones
+//TODO: Hay que añadir alguna forma de que el cliente tenga la ID de la friend request para aceptar y eliminar
 public class FriendBOImpl extends ElvisGenericCRUDServiceImpl<Friend, Long, FriendRepository> implements FriendBO {
 
     private final transient UserRepository userRepository;
@@ -27,22 +24,39 @@ public class FriendBOImpl extends ElvisGenericCRUDServiceImpl<Friend, Long, Frie
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserDTO> getAllFriends(Long userId) {
-        List<Long> friendIds = this.repository.getAllFriends(userId);
+    public Map<Long, UserDTO> getAllFriends(Long userId) {
+        List<Friend> friends = this.repository.getAllFriends(userId);
+        Map<Long, Long> friendIds = new HashMap<>();
+        for (Friend friend : friends) {
+            if (Objects.equals(friend.getUserReceiver().getId(), userId)) {
+                friendIds.put(friend.getId(), friend.getUserSender().getId());
+            }
+            else {
+                friendIds.put(friend.getId(), friend.getUserReceiver().getId());
+            }
+        }
         return convertToDTO(friendIds);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserDTO> getAllSentRequests(Long userId) {
-        List<Long> requestSentToIds = this.repository.getAllSentRequests(userId);
+    public Map<Long, UserDTO> getAllSentRequests(Long userId) {
+        List<Friend> sentRequests = this.repository.getAllSentRequests(userId);
+        Map<Long, Long> requestSentToIds = new HashMap<>();
+        for (Friend sentRequest : sentRequests) {
+            requestSentToIds.put(sentRequest.getId(), sentRequest.getUserReceiver().getId());
+        }
         return convertToDTO(requestSentToIds);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserDTO> getAllReceivedRequests(Long userId) {
-        List<Long> requestedByIds = this.repository.getAllReceivedRequests(userId);
+    public Map<Long, UserDTO> getAllReceivedRequests(Long userId) {
+        List<Friend> receivedRequests = this.repository.getAllReceivedRequests(userId);
+        Map<Long, Long> requestedByIds = new HashMap<>();
+        for (Friend receivedRequest : receivedRequests) {
+            requestedByIds.put(receivedRequest.getId(), receivedRequest.getUserSender().getId());
+        }
         return convertToDTO(requestedByIds);
     }
     @Transactional(readOnly = true)
@@ -77,14 +91,14 @@ public class FriendBOImpl extends ElvisGenericCRUDServiceImpl<Friend, Long, Frie
         return Objects.equals(friendship.getUserReceiver().getId(), userId);
     }
 
-    public List<UserDTO> convertToDTO(List<Long> userIds) {
-        List<UserDTO> userDTOs = new LinkedList<>();
-        for(Long id: userIds){
+    public Map<Long, UserDTO> convertToDTO(Map<Long, Long> friendRequests) {
+        Map<Long, UserDTO> friendRequestsWithUserInfo = new HashMap<>();
+        for(Map.Entry<Long, Long> friendRequest : friendRequests.entrySet()){
             UserDTO userDTO = new UserDTO();
-            Optional<User> optionalUser = userRepository.findById(id);
+            Optional<User> optionalUser = userRepository.findById(friendRequest.getValue());
             optionalUser.ifPresent(userDTO::loadFromDomain);
-            userDTOs.add(userDTO);
+            friendRequestsWithUserInfo.put(friendRequest.getKey(), userDTO);
         }
-        return userDTOs;
+        return friendRequestsWithUserInfo;
     }
 }

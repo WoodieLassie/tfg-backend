@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -41,25 +42,25 @@ public class FriendControllerImpl implements FriendController {
 
     @Override
     @GetMapping
-    public ResponseEntity<List<UserDTO>> findAllFriends(Long userId) {
+    public ResponseEntity<Map<Long, UserDTO>> findAllFriends(Long userId) {
         Long currentUserId = authBO.getCurrentUser().getId();
-        List<UserDTO> currentUserFriends = friendBO.getAllFriends(currentUserId);
+        Map<Long, UserDTO> currentUserFriends = friendBO.getAllFriends(currentUserId);
         return ResponseEntity.status(HttpStatus.OK).body(currentUserFriends);
     }
 
     @Override
     @GetMapping("/requests")
-    public ResponseEntity<List<UserDTO>> findAllSentRequests(Long userId) {
+    public ResponseEntity<Map<Long, UserDTO>> findAllSentRequests(Long userId) {
         Long currentUserId = authBO.getCurrentUser().getId();
-        List<UserDTO> currentSentRequests = friendBO.getAllSentRequests(currentUserId);
+        Map<Long, UserDTO> currentSentRequests = friendBO.getAllSentRequests(currentUserId);
         return ResponseEntity.status(HttpStatus.OK).body(currentSentRequests);
     }
 
     @Override
     @GetMapping("/requested")
-    public ResponseEntity<List<UserDTO>> findAllReceivedRequests(Long userId) {
+    public ResponseEntity<Map<Long, UserDTO>> findAllReceivedRequests(Long userId) {
         Long currentUserId = authBO.getCurrentUser().getId();
-        List<UserDTO> currentReceivedRequests = friendBO.getAllReceivedRequests(currentUserId);
+        Map<Long, UserDTO> currentReceivedRequests = friendBO.getAllReceivedRequests(currentUserId);
         return ResponseEntity.status(HttpStatus.OK).body(currentReceivedRequests);
     }
 
@@ -77,7 +78,7 @@ public class FriendControllerImpl implements FriendController {
         User requestedUser = userBO.findOne(friendDTO.getUserReceiverId());
         if (requestedUser == null) {
             throw new NotExistingIdException(
-                    "User with id " + friendDTO.getUserReceiverId() + "does not exist"
+                    "User with id " + friendDTO.getUserReceiverId() + " does not exist"
             );
         }
         if (friendBO.checkIfRelated(currentUser.getId(), friendDTO.getUserReceiverId())) {
@@ -102,7 +103,25 @@ public class FriendControllerImpl implements FriendController {
     @Override
     @PatchMapping("/requested/{requestId}")
     public ResponseEntity<FriendDTO> acceptRequest(@PathVariable Long requestId) {
-        return null;
+        User currentUser = authBO.getCurrentUser();
+        Friend friendRequest = friendBO.findOne(requestId);
+        if (friendRequest == null) {
+            throw new NotExistingIdException(
+                    "Friend request with id " + requestId + " doest no exist"
+            );
+        }
+        if (!friendBO.checkIfRequestReceiver(currentUser.getId(), friendRequest.getUserSender().getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+        if (friendRequest.isRequestStatus()) {
+            throw new AlreadyExistsException(
+                    "Friend request has already been accepted"
+            );
+        }
+        friendRequest.setRequestStatus(true);
+        friendRequest.setId(requestId);
+        friendBO.save(friendRequest);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     //Servirá tanto para requests por parte del sender y el receiver, como para amistades ya aceptadas
@@ -110,6 +129,22 @@ public class FriendControllerImpl implements FriendController {
     @Override
     @DeleteMapping("/{requestId}")
     public ResponseEntity<FriendDTO> delete(@PathVariable Long requestId) {
-        return null;
+        User currentUser = authBO.getCurrentUser();
+        Friend friendRequest = friendBO.findOne(requestId);
+        if (friendRequest == null) {
+            throw new NotExistingIdException(
+                    "Friend request with id " + requestId + " doest no exist"
+            );
+        }
+        if (Objects.equals(currentUser.getId(), friendRequest.getUserSender().getId())) {
+            if (!friendBO.checkIfRelated(currentUser.getId(), friendRequest.getUserReceiver().getId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            }
+        }
+        if (!friendBO.checkIfRelated(currentUser.getId(), friendRequest.getUserSender().getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+        friendBO.delete(requestId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }
