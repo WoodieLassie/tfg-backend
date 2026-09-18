@@ -59,19 +59,6 @@ public class UserBOImpl
     Optional<User> user = repository.findById(id);
     return user.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
   }
-  //TODO: Mover a authBO
-  @Override
-  public boolean verify(String email, String password) {
-    LOG.debug("UserBOImpl: login");
-    Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-    return authentication.isAuthenticated();
-  }
-  //TODO: Mover a authBO
-  @Override
-  public String encryptPassword(String password) {
-    LOG.debug("UserBOImpl: encryptPassword");
-    return passwordEncoder.encode(password);
-  }
 
   @Override
   public void promoteUser(Long id) {

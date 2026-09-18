@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
-@Schema(name = "UserDTO", description = "Data transfer object: user")
+@Schema(name = "UserDTO", description = "Data transfer object: current logged in user")
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class UserDTO extends ElvisBaseDTO<User> {

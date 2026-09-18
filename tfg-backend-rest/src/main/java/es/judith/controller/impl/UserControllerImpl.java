@@ -5,9 +5,9 @@ import es.judith.bo.JwtBO;
 import es.judith.domain.Role;
 import es.judith.dto.UserDTO;
 import es.judith.dto.UserInputDTO;
+import es.judith.dto.UserProfileDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
-import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
 import es.judith.utils.ImageUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,11 +37,10 @@ import java.util.Objects;
 @RequestMapping("/api/users")
 @Tag(name = "users")
 
-//TODO: Implementar visionado de favoritos del usuario loggeado (insertar favouriteBO), y de otros usuarios (solo si son amistades, mediante isFriend de friendBO)
 public class UserControllerImpl implements UserController {
 
   private final UserBO userBO;
-  private final AuthBO authBO;
+  private final transient AuthBO authBO;
   private final transient JwtBO jwtBO;
   private static final Logger LOG = LoggerFactory.getLogger(UserControllerImpl.class);
 
@@ -53,7 +52,7 @@ public class UserControllerImpl implements UserController {
 
   @PostMapping("/login")
   public ResponseEntity<Map<String, String>> login(@RequestBody UserInputDTO userInputDTO) {
-    boolean areCredentialsCorrect = userBO.verify(userInputDTO.getEmail(), userInputDTO.getPassword());
+    boolean areCredentialsCorrect = authBO.verifyCredentials(userInputDTO.getEmail(), userInputDTO.getPassword());
     if (areCredentialsCorrect){
       String token = jwtBO.generateToken(userInputDTO.getEmail());
       Map<String, String> generatedToken = new HashMap<>();
@@ -87,7 +86,7 @@ public class UserControllerImpl implements UserController {
       throw new AlreadyExistsException(
               "User with username " + userInputDTO.getUsername() + " already exists");
     }
-    userInputDTO.setPassword(userBO.encryptPassword(userInputDTO.getPassword()));
+    userInputDTO.setPassword(authBO.encryptPassword(userInputDTO.getPassword()));
     userInputDTO.setRole(Role.USER);
     userBO.save(userInputDTO.obtainDomainObject());
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
@@ -120,9 +119,8 @@ public class UserControllerImpl implements UserController {
           description = "OK",
           content = {@Content(schema = @Schema(implementation = UserDTO.class))})
   @GetMapping("/{userId}")
-  //TODO: Mostrar un DTO de usuario amigo u otro de usuario estándar según si el usuario es amistad o no? Comprobar condición en BO?
-  public ResponseEntity<UserDTO> getUser(@PathVariable Long userId) {
-    UserDTO userDTO = new UserDTO();
+  public ResponseEntity<UserProfileDTO> getUser(@PathVariable Long userId) {
+    UserProfileDTO userDTO = new UserProfileDTO();
     User user = userBO.findOne(userId);
     if (user == null) {
       throw new NotFoundException();

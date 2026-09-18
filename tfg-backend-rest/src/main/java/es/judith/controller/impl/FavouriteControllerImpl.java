@@ -60,6 +60,7 @@ public class FavouriteControllerImpl implements FavouriteController {
             array = @ArraySchema(schema = @Schema(implementation = FavouriteDTO.class)))
       })
   @GetMapping("/{userId}")
+  //TODO: Solo accesible si el usuario es amistad, o el propio usuario loggeado
   public ResponseEntity<List<FavouriteDTO>> findAllByUser(@PathVariable Long userId) {
     LOG.debug("Fetching results with user id {}", userId);
     List<Favourite> favouriteList = bo.findAllByUser(userId);

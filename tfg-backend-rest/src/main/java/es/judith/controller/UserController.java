@@ -3,6 +3,7 @@ package es.judith.controller;
 import es.judith.domain.User;
 import es.judith.dto.UserDTO;
 import es.judith.dto.UserInputDTO;
+import es.judith.dto.UserProfileDTO;
 import es.judith.rest.BaseController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,5 +14,5 @@ public interface UserController extends BaseController {
     ResponseEntity<User> register(UserInputDTO userDTO);
     ResponseEntity<byte[]> findImageById(Long id);
     ResponseEntity<User> updateImageById(MultipartFile file);
-    ResponseEntity<UserDTO> getUser(Long userId);
+    ResponseEntity<UserProfileDTO> getUser(Long userId);
 }
