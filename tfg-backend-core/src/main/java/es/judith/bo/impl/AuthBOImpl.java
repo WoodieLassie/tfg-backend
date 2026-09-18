@@ -35,6 +35,9 @@ public class AuthBOImpl implements AuthBO, Serializable {
     public User getCurrentUser() {
         LOG.debug("AuthBOImpl: getCurrentUser");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() == "anonymousUser") {
+            return null;
+        }
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return userPrincipal.getUser();
     }

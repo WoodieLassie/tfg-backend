@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * methods, methods to retrieve single entities or collections of them.
  */
 public interface UserRepository
-    extends ElvisBaseRepository<User, Long>,
+    extends GenericRepository<User, Long>,
         JpaSpecificationExecutor<User> {
 
   User findByEmail(String email);

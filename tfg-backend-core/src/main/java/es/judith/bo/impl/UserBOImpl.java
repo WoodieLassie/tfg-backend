@@ -8,8 +8,6 @@ import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +22,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserBOImpl
-    extends ElvisGenericCRUDServiceImpl<User, Long, UserRepository>
+    extends GenericBOImpl<User, Long, UserRepository>
     implements UserBO {
 
   private static final long serialVersionUID = -4166529873832767435L;

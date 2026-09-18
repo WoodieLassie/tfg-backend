@@ -11,7 +11,7 @@ import java.io.Serial;
 @Schema(name = "FavouriteDTO", description = "Data transfer object. Favourite")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class FavouriteDTO extends ElvisBaseDTO<Favourite> {
+public class FavouriteDTO extends GenericDTO<Favourite> {
   @Serial private static final long serialVersionUID = -5526229818088298889L;
 
   @Schema(description = "Favourite identification")

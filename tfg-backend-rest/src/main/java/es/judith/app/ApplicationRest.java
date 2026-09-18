@@ -30,7 +30,7 @@ import jakarta.servlet.MultipartConfigElement;
 @SpringBootApplication
 @EntityScan({"es.judith.domain","es.judith.security.domain"})
 @EnableJpaRepositories({"es.judith.dao"})
-@ComponentScan({"es.judith.rest", "es.judith.controller", "es.judith.bo", "es.judith.config",
+@ComponentScan({"es.judith.controller", "es.judith.bo", "es.judith.config",
     "es.judith.security", "es.judith.dao"})
 @EnableScheduling
 @EnableSpringDataWebSupport

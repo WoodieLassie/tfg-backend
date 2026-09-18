@@ -12,7 +12,7 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "reviews")
-public class Review extends ElvisEntity {
+public class Review extends GenericEntity {
   @Serial private static final long serialVersionUID = 8725454164585149005L;
 
   @ManyToOne(fetch = FetchType.LAZY)

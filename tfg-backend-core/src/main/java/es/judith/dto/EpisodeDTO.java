@@ -13,7 +13,7 @@ import java.util.List;
 @Schema(name = "EpisodeDTO", description = "Data transfer object. Episode")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class EpisodeDTO extends ElvisBaseDTO<Episode> {
+public class EpisodeDTO extends GenericDTO<Episode> {
   @Serial private static final long serialVersionUID = 5170483706615630449L;
 
   @Schema(description = "Episode identification")

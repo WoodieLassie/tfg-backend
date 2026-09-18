@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 @Schema(name = "ActorInputDTO", description = "Data transfer object for input. Actor")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ActorInputDTO extends ElvisBaseDTO<Actor> {
+public class ActorInputDTO extends GenericDTO<Actor> {
   private static final long serialVersionUID = -6545076495785074106L;
 
   @JsonIgnore private Long id;

@@ -1,7 +1,7 @@
 package es.judith.utils;
 
-import es.judith.domain.ElvisEntity;
-import es.judith.dto.ElvisBaseDTO;
+import es.judith.domain.GenericEntity;
+import es.judith.dto.GenericDTO;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -26,7 +26,7 @@ public class ListMapper implements Serializable {
    * @throws InvocationTargetException if newInstance error
    * @noinspection unchecked
    */
-  public static <T extends ElvisEntity, D extends ElvisBaseDTO> List<D> map(
+  public static <T extends GenericEntity, D extends GenericDTO> List<D> map(
       final List<T> inputEntity, final Class<D> outputDTO)
       throws IllegalAccessException, InstantiationException, NoSuchMethodException,
           InvocationTargetException {
@@ -44,7 +44,7 @@ public class ListMapper implements Serializable {
    *
    * @noinspection unchecked, unused
    */
-  public static <T extends ElvisEntity, D extends ElvisBaseDTO> List<T> map(
+  public static <T extends GenericEntity, D extends GenericDTO> List<T> map(
       final List<D> inputDTO) {
     final List<T> result = new LinkedList<>();
 

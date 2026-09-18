@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @Transactional
 public class SeasonBOImpl
-    extends ElvisGenericCRUDServiceImpl<Season, Long, SeasonRepository>
+    extends GenericBOImpl<Season, Long, SeasonRepository>
     implements SeasonBO {
 
   @Serial

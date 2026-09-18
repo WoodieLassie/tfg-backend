@@ -1,6 +1,6 @@
 package es.judith.bo;
 
-import es.judith.domain.ElvisEntity;
+import es.judith.domain.GenericEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,8 +15,8 @@ import java.util.List;
  * @author delivery
  * @noinspection unused
  */
-public interface GenericCRUDService<
-        T extends ElvisEntity,
+public interface GenericBO<
+        T extends GenericEntity,
         I extends Serializable>
     extends Serializable {
 

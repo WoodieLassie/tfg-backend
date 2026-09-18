@@ -1,6 +1,6 @@
 package es.judith.utils;
 
-import es.judith.domain.ElvisEntity;
+import es.judith.domain.GenericEntity;
 import es.judith.domain.User;
 import es.judith.dto.UserDTO;
 import org.junit.jupiter.api.Assertions;
@@ -21,9 +21,9 @@ class ListMapperTest {
     userDTO.setEmail("");
     userDTO.setId(Long.valueOf(10));
     listUser.add(userDTO);
-    List<ElvisEntity> listElvisEntity = ListMapper.map(listUser);
+    List<GenericEntity> listGenericEntity = ListMapper.map(listUser);
 
-    Assertions.assertNotNull(listElvisEntity);
+    Assertions.assertNotNull(listGenericEntity);
   }
 
   @Test

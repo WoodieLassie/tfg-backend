@@ -13,7 +13,7 @@ import java.io.Serial;
     description = "Data transfer object. Season without episode data")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SeasonNoEpisodesDTO extends ElvisBaseDTO<Season> {
+public class SeasonNoEpisodesDTO extends GenericDTO<Season> {
   @Serial private static final long serialVersionUID = -8617926782001985439L;
 
   @NotNull private Long id;

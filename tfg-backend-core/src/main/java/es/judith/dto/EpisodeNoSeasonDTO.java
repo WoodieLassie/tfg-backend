@@ -15,7 +15,7 @@ import java.util.List;
     description = "Data transfer object. Episode without season info")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class EpisodeNoSeasonDTO extends ElvisBaseDTO<Episode> {
+public class EpisodeNoSeasonDTO extends GenericDTO<Episode> {
   @Serial private static final long serialVersionUID = -637798618800399514L;
 
   @Schema(description = "Episode identification")

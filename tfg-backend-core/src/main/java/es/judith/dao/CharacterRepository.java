@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CharacterRepository
-        extends ElvisBaseRepository<Character, Long>,
+        extends GenericRepository<Character, Long>,
         JpaSpecificationExecutor<Character> {
     @Query("SELECT c from Character c LEFT JOIN FETCH c.actors a")
     List<Character> findAll();

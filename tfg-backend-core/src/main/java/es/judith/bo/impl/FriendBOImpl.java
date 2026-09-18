@@ -14,7 +14,7 @@ import java.util.*;
 @Service
 @Transactional
 //TODO: Hay que añadir alguna forma de que el cliente tenga la ID de la friend request para aceptar y eliminar
-public class FriendBOImpl extends ElvisGenericCRUDServiceImpl<Friend, Long, FriendRepository> implements FriendBO {
+public class FriendBOImpl extends GenericBOImpl<Friend, Long, FriendRepository> implements FriendBO {
 
     private final transient UserRepository userRepository;
     public FriendBOImpl(FriendRepository repository, UserRepository userRepository) {

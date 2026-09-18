@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CommentRepository
-    extends ElvisBaseRepository<Comment, Long>,
+    extends GenericRepository<Comment, Long>,
         JpaSpecificationExecutor<Comment> {
   @Query(
       value =

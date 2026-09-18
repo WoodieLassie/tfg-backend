@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface ShowRepository extends ElvisBaseRepository<Show, Long>,
+public interface ShowRepository extends GenericRepository<Show, Long>,
         JpaSpecificationExecutor<Show> {
 
     @Query("SELECT s FROM Show s LEFT JOIN FETCH s.seasons WHERE s.id = :id")

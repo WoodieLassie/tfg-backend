@@ -11,8 +11,8 @@ import java.util.List;
 @Service
 @Transactional
 public class FavouriteBOImpl
-    extends ElvisGenericCRUDServiceImpl<
-        Favourite, Long,FavouriteRepository>
+    extends GenericBOImpl<
+                Favourite, Long,FavouriteRepository>
     implements FavouriteBO {
 
   public FavouriteBOImpl(FavouriteRepository repository) {

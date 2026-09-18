@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ReviewRepository
-    extends ElvisBaseRepository<Review, Long>,
+    extends GenericRepository<Review, Long>,
         JpaSpecificationExecutor<Review> {
     @Query(nativeQuery = true, value = "SELECT r.* FROM reviews r WHERE r.show_id = :showId")
     List<Review> findByShow(@Param("showId") Long showId);

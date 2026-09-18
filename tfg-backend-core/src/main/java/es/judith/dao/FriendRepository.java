@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface FriendRepository extends ElvisBaseRepository<Friend, Long>, JpaSpecificationExecutor<Friend> {
+public interface FriendRepository extends GenericRepository<Friend, Long>, JpaSpecificationExecutor<Friend> {
     @Query(
             nativeQuery = true,
             value = "SELECT f.* FROM friendships f WHERE f.sender_id = :userId AND f.request_status = 1 OR f.receiver_id = :userId AND f.request_status = 1"

@@ -3,13 +3,13 @@ package es.judith.controller;
 import es.judith.domain.Actor;
 import es.judith.dto.ActorDTO;
 import es.judith.dto.ActorInputDTO;
-import es.judith.rest.BaseController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface ActorController extends BaseController {
+public interface ActorController extends Serializable {
     ResponseEntity<List<ActorDTO>> findAll();
     ResponseEntity<ActorDTO> findById(Long id);
     ResponseEntity<byte[]> findImageById(Long id);

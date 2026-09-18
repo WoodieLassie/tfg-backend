@@ -14,7 +14,7 @@ import java.util.List;
 @Schema(name = "ShowDTO", description = "Data transfer object. Show")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ShowDTO extends ElvisBaseDTO<Show> {
+public class ShowDTO extends GenericDTO<Show> {
   @Serial private static final long serialVersionUID = -4692305723930464000L;
 
   @NotNull private String name;

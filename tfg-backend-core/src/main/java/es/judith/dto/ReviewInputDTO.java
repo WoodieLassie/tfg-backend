@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 @Schema(name = "ReviewInputDTO", description = "Data transfer object for input. Review")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ReviewInputDTO extends ElvisBaseDTO<Review> {
+public class ReviewInputDTO extends GenericDTO<Review> {
   @Serial private static final long serialVersionUID = 7844791754882313949L;
 
   @JsonIgnore private Long id;

@@ -11,7 +11,7 @@ import org.hibernate.annotations.NaturalId;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "friendships")
-public class Friend extends ElvisEntity {
+public class Friend extends GenericEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

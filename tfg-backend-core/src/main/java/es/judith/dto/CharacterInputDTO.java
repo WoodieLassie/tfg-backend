@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 @Schema(name = "CharacterInputDTO", description = "Data transfer object for input. Character")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class CharacterInputDTO extends ElvisBaseDTO<Character> {
+public class CharacterInputDTO extends GenericDTO<Character> {
   private static final long serialVersionUID = 5639086464246552279L;
 
   @JsonIgnore private Long id;

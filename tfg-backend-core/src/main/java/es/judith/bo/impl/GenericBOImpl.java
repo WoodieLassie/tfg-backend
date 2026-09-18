@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import es.judith.bo.GenericCRUDService;
-import es.judith.dao.ElvisBaseRepository;
-import es.judith.domain.ElvisEntity;
+import es.judith.bo.GenericBO;
+import es.judith.dao.GenericRepository;
+import es.judith.domain.GenericEntity;
 
-public class ElvisGenericCRUDServiceImpl<T extends ElvisEntity, I extends Serializable, R extends ElvisBaseRepository<T, I>>
-    implements GenericCRUDService<T, I> {
+public class GenericBOImpl<T extends GenericEntity, I extends Serializable, R extends GenericRepository<T, I>>
+    implements GenericBO<T, I> {
 
   private static final long serialVersionUID = -4005659813031548678L;
 
@@ -21,7 +21,7 @@ public class ElvisGenericCRUDServiceImpl<T extends ElvisEntity, I extends Serial
    */
   protected final transient R repository;
 
-  public ElvisGenericCRUDServiceImpl(R repository) {
+  public GenericBOImpl(R repository) {
     super();
     this.repository = repository;
   }

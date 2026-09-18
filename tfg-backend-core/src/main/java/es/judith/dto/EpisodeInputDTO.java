@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 @Schema(name = "EpisodeInputDTO", description = "Data transfer object for input. Episode")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class EpisodeInputDTO extends ElvisBaseDTO<Episode> {
+public class EpisodeInputDTO extends GenericDTO<Episode> {
   private static final long serialVersionUID = -4157249428593446209L;
 
   @JsonIgnore private Long id;

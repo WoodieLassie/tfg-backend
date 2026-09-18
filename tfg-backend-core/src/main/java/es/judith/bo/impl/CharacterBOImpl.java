@@ -15,8 +15,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class CharacterBOImpl
-    extends ElvisGenericCRUDServiceImpl<
-        Character, Long, CharacterRepository>
+    extends GenericBOImpl<
+                Character, Long, CharacterRepository>
     implements CharacterBO {
 
   private static final long serialVersionUID = 5582874611771949151L;

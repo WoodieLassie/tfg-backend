@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 @Schema(name = "SeasonInputDTO", description = "Data transfer object for input. Season")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SeasonInputDTO extends ElvisBaseDTO<Season> {
+public class SeasonInputDTO extends GenericDTO<Season> {
   @Serial private static final long serialVersionUID = -7833187139596920918L;
 
   @JsonIgnore private Long id;

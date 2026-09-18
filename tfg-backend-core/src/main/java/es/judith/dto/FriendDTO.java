@@ -12,7 +12,7 @@ import java.io.Serial;
 @Schema(name = "FriendDTO", description = "Data transfer object: friend")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class FriendDTO extends ElvisBaseDTO<Friend> {
+public class FriendDTO extends GenericDTO<Friend> {
 
     @Serial
     private static final long serialVersionUID = 1515582535568028098L;

@@ -13,8 +13,8 @@ import java.util.List;
 @Service
 @Transactional
 public class CommentBOImpl
-    extends ElvisGenericCRUDServiceImpl<
-        Comment, Long, CommentRepository>
+    extends GenericBOImpl<
+                Comment, Long, CommentRepository>
     implements CommentBO {
 
   public CommentBOImpl(CommentRepository repository) {

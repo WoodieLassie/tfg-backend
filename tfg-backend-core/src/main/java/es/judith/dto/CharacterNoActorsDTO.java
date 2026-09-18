@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
     description = "Data transfer object. Character without actor data")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class CharacterNoActorsDTO extends ElvisBaseDTO<Character> {
+public class CharacterNoActorsDTO extends GenericDTO<Character> {
   @NotNull private Long id;
   @NotNull private String name;
   @NotNull private String description;

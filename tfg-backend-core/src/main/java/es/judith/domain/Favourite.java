@@ -12,7 +12,7 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "favourites")
-public class Favourite extends ElvisEntity {
+public class Favourite extends GenericEntity {
   @Serial private static final long serialVersionUID = -3076389732947119269L;
 
   @ManyToOne(fetch = FetchType.LAZY)

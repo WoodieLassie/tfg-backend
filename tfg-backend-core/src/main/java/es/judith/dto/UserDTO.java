@@ -16,7 +16,7 @@ import java.io.Serial;
 @Schema(name = "UserDTO", description = "Data transfer object: current logged in user")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class UserDTO extends ElvisBaseDTO<User> {
+public class UserDTO extends GenericDTO<User> {
 
   @Serial
   private static final long serialVersionUID = 883832912345648321L;

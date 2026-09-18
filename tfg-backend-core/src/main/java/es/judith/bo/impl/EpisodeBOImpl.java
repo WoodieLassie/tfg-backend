@@ -15,8 +15,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class EpisodeBOImpl
-    extends ElvisGenericCRUDServiceImpl<
-        Episode, Long, EpisodeRepository>
+    extends GenericBOImpl<
+                Episode, Long, EpisodeRepository>
     implements EpisodeBO {
 
   private static final long serialVersionUID = -4565303369232666607L;

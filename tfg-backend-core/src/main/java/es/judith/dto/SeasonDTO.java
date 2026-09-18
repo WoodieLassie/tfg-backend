@@ -12,7 +12,7 @@ import java.util.List;
 @Schema(name = "SeasonDTO", description = "Data transfer object. Season")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SeasonDTO extends ElvisBaseDTO<Season> {
+public class SeasonDTO extends GenericDTO<Season> {
   @Serial private static final long serialVersionUID = -8617926782001985439L;
 
   @Schema(description = "Season identification")

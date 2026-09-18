@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface FavouriteRepository
-    extends ElvisBaseRepository<Favourite, Long>,
+    extends GenericRepository<Favourite, Long>,
         JpaSpecificationExecutor<Favourite> {
   @Query(
       nativeQuery = true,

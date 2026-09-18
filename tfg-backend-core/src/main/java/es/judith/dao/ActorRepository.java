@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ActorRepository
-        extends ElvisBaseRepository<Actor, Long>,
+        extends GenericRepository<Actor, Long>,
         JpaSpecificationExecutor<Actor> {
     @Query("SELECT a from Actor a LEFT JOIN FETCH a.characters c")
     List<Actor> findAll();

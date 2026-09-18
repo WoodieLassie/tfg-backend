@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ReviewBOImpl extends ElvisGenericCRUDServiceImpl<
+public class ReviewBOImpl extends GenericBOImpl<
         Review, Long, ReviewRepository>
         implements ReviewBO {
 

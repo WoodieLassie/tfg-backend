@@ -14,7 +14,7 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "comments")
-public class Comment extends ElvisEntity {
+public class Comment extends GenericEntity {
   @Serial static final long serialVersionUID = 8182917368975655915L;
 
   @ManyToOne(fetch = FetchType.LAZY)

@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 @Schema(name = "UserInputDTO", description = "Data transfer object for input: user")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class UserInputDTO extends ElvisBaseDTO<User> {
+public class UserInputDTO extends GenericDTO<User> {
   @JsonIgnore private Long id;
 
   @NotNull private String email;

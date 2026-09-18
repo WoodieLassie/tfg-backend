@@ -5,7 +5,7 @@ import es.judith.domain.Character;
 import java.util.List;
 
 public interface CharacterBO
-    extends GenericCRUDService<Character, Long> {
+    extends GenericBO<Character, Long> {
     List<Character> findAllById(List<Long> ids);
     byte[] findImageById(Long id);
 }

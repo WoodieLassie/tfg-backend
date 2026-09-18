@@ -1,6 +1,6 @@
 package es.judith.dao;
 
-import es.judith.domain.ElvisEntity;
+import es.judith.domain.GenericEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -17,7 +17,7 @@ import java.util.Optional;
  * @author rbarroso
  */
 @NoRepositoryBean
-public interface ElvisBaseRepository<T extends ElvisEntity, I extends Serializable>
+public interface GenericRepository<T extends GenericEntity, I extends Serializable>
     extends JpaRepository<T, I>, JpaSpecificationExecutor<T> {
 
   @Override

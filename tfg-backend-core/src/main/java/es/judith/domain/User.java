@@ -17,7 +17,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "users")
-public class User extends ElvisEntity {
+public class User extends GenericEntity {
 
   @Serial
   private static final long serialVersionUID = 7389705441694025319L;

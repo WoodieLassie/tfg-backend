@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EpisodeRepository
-    extends ElvisBaseRepository<Episode, Long>,
+    extends GenericRepository<Episode, Long>,
         JpaSpecificationExecutor<Episode> {
   @Query("SELECT e FROM Episode e " + "LEFT JOIN FETCH e.season s " + "WHERE s.id = :showId")
   List<Episode> findAllBySeason(@Param("showId") Long showId);

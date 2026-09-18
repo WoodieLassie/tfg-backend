@@ -8,7 +8,7 @@ import org.springframework.data.mapping.MappingException;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import es.judith.domain.ElvisEntity;
+import es.judith.domain.GenericEntity;
 import es.judith.utils.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -16,13 +16,13 @@ import lombok.Data;
 /** Basic DTO with general needed operations. */
 @Schema(name = "ElvisBaseDTO", description = "Elvis Base")
 @Data
-public abstract class ElvisBaseDTO<T extends ElvisEntity> implements Serializable {
+public abstract class GenericDTO<T extends GenericEntity> implements Serializable {
 
   /** serialVersionUID for object serialization. */
   private static final long serialVersionUID = 3212686467056680847L;
 
   /** The Constant LOG. */
-  private static final Logger LOG = LoggerFactory.getLogger(ElvisBaseDTO.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GenericDTO.class);
 
   /** Object mapper to transform Entity to DTO and vice versa. */
   @JsonIgnore
@@ -40,7 +40,7 @@ public abstract class ElvisBaseDTO<T extends ElvisEntity> implements Serializabl
    * @noinspection all
    */
   @SuppressWarnings("unchecked")
-  protected ElvisBaseDTO() {
+  protected GenericDTO() {
     // Gets form type used by child controller
     final ParameterizedType genericSuperclass =
         (ParameterizedType) getClass().getGenericSuperclass();

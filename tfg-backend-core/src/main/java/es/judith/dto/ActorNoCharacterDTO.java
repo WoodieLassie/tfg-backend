@@ -14,7 +14,7 @@ import java.sql.Date;
 @Schema(name = "ActorNoCharacterDTO", description = "Data transfer object. Actor")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ActorNoCharacterDTO extends ElvisBaseDTO<Actor> {
+public class ActorNoCharacterDTO extends GenericDTO<Actor> {
   @NotNull private String name;
   @NotNull private Date birthDate;
   @NotNull private String nationality;

@@ -11,7 +11,7 @@ import java.io.Serial;
 @Schema(name = "ReviewDTO", description = "Data transfer object. Review")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ReviewDTO extends ElvisBaseDTO<Review> {
+public class ReviewDTO extends GenericDTO<Review> {
   @Serial private static final long serialVersionUID = 1895621387307881661L;
 
   @NotNull private Integer rating;
