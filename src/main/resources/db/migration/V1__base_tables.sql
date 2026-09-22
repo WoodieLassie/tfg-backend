@@ -30,6 +30,14 @@ CREATE TABLE friendships (
   PRIMARY KEY (id, sender_id, receiver_id)
 );
 
+CREATE TABLE recommendations (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    sender_id BIGINT NOT NULL,
+    receiver_id BIGINT NOT NULL,
+    show_id BIGINT NOT NULL,
+    PRIMARY KEY (id, sender_id, receiver_id, show_id)
+);
+
 CREATE TABLE shows (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,

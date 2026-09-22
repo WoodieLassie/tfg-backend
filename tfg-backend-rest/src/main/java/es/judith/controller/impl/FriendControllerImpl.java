@@ -9,6 +9,7 @@ import es.judith.domain.User;
 import es.judith.dto.FriendDTO;
 import es.judith.dto.FriendInputDTO;
 import es.judith.dto.UserDTO;
+import es.judith.dto.UserProfileDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
@@ -42,25 +43,25 @@ public class FriendControllerImpl implements FriendController {
 
     @Override
     @GetMapping
-    public ResponseEntity<Map<Long, UserDTO>> findAllFriends(Long userId) {
+    public ResponseEntity<Map<Long, UserProfileDTO>> findAllFriends(Long userId) {
         Long currentUserId = authBO.getCurrentUser().getId();
-        Map<Long, UserDTO> currentUserFriends = friendBO.getAllFriends(currentUserId);
+        Map<Long, UserProfileDTO> currentUserFriends = friendBO.getAllFriends(currentUserId);
         return ResponseEntity.status(HttpStatus.OK).body(currentUserFriends);
     }
 
     @Override
     @GetMapping("/requests")
-    public ResponseEntity<Map<Long, UserDTO>> findAllSentRequests(Long userId) {
+    public ResponseEntity<Map<Long, UserProfileDTO>> findAllSentRequests(Long userId) {
         Long currentUserId = authBO.getCurrentUser().getId();
-        Map<Long, UserDTO> currentSentRequests = friendBO.getAllSentRequests(currentUserId);
+        Map<Long, UserProfileDTO> currentSentRequests = friendBO.getAllSentRequests(currentUserId);
         return ResponseEntity.status(HttpStatus.OK).body(currentSentRequests);
     }
 
     @Override
     @GetMapping("/requested")
-    public ResponseEntity<Map<Long, UserDTO>> findAllReceivedRequests(Long userId) {
+    public ResponseEntity<Map<Long, UserProfileDTO>> findAllReceivedRequests(Long userId) {
         Long currentUserId = authBO.getCurrentUser().getId();
-        Map<Long, UserDTO> currentReceivedRequests = friendBO.getAllReceivedRequests(currentUserId);
+        Map<Long, UserProfileDTO> currentReceivedRequests = friendBO.getAllReceivedRequests(currentUserId);
         return ResponseEntity.status(HttpStatus.OK).body(currentReceivedRequests);
     }
 

@@ -1,7 +1,6 @@
 package es.judith.dto;
 
-import es.judith.domain.Friend;
-import es.judith.domain.User;
+import es.judith.domain.Recommendation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -9,16 +8,17 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
-@Schema(name = "FriendDTO", description = "Data transfer object: friend")
+@Schema(name = "RecommendationDTO", description = "Data transfer object: recommendation")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class FriendDTO extends GenericDTO<Friend> {
+public class RecommendationDTO extends GenericDTO<Recommendation> {
 
     @Serial
-    private static final long serialVersionUID = 1515582535568028098L;
+    private static final long serialVersionUID = 5658787834259233213L;
 
-    @NotNull private Long id;
+    @NotNull
+    private Long id;
     @NotNull private UserProfileDTO userSender;
     @NotNull private UserProfileDTO userReceiver;
-    @NotNull private boolean requestStatus;
+    @NotNull private ShowDTO show;
 }

@@ -6,6 +6,7 @@ import es.judith.dao.UserRepository;
 import es.judith.domain.Friend;
 import es.judith.domain.User;
 import es.judith.dto.UserDTO;
+import es.judith.dto.UserProfileDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,6 @@ import java.util.*;
 
 @Service
 @Transactional
-//TODO: Hay que añadir alguna forma de que el cliente tenga la ID de la friend request para aceptar y eliminar
 public class FriendBOImpl extends GenericBOImpl<Friend, Long, FriendRepository> implements FriendBO {
 
     private final transient UserRepository userRepository;
@@ -24,7 +24,7 @@ public class FriendBOImpl extends GenericBOImpl<Friend, Long, FriendRepository> 
 
     @Transactional(readOnly = true)
     @Override
-    public Map<Long, UserDTO> getAllFriends(Long userId) {
+    public Map<Long, UserProfileDTO> getAllFriends(Long userId) {
         List<Friend> friends = this.repository.getAllFriends(userId);
         Map<Long, Long> friendIds = new HashMap<>();
         for (Friend friend : friends) {
@@ -40,7 +40,7 @@ public class FriendBOImpl extends GenericBOImpl<Friend, Long, FriendRepository> 
 
     @Transactional(readOnly = true)
     @Override
-    public Map<Long, UserDTO> getAllSentRequests(Long userId) {
+    public Map<Long, UserProfileDTO> getAllSentRequests(Long userId) {
         List<Friend> sentRequests = this.repository.getAllSentRequests(userId);
         Map<Long, Long> requestSentToIds = new HashMap<>();
         for (Friend sentRequest : sentRequests) {
@@ -51,7 +51,7 @@ public class FriendBOImpl extends GenericBOImpl<Friend, Long, FriendRepository> 
 
     @Transactional(readOnly = true)
     @Override
-    public Map<Long, UserDTO> getAllReceivedRequests(Long userId) {
+    public Map<Long, UserProfileDTO> getAllReceivedRequests(Long userId) {
         List<Friend> receivedRequests = this.repository.getAllReceivedRequests(userId);
         Map<Long, Long> requestedByIds = new HashMap<>();
         for (Friend receivedRequest : receivedRequests) {
@@ -91,10 +91,11 @@ public class FriendBOImpl extends GenericBOImpl<Friend, Long, FriendRepository> 
         return Objects.equals(friendship.getUserReceiver().getId(), userId);
     }
 
-    public Map<Long, UserDTO> convertToDTO(Map<Long, Long> friendRequests) {
-        Map<Long, UserDTO> friendRequestsWithUserInfo = new HashMap<>();
+    @Override
+    public Map<Long, UserProfileDTO> convertToDTO(Map<Long, Long> friendRequests) {
+        Map<Long, UserProfileDTO> friendRequestsWithUserInfo = new HashMap<>();
         for(Map.Entry<Long, Long> friendRequest : friendRequests.entrySet()){
-            UserDTO userDTO = new UserDTO();
+            UserProfileDTO userDTO = new UserProfileDTO();
             Optional<User> optionalUser = userRepository.findById(friendRequest.getValue());
             optionalUser.ifPresent(userDTO::loadFromDomain);
             friendRequestsWithUserInfo.put(friendRequest.getKey(), userDTO);
