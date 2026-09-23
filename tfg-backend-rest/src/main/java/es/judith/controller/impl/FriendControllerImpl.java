@@ -27,7 +27,6 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/friends")
 @Tag(name = "friends")
-//Necesitará utilizar AuthController para el usuario actual
 public class FriendControllerImpl implements FriendController {
 
     private final FriendBO friendBO;
