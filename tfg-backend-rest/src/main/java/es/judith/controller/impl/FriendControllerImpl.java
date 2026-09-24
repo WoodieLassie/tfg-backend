@@ -87,19 +87,12 @@ public class FriendControllerImpl implements FriendController {
             );
         }
         Friend friend = friendDTO.obtainDomainObject();
-// ESTE CODIGO NO TENIA SENTIDO QUE ESTUVIESE AQUI PERO LO COMENTO PORQUE SERA UN CHECK NECESARIO EN ACCEPTREQUEST
-//        if (friend == null) {
-//            throw new NotExistingIdException(
-//                    "Friend request " + friendDTO.getId() + " does not exist");
-//        }
         friend.setUserReceiver(requestedUser);
         friend.setUserSender(currentUser);
         friendBO.save(friend);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
-    //Solo posible si el usuario loggeado es el receiver. Si no lo es, error 403
-    //PATCH. Solo cambia el requestStatus. Usará checkIfRequestReceiver para verificar que el usuario forma parte de la request y que es el "receiver"
     @Override
     @PatchMapping("/requested/{requestId}")
     public ResponseEntity<FriendDTO> acceptRequest(@PathVariable Long requestId) {

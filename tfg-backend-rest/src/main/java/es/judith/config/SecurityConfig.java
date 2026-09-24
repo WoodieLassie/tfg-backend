@@ -55,7 +55,7 @@ public class SecurityConfig {
                         "/api/actors/**", "/api/characters/**", "/api/episodes/**", "/api/seasons/**", "/api/shows/**")
                         .hasAuthority("ADMIN")
                 .requestMatchers(
-                        HttpMethod.POST, "/api/comments/**", "/api/favourites/**", "/api/reviews/**", "/api/friends/**")
+                        HttpMethod.POST, "/api/comments/**", "/api/favourites/**", "/api/reviews/**", "/api/friends/**", "/api/recommendations/**")
                         .hasAnyAuthority("ADMIN", "USER")
                 .requestMatchers(
                         HttpMethod.PATCH, "/api/actors/**", "/api/characters/**", "/api/episodes/**", "/api/seasons/**", "/api/shows/**", "/api/users/promote/**")
@@ -68,7 +68,7 @@ public class SecurityConfig {
                         "/api/actors/**", "/api/characters/**", "/api/episodes/**", "/api/images/**", "/api/seasons/**", "/api/shows/**")
                         .hasAuthority("ADMIN")
                 .requestMatchers(
-                        HttpMethod.DELETE, "/api/favourites/**", "/api/comments/**", "/api/reviews/**", "/api/friends/**")
+                        HttpMethod.DELETE, "/api/favourites/**", "/api/comments/**", "/api/reviews/**", "/api/friends/**", "/api/recommendations/**")
                         .hasAnyAuthority("ADMIN", "USER")
                 .anyRequest().hasAuthority("ADMIN"))
                 .userDetailsService(userDetailsService)
