@@ -1,1 +1,1738 @@
-{}
+{
+  "info": {
+    "_postman_id": "1c130605-9cd8-40e1-b530-d929daff6d23",
+    "name": "Trabajo práctico",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "41311639"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"judyyjudyjudyy@gmail.com\",\r\n    \"username\": \"woodielassie\",\r\n    \"password\": \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/users/register",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"judyyjudyjudyy@gmail.com\",\n    \"password\": \"12345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/users/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get logged user",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_0qau}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/users",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get user data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/users/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get user image by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/users/image/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "image",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update user image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgyODAsImV4cCI6MTc3MDEyMzQ2NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.Porhk8AYCDkThf2hIrpUMF0Rg04S4TUEsIMBqgIGUAE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "/home/judy/Descargas/77371b56a8decd0d685d4c8eeb79f389-3148938474.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/api/users/image/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "image",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Promote user to admin",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_07u5}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/users/promote/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "promote",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Shows",
+      "item": [
+        {
+          "name": "Get all shows",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "cue",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/api/shows",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "shows"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get show by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/shows/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "shows",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get show image by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/shows/image/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "shows",
+                "image",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save show",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTYxNzAsImV4cCI6MTc3MDEyMTM1NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.5Ke9-X0xewkiZEsT-L1Zi5jWrutkYr4G6cI4e6Byyrk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"la judy\",\r\n    \"description\": \"judy queriendo arrancarse la piel haciendo el tfg\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/shows",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "shows"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update show",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgyODAsImV4cCI6MTc3MDEyMzQ2NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.Porhk8AYCDkThf2hIrpUMF0Rg04S4TUEsIMBqgIGUAE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"test 2\",\r\n    \"description\": \"test 2\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/shows/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "shows",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update show image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgyODAsImV4cCI6MTc3MDEyMzQ2NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.Porhk8AYCDkThf2hIrpUMF0Rg04S4TUEsIMBqgIGUAE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "/home/judy/Descargas/77371b56a8decd0d685d4c8eeb79f389-3148938474.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/api/shows/image/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "shows",
+                "image",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete show",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgyODAsImV4cCI6MTc3MDEyMzQ2NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.Porhk8AYCDkThf2hIrpUMF0Rg04S4TUEsIMBqgIGUAE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/shows/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "shows",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Seasons",
+      "item": [
+        {
+          "name": "Get season by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/seasons/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "seasons",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "showId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save season",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODkzMDIwMTYsImV4cCI6MTc4OTMwNzIwMCwic3ViIjoianVkeXlqdWR5anVkeXlAZ21haWwuY29tIn0.BJ8Exmw5uHkKYs0UjeqxvjLkpKXwyP-3R6ykjHWa86g",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"seasonNum\": 200,\r\n    \"description\": \"Temporada cuatro\",\r\n    \"showId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/seasons",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "seasons"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update season",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTgyODAsImV4cCI6MTc3MDEyMzQ2NCwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.Porhk8AYCDkThf2hIrpUMF0Rg04S4TUEsIMBqgIGUAE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"seasonNum\": 5,\r\n    \"description\": \"Temporada cinco\",\r\n    \"showId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/seasons/4",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "seasons",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete season",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_0qmz}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/seasons/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "seasons",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Episodes",
+      "item": [
+        {
+          "name": "Get episode by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/episodes/60",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "episodes",
+                "60"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save episode",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"episodeNum\": 101,\r\n    \"title\": \"Episode added through post\",\r\n    \"summary\": \"Please work\",\r\n    \"seasonId\": 3,\r\n    \"characterIds\": [2,4]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/episodes",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "episodes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update episode",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"episodeNum\": 1,\r\n    \"title\": \"Episode edited through patch\",\r\n    \"summary\": \"hi\",\r\n    \"seasonId\": 3,\r\n    \"characterIds\": [2, 5]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/episodes/61",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "episodes",
+                "61"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete episode",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/episodes/61",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "episodes",
+                "61"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Characters",
+      "item": [
+        {
+          "name": "Get characters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/characters",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "characters"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get character by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/characters/15",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "characters",
+                "15"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get character image by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/characters/image/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "characters",
+                "image",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save character",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Test character through post\",\r\n    \"description\": \"Descripción\",\r\n    \"gender\": \"Masculino\",\r\n    \"nationality\": \"Española\",\r\n    \"age\": 23\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/characters",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "characters"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update character",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Test character through patch\",\r\n    \"description\": \"Descripción\",\r\n    \"gender\": \"Masculino\",\r\n    \"nationality\": \"Española\",\r\n    \"age\": 23\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/characters/15",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "characters",
+                "15"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update character image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "/home/judy/Descargas/77371b56a8decd0d685d4c8eeb79f389-3148938474.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/api/characters/image/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "characters",
+                "image",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete character",
+          "request": {
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "authUrl",
+                  "value": "",
+                  "type": "string"
+                },
+                {
+                  "key": "client_authentication",
+                  "value": "header",
+                  "type": "string"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "string"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "http://localhost:8080/redirect",
+                  "type": "string"
+                },
+                {
+                  "key": "scope",
+                  "value": "admin",
+                  "type": "string"
+                },
+                {
+                  "key": "clientSecret",
+                  "value": "secret",
+                  "type": "string"
+                },
+                {
+                  "key": "clientId",
+                  "value": "client",
+                  "type": "string"
+                },
+                {
+                  "key": "addTokenTo",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/characters/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "characters",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Actors",
+      "item": [
+        {
+          "name": "Get actors",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/actors",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "actors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get actor by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/actors/7",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "actors",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get actor image by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/actors/image/18",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "actors",
+                "image",
+                "18"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save actor",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_11d3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"name\": \"Test actor\",\r\n        \"birthDate\": \"1968-06-18\",\r\n        \"nationality\": \"Española\",\r\n        \"gender\": \"Femenino\",\r\n        \"birthLocation\": \"Valencia\",\r\n        \"characterIds\": [12, 1\r\n        ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/actors",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "actors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update actor",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_11d3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"name\": \"Test character 2\",\r\n        \"birthDate\": \"1968-06-18\",\r\n        \"nationality\": \"Española\",\r\n        \"gender\": \"TEST\",\r\n        \"birthLocation\": \"Valencia\",\r\n        \"characterIds\": [12, 2]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/actors/18",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "actors",
+                "18"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update actor image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "/home/judy/Descargas/77371b56a8decd0d685d4c8eeb79f389-3148938474.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/api/actors/image/18",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "actors",
+                "image",
+                "18"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete actor",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_secret_11d3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/actors/18",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "actors",
+                "18"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Favourites",
+      "item": [
+        {
+          "name": "Get favourites from user",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/favourites/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "favourites",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save favourite",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"showId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/favourites",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "favourites"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete favourite",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/favourites/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "favourites",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Get all comments from show",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/comments/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "comments",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save comment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODkzMDIwMTYsImV4cCI6MTc4OTMwNzIwMCwic3ViIjoianVkeXlqdWR5anVkeXlAZ21haWwuY29tIn0.BJ8Exmw5uHkKYs0UjeqxvjLkpKXwyP-3R6ykjHWa86g",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"text\": \"comentario\",\r\n    \"showId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/comments",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete comment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/comments/2",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "comments",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Get rating for show",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/reviews/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "reviews",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save review",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rating\": 3,\r\n    \"showId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/reviews",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete rating",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzAxMTkxNzgsImV4cCI6MTc3MDEyNDM2Miwic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.4kDmRTtAiRxyU5yc8o_aRbNJSNBH6bl758yU4g6l-yU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/reviews/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "reviews",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Friends",
+      "item": [
+        {
+          "name": "Get all friendships",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODkyOTgzMjksImV4cCI6MTc4OTMwMzUxMywic3ViIjoianVkaXRoQGdtYWlsLmNvbSJ9.fgGDIcA7lDsO35iAn_f19g_sM95DBJmgRB-tjytY-is",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/friends",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "friends"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all sent requests",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODkzMDIwMTYsImV4cCI6MTc4OTMwNzIwMCwic3ViIjoianVkeXlqdWR5anVkeXlAZ21haWwuY29tIn0.BJ8Exmw5uHkKYs0UjeqxvjLkpKXwyP-3R6ykjHWa86g",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/friends/requests",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "friends",
+                "requests"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all received requests",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODkzMDIwMTYsImV4cCI6MTc4OTMwNzIwMCwic3ViIjoianVkeXlqdWR5anVkeXlAZ21haWwuY29tIn0.BJ8Exmw5uHkKYs0UjeqxvjLkpKXwyP-3R6ykjHWa86g",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/friends/requested",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "friends",
+                "requested"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Send friend request",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODkzMDIwMTYsImV4cCI6MTc4OTMwNzIwMCwic3ViIjoianVkeXlqdWR5anVkeXlAZ21haWwuY29tIn0.BJ8Exmw5uHkKYs0UjeqxvjLkpKXwyP-3R6ykjHWa86g",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\"userReceiverId\": \"1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/friends",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "friends"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Accept friend request",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODk2NTA0ODcsImV4cCI6MTc4OTY1NTY3MSwic3ViIjoianVkeXlqdWR5anVkeXlAZ21haWwuY29tIn0.YYYgGOprknTi2FqtLOWBdZPMQHPb_J__cNLbx6SpzIY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/friends/requested/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "friends",
+                "requested",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete friend or request",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Recommendations",
+      "item": [
+        {
+          "name": "Get all sent recommendations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all received recommendations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Send recommendation",
+          "request": {
+            "auth": {
+              "type": "bearer"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"userReceiverId\": \"1\",\n    \"showId\": \"1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/recommedations",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "recommedations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete recommendation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/recommendations/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "recommendations",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "auth_secret_0qau",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_0qmz",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_11d3",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_11d3",
+      "secret": true
+    },
+    {
+      "key": "auth_secret_07u5",
+      "secret": true
+    }
+  ]
+}
