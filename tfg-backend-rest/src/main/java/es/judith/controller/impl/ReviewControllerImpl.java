@@ -1,9 +1,6 @@
 package es.judith.controller.impl;
 
-import es.judith.bo.AuthBO;
-import es.judith.bo.ReviewBO;
-import es.judith.bo.ShowBO;
-import es.judith.bo.UserBO;
+import es.judith.bo.*;
 import es.judith.controller.ReviewController;
 import es.judith.domain.Review;
 import es.judith.domain.Role;
@@ -11,6 +8,7 @@ import es.judith.domain.Show;
 import es.judith.domain.User;
 import es.judith.dto.ReviewInputDTO;
 import es.judith.exceptions.BadInputException;
+import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -28,19 +26,25 @@ import java.util.Objects;
 @Tag(name = "reviews")
 public class ReviewControllerImpl implements ReviewController {
   private static final Logger LOG = LoggerFactory.getLogger(ReviewControllerImpl.class);
-  private final ReviewBO bo;
-  private final ShowBO showBO;
-  private final AuthBO authBO;
+  private final transient ReviewBO bo;
+  private final transient ShowBO showBO;
+  private final transient AuthBO authBO;
+  private final transient FriendBO friendBO;
+  private final transient UserBO userBO;
+  private final ReviewBO reviewBO;
 
-  public ReviewControllerImpl(ReviewBO bo, UserBO userBO, ShowBO showBO, AuthBO authBO) {
+  public ReviewControllerImpl(ReviewBO bo, ShowBO showBO, AuthBO authBO, FriendBO friendBO, UserBO userBO, ReviewBO reviewBO) {
     this.bo = bo;
     this.showBO = showBO;
     this.authBO = authBO;
+    this.friendBO = friendBO;
+    this.userBO = userBO;
+    this.reviewBO = reviewBO;
   }
 
   @Override
-  @GetMapping("/{showId}")
-  public ResponseEntity<HashMap<String, Double>> findAll(@PathVariable Long showId) {
+  @GetMapping("/show/{showId}")
+  public ResponseEntity<HashMap<String, Double>> findAllByShowId(@PathVariable Long showId) {
     LOG.debug("ReviewControllerImpl: Fetching all results");
     List<Review> reviewList = bo.findAllByShowId(showId);
     Double totalReviewScore = 0.0;
@@ -53,6 +57,22 @@ public class ReviewControllerImpl implements ReviewController {
     HashMap<String, Double> response = new HashMap<>();
     response.put("averageRating", totalReviewScore);
     return ResponseEntity.ok(response);
+  }
+
+  @Override
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<List<Review>> findAllByUserId(@PathVariable Long userId) {
+    User currentUser = authBO.getCurrentUser();
+    if (userBO.findOne(userId) == null) {
+      throw new NotExistingIdException(
+              "User with id " + userId + " does not exist"
+      );
+    }
+    if (!friendBO.checkIfFriend(currentUser.getId(), userId) && !Objects.equals(currentUser.getId(), userId)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
+    List<Review> userReviews = reviewBO.findAllByUserId(userId);
+    return ResponseEntity.status(HttpStatus.OK).body(userReviews);
   }
 
   @Override
@@ -77,7 +97,7 @@ public class ReviewControllerImpl implements ReviewController {
     if (existingUserReviewInShow != null) {
       newReviewInfo.setId(existingUserReviewInShow.getId());
       bo.save(newReviewInfo);
-      return ResponseEntity.ok(null);
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
     bo.save(newReviewInfo);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
@@ -89,8 +109,9 @@ public class ReviewControllerImpl implements ReviewController {
     if (!bo.exists(id)) {
       throw new NotFoundException("Review with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getUser().getId(), authBO.getCurrentUser().getId())
-        && authBO.getCurrentUser().getRole() != Role.ADMIN) {
+    User currentUser = authBO.getCurrentUser();
+    if (!Objects.equals(bo.findOne(id).getUser().getId(), currentUser.getId())
+        && currentUser.getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
     LOG.debug("ReviewControllerImpl: Deleting data with id {}", id);

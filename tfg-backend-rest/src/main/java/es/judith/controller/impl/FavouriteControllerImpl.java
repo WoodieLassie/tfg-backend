@@ -1,9 +1,6 @@
 package es.judith.controller.impl;
 
-import es.judith.bo.AuthBO;
-import es.judith.bo.FavouriteBO;
-import es.judith.bo.ShowBO;
-import es.judith.bo.UserBO;
+import es.judith.bo.*;
 import es.judith.controller.FavouriteController;
 import es.judith.domain.Favourite;
 import es.judith.domain.Role;
@@ -39,14 +36,18 @@ import java.util.Objects;
 public class FavouriteControllerImpl implements FavouriteController {
 
   private static final Logger LOG = LoggerFactory.getLogger(FavouriteControllerImpl.class);
-  private final FavouriteBO bo;
-  private final ShowBO showBO;
-  private final AuthBO authBO;
+  private final transient FavouriteBO bo;
+  private final transient ShowBO showBO;
+  private final transient AuthBO authBO;
+  private final transient FriendBO friendBO;
+  private final transient UserBO userBO;
 
-  public FavouriteControllerImpl(FavouriteBO bo, UserBO userBO, ShowBO showBO, AuthBO authBO) {
+  public FavouriteControllerImpl(FavouriteBO bo, UserBO userBO, ShowBO showBO, AuthBO authBO, FriendBO friendBO) {
     this.bo = bo;
     this.showBO = showBO;
     this.authBO = authBO;
+    this.friendBO = friendBO;
+    this.userBO = userBO;
   }
 
   @Override
@@ -60,8 +61,16 @@ public class FavouriteControllerImpl implements FavouriteController {
             array = @ArraySchema(schema = @Schema(implementation = FavouriteDTO.class)))
       })
   @GetMapping("/{userId}")
-  //TODO: Solo accesible si el usuario es amistad, o el propio usuario loggeado
   public ResponseEntity<List<FavouriteDTO>> findAllByUser(@PathVariable Long userId) {
+    if (userBO.findOne(userId) == null) {
+      throw new NotExistingIdException(
+              "User with id " + userId + " does not exist"
+      );
+    }
+    User currentUser = authBO.getCurrentUser();
+    if (!Objects.equals(currentUser.getId(), userId) && !friendBO.checkIfFriend(currentUser.getId(), userId)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
     LOG.debug("Fetching results with user id {}", userId);
     List<Favourite> favouriteList = bo.findAllByUser(userId);
     List<FavouriteDTO> convertedFavouriteList = new ArrayList<>();
@@ -122,11 +131,12 @@ public class FavouriteControllerImpl implements FavouriteController {
   @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<FavouriteDTO> delete(@PathVariable Long id) {
+    User currentUser = authBO.getCurrentUser();
     if (!bo.exists(id)) {
       throw new NotFoundException("Favourite with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getUser().getId(), authBO.getCurrentUser().getId())
-        && authBO.getCurrentUser().getRole() != Role.ADMIN) {
+    if (!Objects.equals(bo.findOne(id).getUser().getId(), currentUser.getId())
+        && currentUser.getRole() != Role.ADMIN) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
     LOG.debug("FavouriteControllerImpl: Deleting data with id {}", id);

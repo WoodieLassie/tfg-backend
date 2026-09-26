@@ -2,9 +2,7 @@
 
 Features:
 
-- Solo poder ver reviews y favoritos de usuarios amigos (implementar en favourite y review controllers)
 - Sistema de mensajería entre amistades
-- Sistema de recomendaciones entre amistades
 
 Pulir:
 

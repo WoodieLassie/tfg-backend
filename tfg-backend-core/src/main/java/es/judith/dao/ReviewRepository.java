@@ -12,6 +12,8 @@ public interface ReviewRepository
         JpaSpecificationExecutor<Review> {
     @Query(nativeQuery = true, value = "SELECT r.* FROM reviews r WHERE r.show_id = :showId")
     List<Review> findByShow(@Param("showId") Long showId);
+    @Query(nativeQuery = true, value = "SELECT r.* FROM reviews r WHERE r.user_id = :userId")
+    List<Review> findByUser(@Param("userId") Long userId);
     @Query(nativeQuery = true, value = "SELECT r.* FROM reviews r WHERE r.show_id = :showId AND r.user_id = :userId")
     Review checkIfUserReviewInShow(@Param("showId") Long showId, @Param("userId") Long userId);
 }

@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ReviewBO extends GenericBO<Review, Long> {
     List<Review> findAllByShowId(Long showId);
+    List<Review> findAllByUserId(Long userId);
     Review checkIfUserReviewInShow(Long showId, Long userId);
 }

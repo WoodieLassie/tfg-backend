@@ -22,6 +22,12 @@ public class ReviewBOImpl extends GenericBOImpl<
     public List<Review> findAllByShowId(Long showId) {
         return repository.findByShow(showId);
     }
+
+    @Override
+    public List<Review> findAllByUserId(Long userId) {
+        return repository.findByUser(userId);
+    }
+
     @Transactional(readOnly = true)
     public Review checkIfUserReviewInShow(Long showId, Long userId) {
         return repository.checkIfUserReviewInShow(showId, userId);
