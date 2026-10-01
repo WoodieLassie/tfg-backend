@@ -45,18 +45,11 @@ public class ReviewControllerImpl implements ReviewController {
   @Override
   @GetMapping("/show/{showId}")
   public ResponseEntity<HashMap<String, Double>> findAllByShowId(@PathVariable Long showId) {
-    LOG.debug("ReviewControllerImpl: Fetching all results");
-    List<Review> reviewList = bo.findAllByShowId(showId);
-    Double totalReviewScore = 0.0;
-    for (Review review : reviewList) {
-      totalReviewScore += review.getRating();
-    }
-    totalReviewScore = totalReviewScore / reviewList.size();
-    String totalReviewScoreTruncated = totalReviewScore.toString().substring(0,3);
-    totalReviewScore = Double.valueOf(totalReviewScoreTruncated);
+    LOG.debug("ReviewControllerImpl: Fetching average rating of show id {}", showId);
+    Double totalReviewScore = reviewBO.calculateAverageRating(showId);
     HashMap<String, Double> response = new HashMap<>();
     response.put("averageRating", totalReviewScore);
-    return ResponseEntity.ok(response);
+    return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
   @Override
