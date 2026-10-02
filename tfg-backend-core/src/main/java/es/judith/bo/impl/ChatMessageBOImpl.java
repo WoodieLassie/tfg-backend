@@ -25,6 +25,7 @@ public class ChatMessageBOImpl extends GenericBOImpl<ChatMessage, Long, ChatMess
         this.chatRoomBO = chatRoomBO;
     }
 
+    @Override
     public ChatMessage saveMessage(ChatMessage chatMessage) {
         String chatRoomReference = chatRoomBO.getChatRoomReference(
                 chatMessage.getSenderUser().getId(),
@@ -37,9 +38,10 @@ public class ChatMessageBOImpl extends GenericBOImpl<ChatMessage, Long, ChatMess
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ChatMessage> findChatMessages(Long senderId, Long receiverId) {
         String chatRoomReference = chatRoomBO.getChatRoomReference(senderId, receiverId, false).orElseThrow(NotExistingIdException::new);
         ChatRoom chatRoom = chatRoomBO.findByChatRoomReference(chatRoomReference).orElseThrow(NotExistingIdException::new);
-        return repository.findByChatRoomId(chatRoom.getId());
+        return repository.findAllByChatRoomId(chatRoom.getId());
     }
 }

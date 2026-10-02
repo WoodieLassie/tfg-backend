@@ -11,5 +11,5 @@ public interface ChatMessageRepository extends GenericRepository<ChatMessage, Lo
     @Query(
             value = "SELECT c.* from chat_messages c WHERE c.chatroom_id = :chatRoomId",
             nativeQuery = true)
-    List<ChatMessage> findByChatRoomId(@Param("chatRoomId") Long chatRoomId);
+    List<ChatMessage> findAllByChatRoomId(@Param("chatRoomId") Long chatRoomId);
 }
