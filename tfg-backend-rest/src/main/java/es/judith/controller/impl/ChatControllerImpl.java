@@ -31,7 +31,9 @@ public class ChatControllerImpl implements ChatController {
     }
 
     @MessageMapping("/chat")
-    public void processMessage(ChatMessage chatMessage) {
+    public void processMessage(ChatMessage chatMessage) { //ChatMessageInputDTO chatMessageDTO
+        //ChatMessage chatMessageToSave = chatMessageDTO.obtainDomainObject
+        //Setear propiedades de chatMessage como en el resto de controllers
         ChatMessage chatMessageToSave = chatMessageBO.saveMessage(chatMessage);
         messagingTemplate.convertAndSendToUser(
                 chatMessageToSave.getReceiverUser().getUsername(),

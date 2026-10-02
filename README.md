@@ -3,6 +3,7 @@
 Features:
 
 - Sistema de mensajería entre amistades
+- Creo que ChatMessage va a necesitar un InputDTO? Y por ende, un DTO de lectura. De otra manera no veo como enviar un objeto User mediante el websocket
 
 Pulir:
 

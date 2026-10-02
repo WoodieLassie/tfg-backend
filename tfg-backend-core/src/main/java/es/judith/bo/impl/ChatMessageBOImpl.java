@@ -26,12 +26,14 @@ public class ChatMessageBOImpl extends GenericBOImpl<ChatMessage, Long, ChatMess
     }
 
     @Override
-    public ChatMessage saveMessage(ChatMessage chatMessage) {
+    public ChatMessage saveMessage(ChatMessage chatMessage)  { //ChatMessageInputDTO chatMessageDTO
         String chatRoomReference = chatRoomBO.getChatRoomReference(
+                //chatMessageDTO.getSenderId, chatMessageDTO.getReceiverId
                 chatMessage.getSenderUser().getId(),
                 chatMessage.getReceiverUser().getId(),
                 true).orElseThrow(BadInputException::new);
         ChatRoom chatroom = chatRoomBO.findByChatRoomReference(chatRoomReference).orElseThrow(NotExistingIdException::new);
+        //ChatMessage chatMessage = chatMessageDTO.obtainDomainObject
         chatMessage.setChatRoom(chatroom);
         repository.save(chatMessage);
         return chatMessage;
