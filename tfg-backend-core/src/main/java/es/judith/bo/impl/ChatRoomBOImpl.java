@@ -56,4 +56,9 @@ public class ChatRoomBOImpl extends GenericBOImpl<ChatRoom, Long, ChatRoomReposi
         repository.save(receiverSender);
         return chatRoomReference;
     }
+
+    @Override
+    public Optional<ChatRoom> findByChatRoomReference(String chatRoomReference) {
+        return repository.findByChatRoomReference(chatRoomReference);
+    }
 }

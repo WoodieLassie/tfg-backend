@@ -12,4 +12,8 @@ public interface ChatRoomRepository extends GenericRepository<ChatRoom, Long>, J
             value = "SELECT c.* from chat_rooms c WHERE c.sender_id = :senderId AND c.receiver_id = :recipientId",
             nativeQuery = true)
     Optional<ChatRoom> findBySenderIdAndReceiverId(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId);
+    @Query(
+            value = "SELECT c.* from chat_rooms c WHERE c.chatRoomReference = :chatRoomReference",
+            nativeQuery = true)
+    Optional<ChatRoom> findByChatRoomReference(@Param("chatRoomReference") String chatRoomReference);
 }
