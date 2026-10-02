@@ -12,3 +12,4 @@ Pulir:
 - Mover código a funciones en los servicios, para limpiar el código de los controladores
 - Sonar sin advertencias
 - Revisar los DTO para ver si hay alguna forma de simplificar algo de lo que está hecho
+- Añadir bien las anotaciones a las entidades (@NotNull, @Column, etc...)
