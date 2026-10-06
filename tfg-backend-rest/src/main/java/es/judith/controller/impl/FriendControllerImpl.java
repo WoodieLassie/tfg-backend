@@ -5,11 +5,10 @@ import es.judith.bo.FriendBO;
 import es.judith.bo.UserBO;
 import es.judith.controller.FriendController;
 import es.judith.domain.Friend;
-import es.judith.domain.User;
-import es.judith.dto.FriendDTO;
-import es.judith.dto.FriendInputDTO;
-import es.judith.dto.UserDTO;
-import es.judith.dto.UserProfileDTO;
+import es.judith.domain.user.User;
+import es.judith.dto.friend.FriendDTO;
+import es.judith.dto.friend.FriendInputDTO;
+import es.judith.dto.user.UserProfileDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
@@ -20,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 

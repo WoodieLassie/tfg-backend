@@ -3,16 +3,14 @@ package es.judith.bo.impl;
 import es.judith.bo.ChatMessageBO;
 import es.judith.bo.ChatRoomBO;
 import es.judith.dao.ChatMessageRepository;
-import es.judith.domain.ChatMessage;
-import es.judith.domain.ChatRoom;
+import es.judith.domain.chat.ChatMessage;
+import es.judith.domain.chat.ChatRoom;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional

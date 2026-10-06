@@ -1,8 +1,8 @@
 package es.judith.controller;
 
 import es.judith.domain.Comment;
-import es.judith.dto.CommentDTO;
-import es.judith.dto.CommentInputDTO;
+import es.judith.dto.comment.CommentDTO;
+import es.judith.dto.comment.CommentInputDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;

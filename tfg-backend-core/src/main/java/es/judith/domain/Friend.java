@@ -1,11 +1,11 @@
 package es.judith.domain;
 
+import es.judith.domain.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.NaturalId;
 
 import java.io.Serial;
 

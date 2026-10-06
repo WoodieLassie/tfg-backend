@@ -1,8 +1,7 @@
 package es.judith.bo;
 
 import es.judith.domain.Friend;
-import es.judith.dto.UserDTO;
-import es.judith.dto.UserProfileDTO;
+import es.judith.dto.user.UserProfileDTO;
 
 import java.util.Map;
 

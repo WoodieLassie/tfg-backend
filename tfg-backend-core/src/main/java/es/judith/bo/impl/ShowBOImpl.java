@@ -3,7 +3,8 @@ package es.judith.bo.impl;
 import es.judith.bo.ShowBO;
 import es.judith.dao.ShowRepository;
 import es.judith.domain.Show;
-import es.judith.dto.ShowDTO;
+import es.judith.dto.show.ShowDTO;
+import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +42,23 @@ public class ShowBOImpl
   }
 
   @Override
-  public ShowDTO convertToDTO(Show show) {
+  public ShowDTO convertToShowDTO(Show show) {
     ShowDTO showDTO = new ShowDTO();
+    showDTO.loadFromDomain(show);
+    if (showDTO.getImageData() != null) {
+      String characterImageDownloadURL =
+              ServletUriComponentsBuilder.fromCurrentContextPath()
+                      .path("/shows/images/")
+                      .path(String.valueOf(showDTO.getId()))
+                      .toUriString();
+      showDTO.setImageUrl(characterImageDownloadURL);
+    }
+    return showDTO;
+  }
+
+  @Override
+  public ShowNoSeasonsDTO convertToShowNoSeasonsDTO(Show show) {
+    ShowNoSeasonsDTO showDTO = new ShowNoSeasonsDTO();
     showDTO.loadFromDomain(show);
     if (showDTO.getImageData() != null) {
       String characterImageDownloadURL =

@@ -1,8 +1,12 @@
 package es.judith.bo.impl;
 
 import es.judith.bo.ReviewBO;
+import es.judith.bo.ShowBO;
 import es.judith.dao.ReviewRepository;
 import es.judith.domain.Review;
+import es.judith.domain.Show;
+import es.judith.dto.review.ReviewDTO;
+import es.judith.dto.show.ShowNoSeasonsDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +18,11 @@ public class ReviewBOImpl extends GenericBOImpl<
         Review, Long, ReviewRepository>
         implements ReviewBO {
 
-    public ReviewBOImpl(ReviewRepository repository) {
+    private final transient ShowBO showBO;
+
+    public ReviewBOImpl(ReviewRepository repository, ShowBO showBO) {
         super(repository);
+        this.showBO = showBO;
     }
 
     @Override
@@ -48,5 +55,16 @@ public class ReviewBOImpl extends GenericBOImpl<
         String totalReviewScoreTruncated = totalReviewScore.toString().substring(0,3);
         totalReviewScore = Double.valueOf(totalReviewScoreTruncated);
         return totalReviewScore;
+    }
+
+    @Override
+    public ReviewDTO convertToDTO(Review userReview) {
+        ReviewDTO convertedUserReview = new ReviewDTO();
+        ShowNoSeasonsDTO convertedShowFromReview = new ShowNoSeasonsDTO();
+        convertedUserReview.loadFromDomain(userReview);
+        Show showFromReview = showBO.findOne(userReview.getShow().getId());
+        convertedShowFromReview.loadFromDomain(showFromReview);
+        convertedUserReview.setShow(convertedShowFromReview);
+        return convertedUserReview;
     }
 }

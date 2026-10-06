@@ -1,6 +1,6 @@
 package es.judith.dao;
 
-import es.judith.domain.User;
+import es.judith.domain.user.User;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**

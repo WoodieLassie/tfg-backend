@@ -5,11 +5,11 @@ import es.judith.controller.ReviewController;
 import es.judith.domain.Review;
 import es.judith.domain.Role;
 import es.judith.domain.Show;
-import es.judith.domain.User;
-import es.judith.dto.ReviewDTO;
-import es.judith.dto.ReviewInputDTO;
-import es.judith.dto.SeasonDTO;
-import es.judith.dto.ShowDTO;
+import es.judith.domain.user.User;
+import es.judith.dto.review.ReviewDTO;
+import es.judith.dto.review.ReviewInputDTO;
+import es.judith.dto.show.ShowDTO;
+import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
@@ -54,7 +54,7 @@ public class ReviewControllerImpl implements ReviewController {
 
   @Override
   @GetMapping("/show/{showId}")
-  public ResponseEntity<HashMap<String, Double>> findAllByShowId(@PathVariable Long showId) {
+  public ResponseEntity<HashMap<String, Double>> findAverageRatingByShow(@PathVariable Long showId) {
     LOG.debug("ReviewControllerImpl: Fetching average rating of show id {}", showId);
     Double totalReviewScore = reviewBO.calculateAverageRating(showId);
     HashMap<String, Double> response = new HashMap<>();
@@ -88,17 +88,10 @@ public class ReviewControllerImpl implements ReviewController {
     if (!friendBO.checkIfFriend(currentUser.getId(), userId) && !Objects.equals(currentUser.getId(), userId)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
-    //TODO: Mover a BO
     List<Review> userReviews = reviewBO.findAllByUserId(userId);
     List<ReviewDTO> convertedUserReviews = new ArrayList<>();
     for (Review userReview : userReviews) {
-      ReviewDTO convertedUserReview = new ReviewDTO();
-      ShowDTO convertedShowFromReview = new ShowDTO();
-      convertedUserReview.loadFromDomain(userReview);
-      Show showFromReview = showBO.findOne(userReview.getShow().getId());
-      convertedShowFromReview.loadFromDomain(showFromReview);
-      convertedUserReview.setShow(convertedShowFromReview);
-      convertedUserReviews.add(convertedUserReview);
+      convertedUserReviews.add(bo.convertToDTO(userReview));
     }
     return ResponseEntity.status(HttpStatus.OK).body(convertedUserReviews);
   }

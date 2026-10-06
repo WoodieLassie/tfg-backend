@@ -4,9 +4,8 @@ import es.judith.bo.FriendBO;
 import es.judith.dao.FriendRepository;
 import es.judith.dao.UserRepository;
 import es.judith.domain.Friend;
-import es.judith.domain.User;
-import es.judith.dto.UserDTO;
-import es.judith.dto.UserProfileDTO;
+import es.judith.domain.user.User;
+import es.judith.dto.user.UserProfileDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

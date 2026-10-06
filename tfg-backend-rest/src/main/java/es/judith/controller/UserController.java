@@ -1,12 +1,10 @@
 package es.judith.controller;
 
-import es.judith.domain.User;
-import es.judith.dto.UserDTO;
-import es.judith.dto.UserInputDTO;
-import es.judith.dto.UserProfileDTO;
+import es.judith.domain.user.User;
+import es.judith.dto.user.UserDTO;
+import es.judith.dto.user.UserInputDTO;
+import es.judith.dto.user.UserProfileDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;

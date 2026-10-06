@@ -1,8 +1,6 @@
 package es.judith.bo;
 
 import es.judith.domain.Recommendation;
-import es.judith.dto.ShowDTO;
-import es.judith.dto.UserProfileDTO;
 
 import java.util.*;
 

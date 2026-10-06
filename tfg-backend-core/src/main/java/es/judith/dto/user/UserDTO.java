@@ -1,0 +1,41 @@
+package es.judith.dto.user;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import es.judith.domain.Role;
+import es.judith.domain.user.User;
+import es.judith.dto.GenericDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.io.Serial;
+
+@Schema(name = "UserDTO", description = "Data transfer object: current logged in user")
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class UserDTO extends GenericDTO<User> {
+
+  @Serial
+  private static final long serialVersionUID = 883832912345648321L;
+
+  @NotNull private Long id;
+
+  @NotNull private String email;
+
+  @NotNull private String username;
+
+  @Enumerated(EnumType.STRING)
+  @NotNull
+  private Role role;
+
+  @JsonIgnore private String password;
+
+  @JsonIgnore private byte[] imageData;
+
+  @JsonInclude(value = JsonInclude.Include.NON_NULL)
+  private String imageUrl;
+}

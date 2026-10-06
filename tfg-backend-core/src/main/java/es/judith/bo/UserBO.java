@@ -1,6 +1,6 @@
 package es.judith.bo;
 
-import es.judith.domain.User;
+import es.judith.domain.user.User;
 
 /** Define services to work with Users. */
 public interface UserBO extends GenericBO<User, Long> {

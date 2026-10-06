@@ -49,8 +49,8 @@ CREATE TABLE chat_messages (
     receiver_id BIGINT NOT NULL,
     content VARCHAR(255) NOT NULL,
     timestamp DATE NOT NULL,
-    CONSTRAINT chat_messages_fk_01 FOREIGN KEY (sender_id) REFERENCES users(id),
-    CONSTRAINT chat_messages_fk_02 FOREIGN KEY (receiver_id) REFERENCES users(id)
+    CONSTRAINT chat_messages_fk_01 FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT chat_messages_fk_02 FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE shows (

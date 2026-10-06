@@ -1,8 +1,8 @@
 package es.judith.bo.impl;
 
 import es.judith.bo.AuthBO;
-import es.judith.domain.User;
-import es.judith.domain.UserPrincipal;
+import es.judith.domain.user.User;
+import es.judith.domain.user.UserPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;

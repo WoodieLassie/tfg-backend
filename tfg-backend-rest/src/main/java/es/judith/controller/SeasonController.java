@@ -1,8 +1,8 @@
 package es.judith.controller;
 
 import es.judith.domain.Season;
-import es.judith.dto.SeasonDTO;
-import es.judith.dto.SeasonInputDTO;
+import es.judith.dto.season.SeasonDTO;
+import es.judith.dto.season.SeasonInputDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;

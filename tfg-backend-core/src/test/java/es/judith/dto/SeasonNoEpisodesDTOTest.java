@@ -1,5 +1,6 @@
 package es.judith.dto;
 
+import es.judith.dto.season.SeasonNoEpisodesDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

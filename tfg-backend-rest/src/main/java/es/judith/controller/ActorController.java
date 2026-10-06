@@ -1,8 +1,8 @@
 package es.judith.controller;
 
 import es.judith.domain.Actor;
-import es.judith.dto.ActorDTO;
-import es.judith.dto.ActorInputDTO;
+import es.judith.dto.actor.ActorDTO;
+import es.judith.dto.actor.ActorInputDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,5 +1,6 @@
 package es.judith.domain;
 
+import es.judith.domain.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.xml.bind.annotation.XmlRootElement;

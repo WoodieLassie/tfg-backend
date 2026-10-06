@@ -3,8 +3,8 @@ package es.judith.bo.impl;
 import es.judith.bo.ChatRoomBO;
 import es.judith.dao.ChatRoomRepository;
 import es.judith.dao.UserRepository;
-import es.judith.domain.ChatRoom;
-import es.judith.domain.User;
+import es.judith.domain.chat.ChatRoom;
+import es.judith.domain.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

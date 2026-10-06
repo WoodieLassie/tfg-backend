@@ -4,8 +4,9 @@ import es.judith.bo.SeasonBO;
 import es.judith.bo.ShowBO;
 import es.judith.controller.ShowController;
 import es.judith.domain.Show;
-import es.judith.dto.ShowDTO;
-import es.judith.dto.ShowInputDTO;
+import es.judith.dto.show.ShowDTO;
+import es.judith.dto.show.ShowInputDTO;
+import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
@@ -54,23 +55,23 @@ public class ShowControllerImpl implements ShowController {
           description = "OK",
           content = {@Content(schema = @Schema(implementation = ShowDTO.class))})
   @GetMapping
-  public ResponseEntity<List<ShowDTO>> findAll(
+  public ResponseEntity<List<ShowNoSeasonsDTO>> findAll(
       @Parameter @RequestParam(defaultValue = "") String name) {
     if (Objects.equals(name, "")) {
       LOG.debug("ShowControllerImpl: Fetching all results");
       List<Show> showList = bo.findAll();
-      List<ShowDTO> convertedShowList = new ArrayList<>();
+      List<ShowNoSeasonsDTO> convertedShowList = new ArrayList<>();
       for (Show show : showList) {
-        ShowDTO showDTO = bo.convertToDTO(show);
+        ShowNoSeasonsDTO showDTO = bo.convertToShowNoSeasonsDTO(show);
         convertedShowList.add(showDTO);
       }
       return ResponseEntity.ok(convertedShowList);
     }
     LOG.debug("ShowControllerImpl: Fetching all results with name {}", name);
     List<Show> showList = bo.findAllByName(name);
-    List<ShowDTO> convertedShowList = new ArrayList<>();
+    List<ShowNoSeasonsDTO> convertedShowList = new ArrayList<>();
     for (Show show : showList) {
-      ShowDTO showDTO = bo.convertToDTO(show);
+      ShowNoSeasonsDTO showDTO = bo.convertToShowNoSeasonsDTO(show);
       convertedShowList.add(showDTO);
     }
     return ResponseEntity.ok(convertedShowList);
@@ -95,7 +96,7 @@ public class ShowControllerImpl implements ShowController {
     if (show == null) {
       throw new NotFoundException();
     }
-    ShowDTO showDTO = bo.convertToDTO(show);
+    ShowDTO showDTO = bo.convertToShowDTO(show);
     return ResponseEntity.ok(showDTO);
   }
 

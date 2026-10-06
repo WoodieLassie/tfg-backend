@@ -1,6 +1,6 @@
 package es.judith.bo;
 
-import es.judith.domain.ChatMessage;
+import es.judith.domain.chat.ChatMessage;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package es.judith.bo;
 
-import es.judith.domain.ChatRoom;
-import es.judith.domain.User;
+import es.judith.domain.chat.ChatRoom;
+import es.judith.domain.user.User;
 
 import java.util.Optional;
 

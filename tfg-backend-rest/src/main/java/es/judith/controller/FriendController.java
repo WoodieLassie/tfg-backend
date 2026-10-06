@@ -1,14 +1,12 @@
 package es.judith.controller;
 
 import es.judith.domain.Friend;
-import es.judith.dto.FriendDTO;
-import es.judith.dto.FriendInputDTO;
-import es.judith.dto.UserDTO;
-import es.judith.dto.UserProfileDTO;
+import es.judith.dto.friend.FriendDTO;
+import es.judith.dto.friend.FriendInputDTO;
+import es.judith.dto.user.UserProfileDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 public interface FriendController extends Serializable {

@@ -1,0 +1,20 @@
+package es.judith.dto.comment;
+
+import es.judith.domain.Comment;
+import es.judith.dto.GenericDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.io.Serial;
+
+@Schema(name = "CommentDTO", description = "Data transfer object. Comment")
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class CommentDTO extends GenericDTO<Comment> {
+  @Serial private static final long serialVersionUID = 1808854291344091870L;
+
+  @NotNull private String text;
+  @NotNull private String username;
+}

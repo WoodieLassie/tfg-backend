@@ -1,8 +1,8 @@
 package es.judith.utils;
 
 import es.judith.domain.GenericEntity;
-import es.judith.domain.User;
-import es.judith.dto.UserDTO;
+import es.judith.domain.user.User;
+import es.judith.dto.user.UserDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

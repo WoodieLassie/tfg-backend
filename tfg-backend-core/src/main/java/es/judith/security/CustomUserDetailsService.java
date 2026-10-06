@@ -1,8 +1,8 @@
 package es.judith.security;
 
 import es.judith.dao.UserRepository;
-import es.judith.domain.User;
-import es.judith.domain.UserPrincipal;
+import es.judith.domain.user.User;
+import es.judith.domain.user.UserPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

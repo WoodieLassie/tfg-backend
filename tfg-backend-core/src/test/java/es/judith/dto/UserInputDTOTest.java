@@ -1,5 +1,7 @@
 package es.judith.dto;
 
+import es.judith.dto.user.UserDTO;
+import es.judith.dto.user.UserInputDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

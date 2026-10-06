@@ -1,8 +1,8 @@
 package es.judith.controller;
 
 import es.judith.domain.Favourite;
-import es.judith.dto.FavouriteDTO;
-import es.judith.dto.FavouriteInputDTO;
+import es.judith.dto.favourite.FavouriteDTO;
+import es.judith.dto.favourite.FavouriteInputDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;

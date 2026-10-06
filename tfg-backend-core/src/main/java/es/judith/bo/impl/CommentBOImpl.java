@@ -3,7 +3,7 @@ package es.judith.bo.impl;
 import es.judith.bo.CommentBO;
 import es.judith.dao.CommentRepository;
 import es.judith.domain.Comment;
-import es.judith.dto.CommentDTO;
+import es.judith.dto.comment.CommentDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

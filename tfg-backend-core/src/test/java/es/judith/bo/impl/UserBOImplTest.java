@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import es.judith.dao.UserRepository;
-import es.judith.domain.User;
+import es.judith.domain.user.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 

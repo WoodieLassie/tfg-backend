@@ -1,6 +1,6 @@
 package es.judith.bo;
 
-import es.judith.domain.User;
+import es.judith.domain.user.User;
 
 public interface AuthBO {
     User getCurrentUser();

@@ -1,0 +1,28 @@
+package es.judith.dto.recommendation;
+
+import es.judith.domain.Recommendation;
+import es.judith.dto.GenericDTO;
+import es.judith.dto.show.ShowDTO;
+import es.judith.dto.show.ShowNoSeasonsDTO;
+import es.judith.dto.user.UserProfileDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.io.Serial;
+
+@Schema(name = "RecommendationDTO", description = "Data transfer object: recommendation")
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class RecommendationDTO extends GenericDTO<Recommendation> {
+
+    @Serial
+    private static final long serialVersionUID = 5658787834259233213L;
+
+    @NotNull
+    private Long id;
+    @NotNull private UserProfileDTO userSender;
+    @NotNull private UserProfileDTO userReceiver;
+    @NotNull private ShowNoSeasonsDTO show;
+}

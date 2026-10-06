@@ -3,7 +3,7 @@ package es.judith.bo.impl;
 import es.judith.bo.UserBO;
 import es.judith.dao.UserRepository;
 import es.judith.domain.Role;
-import es.judith.domain.User;
+import es.judith.domain.user.User;
 import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

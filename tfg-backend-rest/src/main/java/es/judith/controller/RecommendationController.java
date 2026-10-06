@@ -1,9 +1,8 @@
 package es.judith.controller;
 
 import es.judith.domain.Recommendation;
-import es.judith.dto.RecommendationInputDTO;
+import es.judith.dto.recommendation.RecommendationInputDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.Serializable;
 import java.util.ArrayList;

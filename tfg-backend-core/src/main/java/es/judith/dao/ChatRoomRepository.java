@@ -1,6 +1,6 @@
 package es.judith.dao;
 
-import es.judith.domain.ChatRoom;
+import es.judith.domain.chat.ChatRoom;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -2,8 +2,8 @@ package es.judith.controller.impl;
 
 import es.judith.bo.ChatMessageBO;
 import es.judith.controller.ChatController;
-import es.judith.domain.ChatMessage;
-import es.judith.domain.ChatNotification;
+import es.judith.domain.chat.ChatMessage;
+import es.judith.domain.chat.ChatNotification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

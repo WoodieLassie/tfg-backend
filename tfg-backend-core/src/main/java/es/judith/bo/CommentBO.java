@@ -1,7 +1,7 @@
 package es.judith.bo;
 
 import es.judith.domain.Comment;
-import es.judith.dto.CommentDTO;
+import es.judith.dto.comment.CommentDTO;
 
 import java.util.List;
 

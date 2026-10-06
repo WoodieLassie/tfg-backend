@@ -1,15 +1,17 @@
 package es.judith.bo.impl;
 
 import es.judith.bo.RecommendationBO;
+import es.judith.bo.ShowBO;
+import es.judith.bo.UserBO;
 import es.judith.dao.RecommendationRepository;
 import es.judith.dao.ShowRepository;
 import es.judith.dao.UserRepository;
-import es.judith.domain.Friend;
 import es.judith.domain.Recommendation;
 import es.judith.domain.Show;
-import es.judith.domain.User;
-import es.judith.dto.ShowDTO;
-import es.judith.dto.UserProfileDTO;
+import es.judith.domain.user.User;
+import es.judith.dto.show.ShowDTO;
+import es.judith.dto.show.ShowNoSeasonsDTO;
+import es.judith.dto.user.UserProfileDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +21,12 @@ import java.util.*;
 @Transactional
 public class RecommendationBOImpl extends GenericBOImpl<Recommendation, Long, RecommendationRepository> implements RecommendationBO {
 
-    private final transient UserRepository userRepository;
-    private final transient ShowRepository showRepository;
-    public RecommendationBOImpl(RecommendationRepository repository, UserRepository userRepository, ShowRepository showRepository) {
+    private final transient UserBO userBO;
+    private final transient ShowBO showBO;
+    public RecommendationBOImpl(RecommendationRepository repository, UserBO userBO, ShowBO showBO) {
         super(repository);
-        this.userRepository = userRepository;
-        this.showRepository = showRepository;
+        this.userBO = userBO;
+        this.showBO = showBO;
     }
 
     @Override
@@ -74,12 +76,12 @@ public class RecommendationBOImpl extends GenericBOImpl<Recommendation, Long, Re
         ArrayList allRecommendationInfo = new ArrayList<>();
         for(Map.Entry<Long, Long> recommendation : recommendations.entrySet()){
             UserProfileDTO userDTO = new UserProfileDTO();
-            ShowDTO showDTO = new ShowDTO();
+            ShowNoSeasonsDTO showDTO = new ShowNoSeasonsDTO();
             ArrayList userAndShowInformation = new ArrayList<>();
-            Optional<User> optionalUser = userRepository.findById(recommendation.getValue());
-            Optional<Show> optionalShow = showRepository.findById(recommendation.getKey());
-            optionalUser.ifPresent(userDTO::loadFromDomain);
-            optionalShow.ifPresent(showDTO::loadFromDomain);
+            User user = userBO.findOne(recommendation.getValue());
+            Show show = showBO.findOne(recommendation.getKey());
+            userDTO.loadFromDomain(user);
+            showDTO.loadFromDomain(show);
             userAndShowInformation.add(userDTO);
             userAndShowInformation.add(showDTO);
             allRecommendationInfo.add(userAndShowInformation);

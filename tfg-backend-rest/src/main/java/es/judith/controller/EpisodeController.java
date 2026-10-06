@@ -1,9 +1,9 @@
 package es.judith.controller;
 
 import es.judith.domain.Episode;
-import es.judith.dto.EpisodeDTO;
-import es.judith.dto.EpisodeInputDTO;
-import es.judith.dto.EpisodeNoSeasonDTO;
+import es.judith.dto.episode.EpisodeDTO;
+import es.judith.dto.episode.EpisodeInputDTO;
+import es.judith.dto.episode.EpisodeNoSeasonDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
