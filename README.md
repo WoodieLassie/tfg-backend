@@ -17,3 +17,4 @@ Pulir:
 - Endpoints PATCH que permitan modificaciones parciales (si un campo no existe, hacer un "set" con la información ya existente)
 - Actualizar el proyecto para solucionar vulnerabilidades
 - Organizar los pom.xml y el application.yml (eliminar perfiles? No se usan. Hacer un application.yml global y listo)
+- CREATED endpoints return entidad

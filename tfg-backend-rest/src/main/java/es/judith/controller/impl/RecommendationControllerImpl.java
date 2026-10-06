@@ -8,6 +8,11 @@ import es.judith.domain.user.User;
 import es.judith.dto.recommendation.RecommendationInputDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.NotExistingIdException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +58,24 @@ public class RecommendationControllerImpl implements RecommendationController {
         return ResponseEntity.status(HttpStatus.OK).body(receivedRecommendations);
     }
     @PostMapping
+    @Operation(method = "POST", summary = "Send a recommendation to a user")
+    @ApiResponse(
+            responseCode = "201",
+            description = "Created",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content = @Content(schema = @Schema(hidden = true)))
+    @ApiResponse(
+            responseCode = "409",
+            description = "Conflict",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
+            responseCode = "400",
+            description = "Bad Request",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @SecurityRequirement(name = "Authorization")
     @Override
     public ResponseEntity<Recommendation> sendRecommendation(@RequestBody RecommendationInputDTO recommendationDTO) {
         User currentUser = authBO.getCurrentUser();
@@ -81,10 +104,26 @@ public class RecommendationControllerImpl implements RecommendationController {
         recommendation.setShow(recommendedShow);
         recommendation.setUserSender(currentUser);
         recommendationBO.save(recommendation);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
     @Override
+    @Operation(
+            method = "DELETE",
+            summary = "Delete a recommendation")
+    @ApiResponse(
+            responseCode = "204",
+            description = "No content",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content = @Content(schema = @Schema(hidden = true)))
+    @ApiResponse(
+            responseCode = "404",
+            description = "Not Found",
+            content = @Content(schema = @Schema(hidden = true)))
+    @SecurityRequirement(name = "Authorization")
     @DeleteMapping("/{recommendationId}")
     public ResponseEntity<Recommendation> delete(@PathVariable Long recommendationId) {
         User currentUser = authBO.getCurrentUser();

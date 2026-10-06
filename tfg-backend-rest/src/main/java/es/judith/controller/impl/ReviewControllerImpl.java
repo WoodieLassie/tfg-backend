@@ -53,6 +53,20 @@ public class ReviewControllerImpl implements ReviewController {
   }
 
   @Override
+  @Operation(
+          method = "GET",
+          summary = "Get average rating for show by show ID",
+          parameters = @Parameter(ref = "showId"))
+  @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {
+                  @Content(mediaType = "application/json", schema = @Schema(implementation = HashMap.class))
+          })
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/show/{showId}")
   public ResponseEntity<HashMap<String, Double>> findAverageRatingByShow(@PathVariable Long showId) {
     LOG.debug("ReviewControllerImpl: Fetching average rating of show id {}", showId);
@@ -74,9 +88,14 @@ public class ReviewControllerImpl implements ReviewController {
                   @Content(mediaType = "application/json", schema = @Schema(implementation = ReviewDTO.class))
           })
   @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
           responseCode = "404",
           description = "Not found",
           content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @GetMapping("/user/{userId}")
   public ResponseEntity<List<ReviewDTO>> findAllByUserId(@PathVariable Long userId) {
     User currentUser = authBO.getCurrentUser();
@@ -135,6 +154,20 @@ public class ReviewControllerImpl implements ReviewController {
   }
 
   @Override
+  @Operation(method = "DELETE", summary = "Delete a review", parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+          responseCode = "204",
+          description = "No content",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<Review> delete(@PathVariable Long id) {
     if (!bo.exists(id)) {

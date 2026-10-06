@@ -45,7 +45,6 @@ public class ShowControllerImpl implements ShowController {
     this.seasonBO = seasonBO;
   }
 
-  //TODO: ShowNoSeasonsDTO
   @Override
   @Operation(
           method = "GET",

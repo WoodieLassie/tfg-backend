@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,24 @@ public class CommentControllerImpl implements CommentController {
   }
 
   @Override
+  @Operation(method = "POST", summary = "Post a new comment")
+  @ApiResponse(
+          responseCode = "201",
+          description = "Created",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "409",
+          description = "Conflict",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Comment> add(@RequestBody CommentInputDTO commentDTO) {
     if (!commentDTO.allFieldsArePresent()) {
@@ -84,6 +103,22 @@ public class CommentControllerImpl implements CommentController {
   }
 
   @Override
+  @Operation(
+          method = "DELETE",
+          summary = "Delete a comment")
+  @ApiResponse(
+          responseCode = "204",
+          description = "No content",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not Found",
+          content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<Comment> delete(@PathVariable Long id) {
     if (!bo.exists(id)) {

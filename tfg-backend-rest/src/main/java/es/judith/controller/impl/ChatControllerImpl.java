@@ -4,6 +4,7 @@ import es.judith.bo.ChatMessageBO;
 import es.judith.controller.ChatController;
 import es.judith.domain.chat.ChatMessage;
 import es.judith.domain.chat.ChatNotification;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -16,9 +17,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/messages")
+@Tag(name = "chats")
 public class ChatControllerImpl implements ChatController {
-    private final ChatMessageBO chatMessageBO;
-    private final SimpMessagingTemplate messagingTemplate;
+    private final transient ChatMessageBO chatMessageBO;
+    private final transient SimpMessagingTemplate messagingTemplate;
 
     public ChatControllerImpl(ChatMessageBO chatMessageBO, SimpMessagingTemplate messagingTemplate) {
         this.chatMessageBO = chatMessageBO;

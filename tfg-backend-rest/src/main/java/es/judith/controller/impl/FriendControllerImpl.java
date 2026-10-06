@@ -12,6 +12,11 @@ import es.judith.dto.user.UserProfileDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,9 +67,25 @@ public class FriendControllerImpl implements FriendController {
         return ResponseEntity.status(HttpStatus.OK).body(currentReceivedRequests);
     }
 
-    //El usuario loggeado siempre será el sender
-    //POST
     @Override
+    @Operation(method = "POST", summary = "Send a friend request")
+    @ApiResponse(
+            responseCode = "201",
+            description = "Created",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content = @Content(schema = @Schema(hidden = true)))
+    @ApiResponse(
+            responseCode = "409",
+            description = "Conflict",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
+            responseCode = "400",
+            description = "Bad Request",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @SecurityRequirement(name = "Authorization")
     @PostMapping
     public ResponseEntity<Friend> sendRequest(@RequestBody FriendInputDTO friendDTO) {
         User currentUser = authBO.getCurrentUser();
@@ -92,6 +113,24 @@ public class FriendControllerImpl implements FriendController {
     }
 
     @Override
+    @Operation(method = "PATCH", summary = "Accept a friend request")
+    @ApiResponse(
+            responseCode = "204",
+            description = "No Content",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content = @Content(schema = @Schema(hidden = true)))
+    @ApiResponse(
+            responseCode = "409",
+            description = "Conflict",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
+            responseCode = "400",
+            description = "Bad Request",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @SecurityRequirement(name = "Authorization")
     @PatchMapping("/requested/{requestId}")
     public ResponseEntity<FriendDTO> acceptRequest(@PathVariable Long requestId) {
         User currentUser = authBO.getCurrentUser();
@@ -115,9 +154,23 @@ public class FriendControllerImpl implements FriendController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
-    //Servirá tanto para requests por parte del sender y el receiver, como para amistades ya aceptadas
-    //Usará checkIfRelated como check para evitar eliminaciones no autorizadas. Error 403 si no esta autorizado
     @Override
+    @Operation(
+            method = "DELETE",
+            summary = "Delete a friend or an unaccepted friend request")
+    @ApiResponse(
+            responseCode = "204",
+            description = "No content",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content = @Content(schema = @Schema(hidden = true)))
+    @ApiResponse(
+            responseCode = "404",
+            description = "Not Found",
+            content = @Content(schema = @Schema(hidden = true)))
+    @SecurityRequirement(name = "Authorization")
     @DeleteMapping("/{requestId}")
     public ResponseEntity<FriendDTO> delete(@PathVariable Long requestId) {
         User currentUser = authBO.getCurrentUser();
