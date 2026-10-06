@@ -2,7 +2,6 @@ package es.judith.dto.favourite;
 
 import es.judith.domain.Favourite;
 import es.judith.dto.GenericDTO;
-import es.judith.dto.show.ShowDTO;
 import es.judith.dto.show.ShowNoSeasonsDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

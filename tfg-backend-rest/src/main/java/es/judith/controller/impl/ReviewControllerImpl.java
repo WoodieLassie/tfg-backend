@@ -8,8 +8,6 @@ import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.review.ReviewDTO;
 import es.judith.dto.review.ReviewInputDTO;
-import es.judith.dto.show.ShowDTO;
-import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;

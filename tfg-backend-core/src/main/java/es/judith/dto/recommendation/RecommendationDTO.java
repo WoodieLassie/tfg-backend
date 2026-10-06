@@ -2,7 +2,6 @@ package es.judith.dto.recommendation;
 
 import es.judith.domain.Recommendation;
 import es.judith.dto.GenericDTO;
-import es.judith.dto.show.ShowDTO;
 import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.dto.user.UserProfileDTO;
 import io.swagger.v3.oas.annotations.media.Schema;

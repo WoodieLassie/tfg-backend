@@ -7,12 +7,11 @@ Features:
 
 Pulir:
 
-- Documentar correctamente nuevos endpoints y cambios en el sistema de seguridad en swagger
+- Crear DTOs especiales para los endpoints dificiles de documentar en Swagger
 - Añadir logs
 - Todos los endpoints GET deben estar paginados
 - Mover código a funciones en los servicios, para limpiar el código de los controladores
 - Sonar sin advertencias
-- Revisar los DTO para ver si hay alguna forma de simplificar algo de lo que está hecho
 - Añadir body a los ResponseEntity 403
 - Endpoints PATCH que permitan modificaciones parciales (si un campo no existe, hacer un "set" con la información ya existente)
 - Actualizar el proyecto para solucionar vulnerabilidades

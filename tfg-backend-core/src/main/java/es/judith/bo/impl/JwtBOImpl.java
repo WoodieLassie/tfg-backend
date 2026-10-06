@@ -51,7 +51,6 @@ public class JwtBOImpl implements JwtBO {
 
     @Override
     public String extractUsername(String token) {
-        // TODO: Al existir email y username, quizas necesite extraer ambas para el frontend
         return extractClaim(token, Claims::getSubject);
     }
 

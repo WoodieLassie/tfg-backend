@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-//TODO: Ver en el perfil del propio usuario las recomendaciones hechas y las recibidas. No se verán en el perfil de otro usuario
 public interface RecommendationRepository extends GenericRepository<Recommendation, Long>, JpaSpecificationExecutor<Recommendation> {
     @Query(
             nativeQuery = true,

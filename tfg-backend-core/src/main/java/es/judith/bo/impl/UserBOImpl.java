@@ -7,8 +7,6 @@ import es.judith.domain.user.User;
 import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,16 +25,9 @@ public class UserBOImpl
 
   private static final long serialVersionUID = -4166529873832767435L;
   private static final Logger LOG = LoggerFactory.getLogger(UserBOImpl.class);
-  private final BCryptPasswordEncoder passwordEncoder;
-    {
-      new BCryptPasswordEncoder(10);
-    }
-  private final AuthenticationManager authenticationManager;
 
-  public UserBOImpl(UserRepository repository, BCryptPasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+  public UserBOImpl(UserRepository repository) {
     super(repository);
-    this.passwordEncoder = passwordEncoder;
-    this.authenticationManager = authenticationManager;
   }
   
   @Override

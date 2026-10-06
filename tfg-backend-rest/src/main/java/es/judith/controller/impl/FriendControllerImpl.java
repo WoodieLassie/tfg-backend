@@ -32,10 +32,10 @@ import java.util.Objects;
 @Tag(name = "friends")
 public class FriendControllerImpl implements FriendController {
 
-    private final FriendBO friendBO;
-    private final AuthBO authBO;
+    private final transient FriendBO friendBO;
+    private final transient AuthBO authBO;
     private static final Logger LOG = LoggerFactory.getLogger(FriendControllerImpl.class);
-    private final UserBO userBO;
+    private final transient UserBO userBO;
 
     public FriendControllerImpl(FriendBO friendBO, AuthBO authBO, UserBO userBO) {
         this.friendBO = friendBO;

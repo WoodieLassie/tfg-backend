@@ -136,7 +136,7 @@ public class SeasonControllerImpl implements SeasonController {
     if (show == null) {
       throw new NotFoundException("Show with id " + seasonDTO.getShowId() + " does not exist");
     }
-    if (bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId())
+    if (Boolean.TRUE.equals(bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId()))
             && !Objects.equals(seasonDTO.getShowId(), season.getShow().getId())) {
       throw new AlreadyExistsException(
           "Season with number " + seasonDTO.getSeasonNum() + " already exists");

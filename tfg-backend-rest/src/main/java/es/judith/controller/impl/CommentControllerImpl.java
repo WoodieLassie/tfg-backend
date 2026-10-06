@@ -37,9 +37,9 @@ import java.util.Objects;
 public class CommentControllerImpl implements CommentController {
 
   private static final Logger LOG = LoggerFactory.getLogger(CommentControllerImpl.class);
-  private final CommentBO bo;
-  private final ShowBO showBO;
-  private final AuthBO authBO;
+  private final transient CommentBO bo;
+  private final transient ShowBO showBO;
+  private final transient AuthBO authBO;
 
   public CommentControllerImpl(CommentBO bo, ShowBO showBO, AuthBO authBO) {
     this.bo = bo;
