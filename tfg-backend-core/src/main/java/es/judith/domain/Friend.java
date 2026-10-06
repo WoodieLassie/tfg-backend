@@ -1,6 +1,7 @@
 package es.judith.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +25,7 @@ public class Friend extends GenericEntity {
     private User userReceiver;
 
     @Column(name = "request_status", nullable = false)
+    @NotNull
     private boolean requestStatus;
 
 }

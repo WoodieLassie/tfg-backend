@@ -6,6 +6,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.util.Date;
 
 @Entity
@@ -14,6 +15,8 @@ import java.util.Date;
 @Data
 @Table(name = "chat_messages")
 public class ChatMessage extends GenericEntity {
+    @Serial private static final long serialVersionUID = -4500205602852331686L;
+
     @ManyToOne
     @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.*;
 
+import java.io.Serial;
+
 @Entity
 @XmlRootElement
 @EqualsAndHashCode(callSuper = true)
@@ -14,6 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 @Table(name = "chat_rooms")
 public class ChatRoom extends GenericEntity {
+    @Serial private static final long serialVersionUID = 7651127467545150684L;
 
     @Column(name = "chatRoomReference", nullable = false, length = 100)
     @NotNull

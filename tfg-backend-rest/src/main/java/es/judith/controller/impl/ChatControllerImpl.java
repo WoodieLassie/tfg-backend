@@ -34,6 +34,7 @@ public class ChatControllerImpl implements ChatController {
     public void processMessage(ChatMessage chatMessage) { //ChatMessageInputDTO chatMessageDTO
         //ChatMessage chatMessageToSave = chatMessageDTO.obtainDomainObject
         //Setear propiedades de chatMessage como en el resto de controllers
+        //Solo posible si el usuario es una amistad. Inyectar friendBO
         ChatMessage chatMessageToSave = chatMessageBO.saveMessage(chatMessage);
         messagingTemplate.convertAndSendToUser(
                 chatMessageToSave.getReceiverUser().getUsername(),

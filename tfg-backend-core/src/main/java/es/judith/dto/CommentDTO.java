@@ -15,5 +15,5 @@ public class CommentDTO extends GenericDTO<Comment> {
   @Serial private static final long serialVersionUID = 1808854291344091870L;
 
   @NotNull private String text;
-  @NotNull private String email;
+  @NotNull private String username;
 }

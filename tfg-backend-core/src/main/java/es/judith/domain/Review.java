@@ -1,6 +1,7 @@
 package es.judith.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,6 +21,7 @@ public class Review extends GenericEntity {
   private User user;
 
   @Column(name = "rating", nullable = false)
+  @NotNull
   private Integer rating;
 
   @ManyToOne(fetch = FetchType.LAZY)

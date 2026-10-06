@@ -19,7 +19,7 @@ public class Favourite extends GenericEntity {
   @JoinColumn(name = "user_id")
   private User user;
 
-  @JoinColumn(name = "show_id", nullable = false)
   @OneToOne
+  @JoinColumn(name = "show_id", nullable = false)
   private Show show;
 }
