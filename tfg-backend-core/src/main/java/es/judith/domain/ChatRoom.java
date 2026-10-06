@@ -18,7 +18,7 @@ import java.io.Serial;
 public class ChatRoom extends GenericEntity {
     @Serial private static final long serialVersionUID = 7651127467545150684L;
 
-    @Column(name = "chatRoomReference", nullable = false, length = 100)
+    @Column(name = "chat_room_reference", nullable = false, length = 100)
     @NotNull
     private String chatRoomReference;
     @ManyToOne

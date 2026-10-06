@@ -134,7 +134,7 @@ public class FriendControllerImpl implements FriendController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
             }
         }
-        if (!friendBO.checkIfRelated(currentUser.getId(), friendRequest.getUserSender().getId())) {
+        else if (!friendBO.checkIfRelated(currentUser.getId(), friendRequest.getUserSender().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         friendBO.delete(requestId);

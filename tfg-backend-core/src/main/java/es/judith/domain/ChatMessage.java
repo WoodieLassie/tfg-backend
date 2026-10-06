@@ -18,7 +18,7 @@ public class ChatMessage extends GenericEntity {
     @Serial private static final long serialVersionUID = -4500205602852331686L;
 
     @ManyToOne
-    @JoinColumn(name = "chatroom_id")
+    @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
     @ManyToOne
     @JoinColumn(name = "sender_id")

@@ -1,5 +1,6 @@
 package es.judith.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serial;
+import java.util.List;
 import java.util.Set;
 
 /** Entity stores information related to User. */
@@ -47,7 +49,32 @@ public class User extends GenericEntity {
   @Size(max = 65535)
   private byte[] imageData;
 
-  @OneToMany(mappedBy = "userSender")
-  private Set<Friend> friends;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "userSender", cascade = CascadeType.REMOVE)
+  @JsonIgnore
+  private Set<Friend> friendsRequested;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "userReceiver", cascade = CascadeType.REMOVE)
+  @JsonIgnore
+  private Set<Friend> friendsReceived;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "userSender", cascade = CascadeType.REMOVE)
+  @JsonIgnore
+  private List<Recommendation> recommendationsSent;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "userReceiver", cascade = CascadeType.REMOVE)
+  @JsonIgnore
+  private List<Recommendation> recommendationsReceived;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+  @JsonIgnore
+  private List<Favourite> favourites;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+  @JsonIgnore
+  private List<Comment> comments;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+  @JsonIgnore
+  private List<Review> reviews;
 
 }

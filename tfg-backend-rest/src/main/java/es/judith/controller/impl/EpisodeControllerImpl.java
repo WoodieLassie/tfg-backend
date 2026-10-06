@@ -10,7 +10,6 @@ import es.judith.domain.Season;
 import es.judith.dto.EpisodeDTO;
 import es.judith.dto.EpisodeInputDTO;
 import es.judith.dto.EpisodeNoSeasonDTO;
-import es.judith.dto.EpisodeSwaggerDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;

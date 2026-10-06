@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS favourites;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS recommendations;
 DROP TABLE IF EXISTS episode_character;
 DROP TABLE IF EXISTS actor_character;
 DROP TABLE IF EXISTS actors;
@@ -9,6 +9,8 @@ DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS episodes;
 DROP TABLE IF EXISTS seasons;
 DROP TABLE IF EXISTS shows;
+DROP TABLE IF EXISTS chat_rooms;
+DROP TABLE IF EXISTS chat_messages;
 DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS users;
 
@@ -23,19 +25,32 @@ CREATE TABLE users (
 );
 
 CREATE TABLE friendships (
-  id BIGINT NOT NULL AUTO_INCREMENT,
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   sender_id BIGINT NOT NULL,
   receiver_id BIGINT NOT NULL,
   request_status BOOLEAN NOT NULL,
-  PRIMARY KEY (id, sender_id, receiver_id)
+  CONSTRAINT friendships_fk_01 FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT friendships_fk_02 FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE recommendations (
-    id BIGINT NOT NULL AUTO_INCREMENT,
+CREATE TABLE chat_rooms (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    chat_room_reference VARCHAR(100) NOT NULL,
     sender_id BIGINT NOT NULL,
     receiver_id BIGINT NOT NULL,
-    show_id BIGINT NOT NULL,
-    PRIMARY KEY (id, sender_id, receiver_id, show_id)
+    CONSTRAINT chat_rooms_fk_01 FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT chat_rooms_fk_02 FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE chat_messages (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    chat_room_id BIGINT NOT NULL,
+    sender_id BIGINT NOT NULL,
+    receiver_id BIGINT NOT NULL,
+    content VARCHAR(255) NOT NULL,
+    timestamp DATE NOT NULL,
+    CONSTRAINT chat_messages_fk_01 FOREIGN KEY (sender_id) REFERENCES users(id),
+    CONSTRAINT chat_messages_fk_02 FOREIGN KEY (receiver_id) REFERENCES users(id)
 );
 
 CREATE TABLE shows (
@@ -44,13 +59,23 @@ CREATE TABLE shows (
   description VARCHAR(100) NOT NULL
 );
 
+CREATE TABLE recommendations (
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  sender_id BIGINT NOT NULL,
+  receiver_id BIGINT NOT NULL,
+  show_id BIGINT NOT NULL,
+  CONSTRAINT recommendations_fk_01 FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT recommendations_fk_02 FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT recommendations_fk_03 FOREIGN KEY (show_id) REFERENCES shows(id) ON DELETE CASCADE
+);
+
 CREATE TABLE comments (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   text VARCHAR(255) NOT NULL,
   user_id BIGINT NOT NULL,
   show_id BIGINT NOT NULL,
-  CONSTRAINT comments_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id),
-  CONSTRAINT user_comments_fk_01 FOREIGN KEY (user_id) REFERENCES users (id)
+  CONSTRAINT comments_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id) ON DELETE CASCADE,
+  CONSTRAINT user_comments_fk_01 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE reviews (
@@ -118,5 +143,5 @@ CREATE TABLE favourites (
   user_id BIGINT NOT NULL,
   show_id BIGINT NOT NULL,
   CONSTRAINT favourites_fk_01 FOREIGN KEY (show_id) REFERENCES shows (id) ON DELETE CASCADE,
-  CONSTRAINT user_favourites_fk_01 FOREIGN KEY (user_id) REFERENCES users (id)
+  CONSTRAINT user_favourites_fk_01 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );

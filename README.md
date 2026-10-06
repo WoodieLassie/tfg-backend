@@ -18,4 +18,5 @@ Pulir:
 - Actualizar el proyecto para solucionar vulnerabilidades
 - Organizar los pom.xml y el application.yml (eliminar perfiles? No se usan. Hacer un application.yml global y listo)
 - ShowNoSeasonsDTO para RecommendationDTO, para findAll de ShowController, y para ReviewDTO
-- Revisar que los DELETE sean recursivos cuando sea necesario (user elimine friends, reviews, comments, chatrooms, chatmessages...)
+- Revisar que los DELETE sean recursivos cuando sea necesario (user elimine friends, reviews, comments, chatrooms, chatmessages...). Relaciones mal hechas?
+- Hacer las tablas en base de datos para ChatRoom y ChatMessages (POR QUE NO ESTABA ESTO HECHO ANTES?)

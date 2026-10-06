@@ -88,6 +88,7 @@ public class ReviewControllerImpl implements ReviewController {
     if (!friendBO.checkIfFriend(currentUser.getId(), userId) && !Objects.equals(currentUser.getId(), userId)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
+    //TODO: Mover a BO
     List<Review> userReviews = reviewBO.findAllByUserId(userId);
     List<ReviewDTO> convertedUserReviews = new ArrayList<>();
     for (Review userReview : userReviews) {

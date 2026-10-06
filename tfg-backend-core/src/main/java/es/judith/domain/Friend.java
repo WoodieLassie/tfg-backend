@@ -7,20 +7,21 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.NaturalId;
 
+import java.io.Serial;
+
 @Entity
 @XmlRootElement
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "friendships")
 public class Friend extends GenericEntity {
+    @Serial private static final long serialVersionUID = 3565593854101402250L;
 
-    @NaturalId
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
     private User userSender;
 
-    @NaturalId
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private User userReceiver;
 
