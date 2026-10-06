@@ -44,7 +44,15 @@ public class ShowControllerImpl implements ShowController {
     this.seasonBO = seasonBO;
   }
 
+  //TODO: ShowNoSeasonsDTO
   @Override
+  @Operation(
+          method = "GET",
+          summary = "Get all shows")
+  @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {@Content(schema = @Schema(implementation = ShowDTO.class))})
   @GetMapping
   public ResponseEntity<List<ShowDTO>> findAll(
       @Parameter @RequestParam(defaultValue = "") String name) {
@@ -69,6 +77,18 @@ public class ShowControllerImpl implements ShowController {
   }
 
   @Override
+  @Operation(
+          method = "GET",
+          summary = "Get a show by show ID",
+          parameters = @Parameter(ref = "id"))
+  @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {@Content(schema = @Schema(implementation = ShowDTO.class))})
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/{id}")
   public ResponseEntity<ShowDTO> findById(@PathVariable Long id) {
     Show show = bo.findOne(id);
@@ -82,7 +102,7 @@ public class ShowControllerImpl implements ShowController {
   @Override
   @Operation(
       method = "GET",
-      summary = "Get a show image by show identification",
+      summary = "Get a show image by show ID",
       parameters = @Parameter(ref = "id"))
   @ApiResponse(
       responseCode = "200",
@@ -103,6 +123,24 @@ public class ShowControllerImpl implements ShowController {
   }
 
   @Override
+  @Operation(method = "POST", summary = "Save a new show")
+  @ApiResponse(
+          responseCode = "201",
+          description = "Created",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "409",
+          description = "Conflict",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Show> add(@RequestBody ShowInputDTO showDTO) {
     if (!showDTO.allFieldsArePresent()) {
@@ -115,6 +153,24 @@ public class ShowControllerImpl implements ShowController {
   }
 
   @Override
+  @Operation(method = "PATCH", summary = "Edit show")
+  @ApiResponse(
+          responseCode = "204",
+          description = "No Content",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "409",
+          description = "Conflict",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Show> update(@PathVariable Long id, @RequestBody ShowInputDTO showDTO) {
     if (!showDTO.allFieldsArePresent()) {
@@ -140,6 +196,10 @@ public class ShowControllerImpl implements ShowController {
       responseCode = "204",
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
       responseCode = "404",
       description = "Not found",
@@ -170,6 +230,22 @@ public class ShowControllerImpl implements ShowController {
   }
 
   @Override
+  @Operation(
+          method = "DELETE",
+          summary = "Delete show")
+  @ApiResponse(
+          responseCode = "204",
+          description = "No content",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not Found",
+          content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<Show> delete(@PathVariable Long id) {
     if (!bo.exists(id)) {

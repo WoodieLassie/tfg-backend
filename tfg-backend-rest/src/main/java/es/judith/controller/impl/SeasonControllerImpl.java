@@ -74,6 +74,10 @@ public class SeasonControllerImpl implements SeasonController {
       description = "Created",
       content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
       responseCode = "409",
       description = "Conflict",
       content = {@Content(schema = @Schema(hidden = true))})
@@ -109,6 +113,10 @@ public class SeasonControllerImpl implements SeasonController {
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
@@ -128,9 +136,8 @@ public class SeasonControllerImpl implements SeasonController {
     if (show == null) {
       throw new NotFoundException("Show with id " + seasonDTO.getShowId() + " does not exist");
     }
-    if (Boolean.TRUE.equals(
-        bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId())
-            && !Objects.equals(seasonDTO.getShowId(), season.getShow().getId()))) {
+    if (bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId())
+            && !Objects.equals(seasonDTO.getShowId(), season.getShow().getId())) {
       throw new AlreadyExistsException(
           "Season with number " + seasonDTO.getSeasonNum() + " already exists");
     }
@@ -147,6 +154,10 @@ public class SeasonControllerImpl implements SeasonController {
       responseCode = "204",
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
       responseCode = "404",
       description = "Not found",

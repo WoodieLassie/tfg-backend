@@ -13,4 +13,9 @@ Pulir:
 - Mover código a funciones en los servicios, para limpiar el código de los controladores
 - Sonar sin advertencias
 - Revisar los DTO para ver si hay alguna forma de simplificar algo de lo que está hecho
-- Añadir bien las anotaciones a las entidades (@NotNull, @Column, etc...)
+- Añadir body a los ResponseEntity 403
+- Endpoints PATCH que permitan modificaciones parciales (si un campo no existe, hacer un "set" con la información ya existente)
+- Actualizar el proyecto para solucionar vulnerabilidades
+- Organizar los pom.xml y el application.yml (eliminar perfiles? No se usan. Hacer un application.yml global y listo)
+- ShowNoSeasonsDTO para RecommendationDTO, para findAll de ShowController, y para ReviewDTO
+- Revisar que los DELETE sean recursivos cuando sea necesario (user elimine friends, reviews, comments, chatrooms, chatmessages...)

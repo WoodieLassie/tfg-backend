@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
-@Schema(name = "UserDTO", description = "Data transfer object: user profiles")
+@Schema(name = "UserProfileDTO", description = "Data transfer object: user profiles")
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class UserProfileDTO extends GenericDTO<User> {

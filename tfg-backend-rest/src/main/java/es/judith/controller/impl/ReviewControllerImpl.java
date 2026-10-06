@@ -6,10 +6,19 @@ import es.judith.domain.Review;
 import es.judith.domain.Role;
 import es.judith.domain.Show;
 import es.judith.domain.User;
+import es.judith.dto.ReviewDTO;
 import es.judith.dto.ReviewInputDTO;
+import es.judith.dto.SeasonDTO;
+import es.judith.dto.ShowDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -53,8 +63,22 @@ public class ReviewControllerImpl implements ReviewController {
   }
 
   @Override
+  @Operation(
+          method = "GET",
+          summary = "Get all reviews from user by user ID",
+          parameters = @Parameter(ref = "userId"))
+  @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {
+                  @Content(mediaType = "application/json", schema = @Schema(implementation = ReviewDTO.class))
+          })
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @GetMapping("/user/{userId}")
-  public ResponseEntity<List<Review>> findAllByUserId(@PathVariable Long userId) {
+  public ResponseEntity<List<ReviewDTO>> findAllByUserId(@PathVariable Long userId) {
     User currentUser = authBO.getCurrentUser();
     if (userBO.findOne(userId) == null) {
       throw new NotExistingIdException(
@@ -65,10 +89,30 @@ public class ReviewControllerImpl implements ReviewController {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
     List<Review> userReviews = reviewBO.findAllByUserId(userId);
-    return ResponseEntity.status(HttpStatus.OK).body(userReviews);
+    List<ReviewDTO> convertedUserReviews = new ArrayList<>();
+    for (Review userReview : userReviews) {
+      ReviewDTO convertedUserReview = new ReviewDTO();
+      ShowDTO convertedShowFromReview = new ShowDTO();
+      convertedUserReview.loadFromDomain(userReview);
+      Show showFromReview = showBO.findOne(userReview.getShow().getId());
+      convertedShowFromReview.loadFromDomain(showFromReview);
+      convertedUserReview.setShow(convertedShowFromReview);
+      convertedUserReviews.add(convertedUserReview);
+    }
+    return ResponseEntity.status(HttpStatus.OK).body(convertedUserReviews);
   }
 
   @Override
+  @Operation(method = "POST", summary = "Save a new review")
+  @ApiResponse(
+          responseCode = "201",
+          description = "Created",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Review> add(@RequestBody ReviewInputDTO reviewDTO) {
     if (!reviewDTO.allFieldsArePresent()) {

@@ -61,14 +61,14 @@ public class SecurityConfig {
                         HttpMethod.PATCH, "/api/actors/**", "/api/characters/**", "/api/episodes/**", "/api/seasons/**", "/api/shows/**", "/api/users/promote/**")
                         .hasAuthority("ADMIN")
                 .requestMatchers(
-                        HttpMethod.PATCH, "/api/friends/**", "/api/users/image/**")
+                        HttpMethod.PATCH, "/api/friends/**", "/api/users/details/**")
                         .hasAnyAuthority("ADMIN", "USER")
                 .requestMatchers(
                         HttpMethod.DELETE,
                         "/api/actors/**", "/api/characters/**", "/api/episodes/**", "/api/images/**", "/api/seasons/**", "/api/shows/**")
                         .hasAuthority("ADMIN")
                 .requestMatchers(
-                        HttpMethod.DELETE, "/api/favourites/**", "/api/comments/**", "/api/reviews/**", "/api/friends/**", "/api/recommendations/**")
+                        HttpMethod.DELETE, "/api/favourites/**", "/api/comments/**", "/api/reviews/**", "/api/friends/**", "/api/recommendations/**", "/api/users/**")
                         .hasAnyAuthority("ADMIN", "USER")
                 .anyRequest().hasAuthority("ADMIN"))
                 .userDetailsService(userDetailsService)

@@ -14,5 +14,7 @@ import java.io.Serial;
 public class ReviewDTO extends GenericDTO<Review> {
   @Serial private static final long serialVersionUID = 1895621387307881661L;
 
+  //TODO: ShowNoSeasonsDTO
+  @NotNull private ShowDTO show;
   @NotNull private Integer rating;
 }

@@ -56,7 +56,7 @@ public class EpisodeControllerImpl implements EpisodeController {
       content = {
         @Content(
             mediaType = "application/json",
-            schema = @Schema(implementation = EpisodeSwaggerDTO.class))
+            schema = @Schema(implementation = EpisodeNoSeasonDTO.class))
       })
   @ApiResponse(
           responseCode = "404",

@@ -8,6 +8,7 @@ import es.judith.dto.UserInputDTO;
 import es.judith.dto.UserProfileDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
+import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
 import es.judith.utils.ImageUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,6 +51,16 @@ public class UserControllerImpl implements UserController {
     this.jwtBO = jwtBO;
   }
 
+  @Override
+  @Operation(method = "POST", summary = "Get user token")
+  @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = {@Content(schema = @Schema(hidden = true))})
   @PostMapping("/login")
   public ResponseEntity<Map<String, String>> login(@RequestBody UserInputDTO userInputDTO) {
     boolean areCredentialsCorrect = authBO.verifyCredentials(userInputDTO.getEmail(), userInputDTO.getPassword());
@@ -62,8 +73,9 @@ public class UserControllerImpl implements UserController {
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   }
 
+  @Override
   @PostMapping("/register")
-  @Operation(method = "POST", summary = "Save a new user")
+  @Operation(method = "POST", summary = "Register a new user")
   @ApiResponse(
           responseCode = "201",
           description = "Created",
@@ -106,9 +118,6 @@ public class UserControllerImpl implements UserController {
   public ResponseEntity<UserDTO> getLoggedUser() {
     UserDTO userDTO = new UserDTO();
     User user = authBO.getCurrentUser();
-    if (user == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    }
     userDTO.loadFromDomain(user);
     return ResponseEntity.status(HttpStatus.OK).body(userDTO);
   }
@@ -117,7 +126,11 @@ public class UserControllerImpl implements UserController {
   @ApiResponse(
           responseCode = "200",
           description = "OK",
-          content = {@Content(schema = @Schema(implementation = UserDTO.class))})
+          content = {@Content(schema = @Schema(implementation = UserProfileDTO.class))})
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not Found",
+          content = {@Content(schema = @Schema(hidden = true))})
   @GetMapping("/{userId}")
   public ResponseEntity<UserProfileDTO> getUser(@PathVariable Long userId) {
     UserProfileDTO userDTO = new UserProfileDTO();
@@ -155,15 +168,58 @@ public class UserControllerImpl implements UserController {
   @Override
   @Operation(
           method = "PATCH",
-          summary = "Edit an existing user image",
-          parameters = @Parameter(ref = "userId"))
+          summary = "Edit currently logged in user")
   @ApiResponse(
           responseCode = "204",
           description = "No content",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-          responseCode = "404",
-          description = "Not found",
+          responseCode = "409",
+          description = "Conflict",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
+  @PatchMapping("/details")
+  public ResponseEntity<User> update(@RequestBody UserInputDTO userDTO) {
+    User currentUser = authBO.getCurrentUser();
+    userDTO.setId(currentUser.getId());
+    if (userDTO.getEmail() != null) {
+      if (userBO.findByEmail(userDTO.getEmail()) != null) {
+        throw new AlreadyExistsException(
+                "User with email " + userDTO.getEmail() + " already exists"
+        );
+      }
+      currentUser.setEmail(userDTO.getEmail());
+    }
+    if (userDTO.getPassword() != null) {
+      currentUser.setPassword(authBO.encryptPassword(userDTO.getPassword()));
+    }
+    if (userDTO.getUsername() != null) {
+      if (userBO.findByUsername(userDTO.getUsername()) != null) {
+        throw new AlreadyExistsException(
+                "User with username " + userDTO.getUsername() + " already exists"
+        );
+      }
+      currentUser.setUsername(userDTO.getUsername());
+    }
+    userBO.save(currentUser);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+  }
+
+  @Override
+  @Operation(
+          method = "PATCH",
+          summary = "Edit currently logged in user image")
+  @ApiResponse(
+          responseCode = "204",
+          description = "No content",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
           content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PatchMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -187,10 +243,54 @@ public class UserControllerImpl implements UserController {
     return ResponseEntity.noContent().build();
   }
 
+  @Operation(
+          method = "PATCH",
+          summary = "Promote user to admin role")
+  @ApiResponse(
+          responseCode = "204",
+          description = "OK",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = {@Content(schema = @Schema(hidden = true))})
   @PatchMapping("/promote/{userId}")
-  public ResponseEntity<User>  promoteUser(@PathVariable Long userId) {
+  @SecurityRequirement(name = "Authorization")
+  public ResponseEntity<User> promoteUser(@PathVariable Long userId) {
     LOG.debug("UserControllerImpl: Promoting user with id {}", userId);
     userBO.promoteUser(userId);
     return ResponseEntity.noContent().build();
+  }
+
+  @DeleteMapping("/{userId}")
+  @Operation(
+          method = "DELETE",
+          summary = "Delete user")
+  @ApiResponse(
+          responseCode = "204",
+          description = "No content",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not Found",
+          content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
+  public ResponseEntity<User> delete(@PathVariable Long userId) {
+    User currentUser = authBO.getCurrentUser();
+    if (!Objects.equals(currentUser.getId(), userId) && currentUser.getRole() != Role.ADMIN) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
+    if (userBO.findOne(userId) == null) {
+      throw new NotExistingIdException(
+              "User with id " + userId + " does not exist"
+      );
+    }
+    LOG.debug("UserControllerImpl: Deleting user with id {}", userId);
+    userBO.delete(userId);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }
 }

@@ -25,6 +25,7 @@ public class UserInputDTO extends GenericDTO<User> {
 
   @NotNull private String password;
 
+  @Schema(hidden = true)
   @Enumerated(EnumType.STRING)
   @NotNull
   private Role role;
