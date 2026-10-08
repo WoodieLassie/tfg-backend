@@ -26,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +36,8 @@ import java.util.Objects;
 @Tag(name = "favourites")
 public class FavouriteControllerImpl implements FavouriteController {
 
+  @Serial
+  private static final long serialVersionUID = -7635624792960377064L;
   private static final Logger LOG = LoggerFactory.getLogger(FavouriteControllerImpl.class);
   private final transient FavouriteBO bo;
   private final transient ShowBO showBO;

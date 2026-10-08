@@ -5,6 +5,8 @@ import es.judith.controller.ChatController;
 import es.judith.domain.chat.ChatMessage;
 import es.judith.domain.chat.ChatNotification;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -13,12 +15,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serial;
 import java.util.List;
 
 @RestController
 @RequestMapping("/messages")
 @Tag(name = "chats")
 public class ChatControllerImpl implements ChatController {
+
+    @Serial
+    private static final long serialVersionUID = -5184484261232203919L;
+    private static final Logger LOG = LoggerFactory.getLogger(ChatControllerImpl.class);
     private final transient ChatMessageBO chatMessageBO;
     private final transient SimpMessagingTemplate messagingTemplate;
 
@@ -29,6 +36,7 @@ public class ChatControllerImpl implements ChatController {
 
     @GetMapping("/{senderId}/{receiverId}")
     public ResponseEntity<List<ChatMessage>> getMessages(@PathVariable Long senderId, @PathVariable Long receiverId) {
+        LOG.debug("ChatControllerImpl: Fetching all messages");
         return ResponseEntity.ok(chatMessageBO.findChatMessages(senderId, receiverId));
     }
 
@@ -37,6 +45,7 @@ public class ChatControllerImpl implements ChatController {
         //ChatMessage chatMessageToSave = chatMessageDTO.obtainDomainObject
         //Setear propiedades de chatMessage como en el resto de controllers
         //Solo posible si el usuario es una amistad. Inyectar friendBO
+        LOG.debug("ChatControllerImpl: Processing new message");
         ChatMessage chatMessageToSave = chatMessageBO.saveMessage(chatMessage);
         messagingTemplate.convertAndSendToUser(
                 chatMessageToSave.getReceiverUser().getUsername(),

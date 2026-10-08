@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serial;
 import java.util.*;
 
 @RestController
@@ -27,6 +28,8 @@ import java.util.*;
 @Tag(name = "recommendations")
 public class RecommendationControllerImpl implements RecommendationController {
 
+    @Serial
+    private static final long serialVersionUID = 3595750705695577569L;
     private final RecommendationBO recommendationBO;
     private final transient AuthBO authBO;
     private static final Logger LOG = LoggerFactory.getLogger(RecommendationControllerImpl.class);
@@ -45,6 +48,7 @@ public class RecommendationControllerImpl implements RecommendationController {
     @GetMapping("/sent")
     @Override
     public ResponseEntity<Map<Long, ArrayList>> findAllSentRecommendations() {
+        LOG.debug("RecommendationControllerImpl: Finding all sent recommendations");
         User currentUser = authBO.getCurrentUser();
         Map<Long, ArrayList> sentRecommendations = recommendationBO.getAllSentRecommendations(currentUser.getId());
         return ResponseEntity.status(HttpStatus.OK).body(sentRecommendations);
@@ -53,6 +57,7 @@ public class RecommendationControllerImpl implements RecommendationController {
     @GetMapping("/received")
     @Override
     public ResponseEntity<Map<Long, ArrayList>> findAllReceivedRecommendations() {
+        LOG.debug("RecommendationControllerImpl: Finding all received recommendations");
         User currentUser = authBO.getCurrentUser();
         Map<Long, ArrayList> receivedRecommendations = recommendationBO.getAllReceivedRecommendations(currentUser.getId());
         return ResponseEntity.status(HttpStatus.OK).body(receivedRecommendations);
@@ -103,6 +108,7 @@ public class RecommendationControllerImpl implements RecommendationController {
         recommendation.setUserReceiver(sentToUser);
         recommendation.setShow(recommendedShow);
         recommendation.setUserSender(currentUser);
+        LOG.debug("RecommendationControllerImpl: Sending new recommendation");
         recommendationBO.save(recommendation);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
@@ -136,6 +142,7 @@ public class RecommendationControllerImpl implements RecommendationController {
         if (!Objects.equals(currentUser.getId(), recommendation.getUserSender().getId()) && !Objects.equals(currentUser.getId(), recommendation.getUserReceiver().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
+        LOG.debug("RecommendationControllerImpl: Deleting recomendation with id {}", recommendationId);
         recommendationBO.delete(recommendationId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }

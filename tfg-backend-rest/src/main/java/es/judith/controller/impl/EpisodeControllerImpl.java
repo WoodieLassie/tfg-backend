@@ -26,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serial;
 import java.util.List;
 
 @RestController
@@ -33,6 +34,8 @@ import java.util.List;
 @Tag(name = "episodes")
 public class EpisodeControllerImpl implements EpisodeController {
 
+  @Serial
+  private static final long serialVersionUID = -4528614600955593247L;
   private static final Logger LOG = LoggerFactory.getLogger(EpisodeControllerImpl.class);
   private final EpisodeBO bo;
   private final CharacterBO characterBO;

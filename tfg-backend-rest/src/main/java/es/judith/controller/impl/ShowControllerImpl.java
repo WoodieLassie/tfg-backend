@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,6 +37,8 @@ import java.util.Objects;
 @Tag(name = "shows")
 public class ShowControllerImpl implements ShowController {
 
+  @Serial
+  private static final long serialVersionUID = 509791301070857618L;
   private static final Logger LOG = LoggerFactory.getLogger(ShowControllerImpl.class);
   private final ShowBO bo;
   private final SeasonBO seasonBO;

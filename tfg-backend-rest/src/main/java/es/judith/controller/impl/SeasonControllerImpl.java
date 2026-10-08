@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serial;
 import java.util.Objects;
 
 @RestController
@@ -31,6 +32,8 @@ import java.util.Objects;
 @Tag(name = "seasons")
 public class SeasonControllerImpl implements SeasonController {
 
+  @Serial
+  private static final long serialVersionUID = 8183016072300192421L;
   private static final Logger LOG = LoggerFactory.getLogger(SeasonControllerImpl.class);
   private final SeasonBO bo;
   private final ShowBO showBO;

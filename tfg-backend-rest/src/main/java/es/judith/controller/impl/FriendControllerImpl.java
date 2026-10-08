@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serial;
 import java.util.Map;
 import java.util.Objects;
 
@@ -32,6 +33,8 @@ import java.util.Objects;
 @Tag(name = "friends")
 public class FriendControllerImpl implements FriendController {
 
+    @Serial
+    private static final long serialVersionUID = 4464637391250250507L;
     private final transient FriendBO friendBO;
     private final transient AuthBO authBO;
     private static final Logger LOG = LoggerFactory.getLogger(FriendControllerImpl.class);
@@ -45,7 +48,8 @@ public class FriendControllerImpl implements FriendController {
 
     @Override
     @GetMapping
-    public ResponseEntity<Map<Long, UserProfileDTO>> findAllFriends(Long userId) {
+    public ResponseEntity<Map<Long, UserProfileDTO>> findAllFriends() {
+        LOG.debug("FriendControllerImpl: Finding all friendships");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentUserFriends = friendBO.getAllFriends(currentUserId);
         return ResponseEntity.status(HttpStatus.OK).body(currentUserFriends);
@@ -53,7 +57,8 @@ public class FriendControllerImpl implements FriendController {
 
     @Override
     @GetMapping("/requests")
-    public ResponseEntity<Map<Long, UserProfileDTO>> findAllSentRequests(Long userId) {
+    public ResponseEntity<Map<Long, UserProfileDTO>> findAllSentRequests() {
+        LOG.debug("FriendControllerImpl: Finding all sent requests");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentSentRequests = friendBO.getAllSentRequests(currentUserId);
         return ResponseEntity.status(HttpStatus.OK).body(currentSentRequests);
@@ -61,7 +66,8 @@ public class FriendControllerImpl implements FriendController {
 
     @Override
     @GetMapping("/requested")
-    public ResponseEntity<Map<Long, UserProfileDTO>> findAllReceivedRequests(Long userId) {
+    public ResponseEntity<Map<Long, UserProfileDTO>> findAllReceivedRequests() {
+        LOG.debug("FriendControllerImpl: Finding all received requests");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentReceivedRequests = friendBO.getAllReceivedRequests(currentUserId);
         return ResponseEntity.status(HttpStatus.OK).body(currentReceivedRequests);
@@ -108,6 +114,7 @@ public class FriendControllerImpl implements FriendController {
         Friend friend = friendDTO.obtainDomainObject();
         friend.setUserReceiver(requestedUser);
         friend.setUserSender(currentUser);
+        LOG.debug("FriendControllerImpl: Sending friend request");
         friendBO.save(friend);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
@@ -150,6 +157,7 @@ public class FriendControllerImpl implements FriendController {
         }
         friendRequest.setRequestStatus(true);
         friendRequest.setId(requestId);
+        LOG.debug("FriendControllerImpl: Accepting request with id {}", requestId);
         friendBO.save(friendRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
@@ -188,6 +196,7 @@ public class FriendControllerImpl implements FriendController {
         else if (!friendBO.checkIfRelated(currentUser.getId(), friendRequest.getUserSender().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
+        LOG.debug("FriendControllerImpl: Deleting friendship with id {}", requestId);
         friendBO.delete(requestId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }

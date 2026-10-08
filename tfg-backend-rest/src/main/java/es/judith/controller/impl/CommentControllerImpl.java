@@ -26,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +37,8 @@ import java.util.Objects;
 @Tag(name = "comments")
 public class CommentControllerImpl implements CommentController {
 
+  @Serial
+  private static final long serialVersionUID = -6875550298927879264L;
   private static final Logger LOG = LoggerFactory.getLogger(CommentControllerImpl.class);
   private final transient CommentBO bo;
   private final transient ShowBO showBO;

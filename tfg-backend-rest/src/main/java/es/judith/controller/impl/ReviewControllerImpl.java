@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,9 @@ import java.util.Objects;
 @RequestMapping("/api/reviews")
 @Tag(name = "reviews")
 public class ReviewControllerImpl implements ReviewController {
+
+  @Serial
+  private static final long serialVersionUID = 8386981531402903923L;
   private static final Logger LOG = LoggerFactory.getLogger(ReviewControllerImpl.class);
   private final transient ReviewBO bo;
   private final transient ShowBO showBO;
@@ -105,6 +109,7 @@ public class ReviewControllerImpl implements ReviewController {
     if (!friendBO.checkIfFriend(currentUser.getId(), userId) && !Objects.equals(currentUser.getId(), userId)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
+    LOG.debug("ReviewControllerImpl: Finding all reviews by user id {}", userId);
     List<Review> userReviews = reviewBO.findAllByUserId(userId);
     List<ReviewDTO> convertedUserReviews = new ArrayList<>();
     for (Review userReview : userReviews) {
@@ -147,6 +152,7 @@ public class ReviewControllerImpl implements ReviewController {
       bo.save(newReviewInfo);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
+    LOG.debug("ReviewControllerImpl: Saving new review");
     bo.save(newReviewInfo);
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }

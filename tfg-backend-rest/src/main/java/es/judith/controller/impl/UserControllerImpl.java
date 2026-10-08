@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -40,6 +41,8 @@ import java.util.Objects;
 
 public class UserControllerImpl implements UserController {
 
+  @Serial
+  private static final long serialVersionUID = 7518371839272971029L;
   private final UserBO userBO;
   private final transient AuthBO authBO;
   private final transient JwtBO jwtBO;
@@ -68,6 +71,7 @@ public class UserControllerImpl implements UserController {
       String token = jwtBO.generateToken(userInputDTO.getEmail());
       Map<String, String> generatedToken = new HashMap<>();
       generatedToken.put("token", token);
+      LOG.debug("UserControllerImpl: Generating new token for user");
       return ResponseEntity.status(HttpStatus.OK).body(generatedToken);
     }
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -100,6 +104,7 @@ public class UserControllerImpl implements UserController {
     }
     userInputDTO.setPassword(authBO.encryptPassword(userInputDTO.getPassword()));
     userInputDTO.setRole(Role.USER);
+    LOG.debug("UserControllerImpl: Registering new user");
     userBO.save(userInputDTO.obtainDomainObject());
     return ResponseEntity.status(HttpStatus.CREATED).body(null);
   }
@@ -119,6 +124,7 @@ public class UserControllerImpl implements UserController {
     UserDTO userDTO = new UserDTO();
     User user = authBO.getCurrentUser();
     userDTO.loadFromDomain(user);
+    LOG.debug("UserControllerImpl: Getting currently logged in user info with id {}", user.getId());
     return ResponseEntity.status(HttpStatus.OK).body(userDTO);
   }
 
@@ -138,6 +144,7 @@ public class UserControllerImpl implements UserController {
     if (user == null) {
       throw new NotFoundException();
     }
+    LOG.debug("UserControllerImpl: Getting user profile with id {}", user.getId());
     userDTO.loadFromDomain(user);
     return ResponseEntity.status(HttpStatus.OK).body(userDTO);
   }
@@ -205,6 +212,7 @@ public class UserControllerImpl implements UserController {
       }
       currentUser.setUsername(userDTO.getUsername());
     }
+    LOG.debug("UserControllerImpl: Modifying user data with user id {}", currentUser.getId());
     userBO.save(currentUser);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }

@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -37,6 +38,8 @@ import java.util.Objects;
 @Tag(name = "characters")
 public class CharacterControllerImpl implements CharacterController {
 
+  @Serial
+  private static final long serialVersionUID = 4627888723729775421L;
   private static final Logger LOG = LoggerFactory.getLogger(CharacterControllerImpl.class);
   private final CharacterBO bo;
 
