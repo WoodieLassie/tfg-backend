@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ public class CharacterBOImpl
                 Character, Long, CharacterRepository>
     implements CharacterBO {
 
+  @Serial
   private static final long serialVersionUID = 5582874611771949151L;
   private static final Logger LOG = LoggerFactory.getLogger(CharacterBOImpl.class);
 

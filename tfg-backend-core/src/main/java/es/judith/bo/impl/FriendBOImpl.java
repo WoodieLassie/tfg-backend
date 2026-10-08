@@ -1,6 +1,7 @@
 package es.judith.bo.impl;
 
 import es.judith.bo.FriendBO;
+import es.judith.bo.UserBO;
 import es.judith.dao.FriendRepository;
 import es.judith.dao.UserRepository;
 import es.judith.domain.Friend;
@@ -18,14 +19,14 @@ import java.util.*;
 @Transactional
 public class FriendBOImpl extends GenericBOImpl<Friend, Long, FriendRepository> implements FriendBO {
 
-    private final transient UserRepository userRepository;
+    private final transient UserBO userBO;
     @Serial
     private static final long serialVersionUID = 3262767552083375561L;
     private static final Logger LOG = LoggerFactory.getLogger(FriendBOImpl.class);
 
-    public FriendBOImpl(FriendRepository repository, UserRepository userRepository) {
+    public FriendBOImpl(FriendRepository repository, UserBO userBO) {
         super(repository);
-        this.userRepository = userRepository;
+        this.userBO = userBO;
     }
 
     @Transactional(readOnly = true)
@@ -109,8 +110,8 @@ public class FriendBOImpl extends GenericBOImpl<Friend, Long, FriendRepository> 
         Map<Long, UserProfileDTO> friendRequestsWithUserInfo = new HashMap<>();
         for(Map.Entry<Long, Long> friendRequest : friendRequests.entrySet()){
             UserProfileDTO userDTO = new UserProfileDTO();
-            Optional<User> optionalUser = userRepository.findById(friendRequest.getValue());
-            optionalUser.ifPresent(userDTO::loadFromDomain);
+            User user = userBO.findOne(friendRequest.getValue());
+            userDTO.loadFromDomain(user);
             friendRequestsWithUserInfo.put(friendRequest.getKey(), userDTO);
         }
         return friendRequestsWithUserInfo;

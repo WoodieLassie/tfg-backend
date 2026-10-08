@@ -13,9 +13,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class SeasonBOImpl
-    extends GenericBOImpl<Season, Long, SeasonRepository>
-    implements SeasonBO {
+public class SeasonBOImpl extends GenericBOImpl<Season, Long, SeasonRepository> implements SeasonBO {
 
   @Serial
   private static final long serialVersionUID = 7842584807701349758L;

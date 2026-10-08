@@ -15,10 +15,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class EpisodeBOImpl
-    extends GenericBOImpl<
-                Episode, Long, EpisodeRepository>
-    implements EpisodeBO {
+public class EpisodeBOImpl extends GenericBOImpl<Episode, Long, EpisodeRepository> implements EpisodeBO {
 
   @Serial
   private static final long serialVersionUID = -4565303369232666607L;

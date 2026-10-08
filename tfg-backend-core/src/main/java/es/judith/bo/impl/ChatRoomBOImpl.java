@@ -1,6 +1,7 @@
 package es.judith.bo.impl;
 
 import es.judith.bo.ChatRoomBO;
+import es.judith.bo.UserBO;
 import es.judith.dao.ChatRoomRepository;
 import es.judith.dao.UserRepository;
 import es.judith.domain.chat.ChatRoom;
@@ -17,14 +18,14 @@ import java.util.Optional;
 @Transactional
 public class ChatRoomBOImpl extends GenericBOImpl<ChatRoom, Long, ChatRoomRepository> implements ChatRoomBO {
 
-    private final transient UserRepository userRepository;
+    private final transient UserBO userBO;
     @Serial
     private static final long serialVersionUID = -8475951517591541787L;
     private static final Logger LOG = LoggerFactory.getLogger(ChatRoomBOImpl.class);
 
-    public ChatRoomBOImpl(ChatRoomRepository repository, UserRepository userRepository) {
+    public ChatRoomBOImpl(ChatRoomRepository repository, UserBO userBO) {
         super(repository);
-        this.userRepository = userRepository;
+        this.userBO = userBO;
     }
 
     @Override
@@ -34,10 +35,10 @@ public class ChatRoomBOImpl extends GenericBOImpl<ChatRoom, Long, ChatRoomReposi
                 .map(ChatRoom::getChatRoomReference)
                 .or (() -> {
                     if (createNewRoomIfNotExists) {
-                        Optional<User> userSender = userRepository.findById(senderId);
-                        Optional<User> userReceiver = userRepository.findById(receiverId);
-                        if (userSender.isPresent() && userReceiver.isPresent()) {
-                            String chatReference = createChatRoomReference(userSender.get(), userReceiver.get());
+                        User userSender = userBO.findOne(senderId);
+                        User userReceiver = userBO.findOne(receiverId);
+                        if (userSender != null && userReceiver != null) {
+                            String chatReference = createChatRoomReference(userSender, userReceiver);
                             return Optional.of(chatReference);
                         }
                     }

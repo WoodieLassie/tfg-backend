@@ -17,9 +17,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ReviewBOImpl extends GenericBOImpl<
-        Review, Long, ReviewRepository>
-        implements ReviewBO {
+public class ReviewBOImpl extends GenericBOImpl<Review, Long, ReviewRepository> implements ReviewBO {
 
     private final transient ShowBO showBO;
     @Serial

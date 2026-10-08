@@ -2,7 +2,6 @@
 
 - Creo que ChatMessage va a necesitar un InputDTO? Y por ende, un DTO de lectura. De otra manera no veo como enviar un objeto User mediante el websocket
 - Crear DTOs especiales para los endpoints dificiles de documentar en Swagger
-- Añadir logs
 - Todos los endpoints GET deben estar paginados (GenericBOImpl findAll(pageable) --> Revisar e implementar?)
 - Mover código a funciones en los servicios, para limpiar el código de los controladores
 - Sonar sin advertencias

@@ -14,9 +14,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class ActorBOImpl
-    extends GenericBOImpl<Actor, Long, ActorRepository>
-    implements ActorBO {
+public class ActorBOImpl extends GenericBOImpl<Actor, Long, ActorRepository> implements ActorBO {
 
   @Serial
   private static final long serialVersionUID = -2327250805753457217L;
