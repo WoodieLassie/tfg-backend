@@ -7,9 +7,12 @@ import es.judith.domain.Review;
 import es.judith.domain.Show;
 import es.judith.dto.review.ReviewDTO;
 import es.judith.dto.show.ShowNoSeasonsDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serial;
 import java.util.List;
 
 @Service
@@ -19,6 +22,9 @@ public class ReviewBOImpl extends GenericBOImpl<
         implements ReviewBO {
 
     private final transient ShowBO showBO;
+    @Serial
+    private static final long serialVersionUID = -8987230218466264611L;
+    private static final Logger LOG = LoggerFactory.getLogger(ReviewBOImpl.class);
 
     public ReviewBOImpl(ReviewRepository repository, ShowBO showBO) {
         super(repository);
@@ -28,24 +34,28 @@ public class ReviewBOImpl extends GenericBOImpl<
     @Override
     @Transactional(readOnly = true)
     public List<Review> findAllByShowId(Long showId) {
+        LOG.debug("ReviewBOImpl: findAllByShowId");
         return repository.findByShow(showId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Review> findAllByUserId(Long userId) {
+        LOG.debug("ReviewBOImpl: findAllByUserId");
         return repository.findByUser(userId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Review checkIfUserReviewInShow(Long showId, Long userId) {
+        LOG.debug("ReviewBOImpl: checkIfUserReviewInShow");
         return repository.checkIfUserReviewInShow(showId, userId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Double calculateAverageRating(Long showId) {
+        LOG.debug("ReviewBOImpl: calculateAverageRating");
         List<Review> reviewList = repository.findByShow(showId);
         Double totalReviewScore = 0.0;
         for (Review review : reviewList) {
@@ -59,6 +69,7 @@ public class ReviewBOImpl extends GenericBOImpl<
 
     @Override
     public ReviewDTO convertToDTO(Review userReview) {
+        LOG.debug("ReviewBOImpl: convertToDTO");
         ReviewDTO convertedUserReview = new ReviewDTO();
         ShowNoSeasonsDTO convertedShowFromReview = new ShowNoSeasonsDTO();
         convertedUserReview.loadFromDomain(userReview);

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ public class ShowBOImpl
     extends GenericBOImpl<Show, Long, ShowRepository>
     implements ShowBO {
 
+  @Serial
   private static final long serialVersionUID = -3276571133320739328L;
   private static final Logger LOG = LoggerFactory.getLogger(ShowBOImpl.class);
 
@@ -43,6 +45,7 @@ public class ShowBOImpl
 
   @Override
   public ShowDTO convertToShowDTO(Show show) {
+    LOG.debug("ShowBOImpl: convertToShowDTO");
     ShowDTO showDTO = new ShowDTO();
     showDTO.loadFromDomain(show);
     if (showDTO.getImageData() != null) {
@@ -58,6 +61,7 @@ public class ShowBOImpl
 
   @Override
   public ShowNoSeasonsDTO convertToShowNoSeasonsDTO(Show show) {
+    LOG.debug("ShowBOImpl: convertToShowNoSeasonsDTO");
     ShowNoSeasonsDTO showDTO = new ShowNoSeasonsDTO();
     showDTO.loadFromDomain(show);
     if (showDTO.getImageData() != null) {

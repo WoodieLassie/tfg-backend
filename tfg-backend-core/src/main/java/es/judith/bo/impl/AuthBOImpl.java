@@ -43,7 +43,7 @@ public class AuthBOImpl implements AuthBO, Serializable {
     }
     @Override
     public boolean verifyCredentials(String email, String password) {
-        LOG.debug("AuthBOImpl: login");
+        LOG.debug("AuthBOImpl: verifyCredentials");
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         return authentication.isAuthenticated();
     }

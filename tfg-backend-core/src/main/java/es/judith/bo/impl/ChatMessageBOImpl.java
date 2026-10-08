@@ -7,9 +7,12 @@ import es.judith.domain.chat.ChatMessage;
 import es.judith.domain.chat.ChatRoom;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serial;
 import java.util.List;
 
 @Service
@@ -17,6 +20,9 @@ import java.util.List;
 public class ChatMessageBOImpl extends GenericBOImpl<ChatMessage, Long, ChatMessageRepository> implements ChatMessageBO {
 
     private final transient ChatRoomBO chatRoomBO;
+    @Serial
+    private static final long serialVersionUID = 626399586736149127L;
+    private static final Logger LOG = LoggerFactory.getLogger(ChatMessageBOImpl.class);
 
     public ChatMessageBOImpl(ChatMessageRepository repository, ChatRoomBO chatRoomBO) {
         super(repository);
@@ -25,6 +31,7 @@ public class ChatMessageBOImpl extends GenericBOImpl<ChatMessage, Long, ChatMess
 
     @Override
     public ChatMessage saveMessage(ChatMessage chatMessage)  { //ChatMessageInputDTO chatMessageDTO
+        LOG.debug("ChatMessageBOImpl: saveMessage");
         String chatRoomReference = chatRoomBO.getChatRoomReference(
                 //chatMessageDTO.getSenderId, chatMessageDTO.getReceiverId
                 chatMessage.getSenderUser().getId(),
@@ -40,6 +47,7 @@ public class ChatMessageBOImpl extends GenericBOImpl<ChatMessage, Long, ChatMess
     @Override
     @Transactional(readOnly = true)
     public List<ChatMessage> findChatMessages(Long senderId, Long receiverId) {
+        LOG.debug("ChatMessageBOImpl: findChatMessages");
         String chatRoomReference = chatRoomBO.getChatRoomReference(senderId, receiverId, false).orElseThrow(NotExistingIdException::new);
         ChatRoom chatRoom = chatRoomBO.findByChatRoomReference(chatRoomReference).orElseThrow(NotExistingIdException::new);
         return repository.findAllByChatRoomId(chatRoom.getId());

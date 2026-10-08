@@ -5,9 +5,12 @@ import es.judith.dao.ChatRoomRepository;
 import es.judith.dao.UserRepository;
 import es.judith.domain.chat.ChatRoom;
 import es.judith.domain.user.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serial;
 import java.util.Optional;
 
 @Service
@@ -15,6 +18,9 @@ import java.util.Optional;
 public class ChatRoomBOImpl extends GenericBOImpl<ChatRoom, Long, ChatRoomRepository> implements ChatRoomBO {
 
     private final transient UserRepository userRepository;
+    @Serial
+    private static final long serialVersionUID = -8475951517591541787L;
+    private static final Logger LOG = LoggerFactory.getLogger(ChatRoomBOImpl.class);
 
     public ChatRoomBOImpl(ChatRoomRepository repository, UserRepository userRepository) {
         super(repository);
@@ -23,6 +29,7 @@ public class ChatRoomBOImpl extends GenericBOImpl<ChatRoom, Long, ChatRoomReposi
 
     @Override
     public Optional<String> getChatRoomReference(Long senderId, Long receiverId, boolean createNewRoomIfNotExists) {
+        LOG.debug("ChatRoomBOImpl: getChatRoomReference");
         return repository.findBySenderIdAndReceiverId(senderId, receiverId)
                 .map(ChatRoom::getChatRoomReference)
                 .or (() -> {
@@ -40,6 +47,7 @@ public class ChatRoomBOImpl extends GenericBOImpl<ChatRoom, Long, ChatRoomReposi
 
     @Override
     public String createChatRoomReference(User userSender, User userReceiver) {
+        LOG.debug("ChatRoomBOImpl: createChatRoomReference");
         String chatRoomReference = String.format("%s_%s", userSender.getId(), userReceiver.getId());
         ChatRoom senderReceiver = ChatRoom.builder()
                 .chatRoomReference(chatRoomReference)
@@ -59,6 +67,7 @@ public class ChatRoomBOImpl extends GenericBOImpl<ChatRoom, Long, ChatRoomReposi
 
     @Override
     public Optional<ChatRoom> findByChatRoomReference(String chatRoomReference) {
+        LOG.debug("ChatRoomBOImpl: findByChatRoomReference");
         return repository.findByChatRoomReference(chatRoomReference);
     }
 }

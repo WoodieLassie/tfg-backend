@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serial;
 import java.util.Optional;
 
 /**
@@ -23,6 +24,7 @@ public class UserBOImpl
     extends GenericBOImpl<User, Long, UserRepository>
     implements UserBO {
 
+  @Serial
   private static final long serialVersionUID = -4166529873832767435L;
   private static final Logger LOG = LoggerFactory.getLogger(UserBOImpl.class);
 

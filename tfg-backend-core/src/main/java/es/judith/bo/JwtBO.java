@@ -4,10 +4,11 @@ import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.function.Function;
 
-public interface JwtBO {
+public interface JwtBO extends Serializable {
     String generateToken(String username);
     SecretKey getEncryptionKey();
     String extractUsername(String token);

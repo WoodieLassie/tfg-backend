@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ public class EpisodeBOImpl
                 Episode, Long, EpisodeRepository>
     implements EpisodeBO {
 
+  @Serial
   private static final long serialVersionUID = -4565303369232666607L;
   private static final Logger LOG = LoggerFactory.getLogger(EpisodeBOImpl.class);
 
@@ -36,7 +38,7 @@ public class EpisodeBOImpl
   @Transactional(readOnly = true)
   @Override
   public Episode findOneWithCharacters(Long id) {
-    LOG.debug("EpisodeBOImpl: findOne");
+    LOG.debug("EpisodeBOImpl: findOneWithCharacters");
     Optional<Episode> episodeOptional = repository.findById(id);
     Episode episode = new Episode();
     if (episodeOptional.isPresent()) {

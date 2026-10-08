@@ -9,9 +9,12 @@ import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.dto.user.UserProfileDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serial;
 import java.util.*;
 
 @Service
@@ -20,6 +23,10 @@ public class RecommendationBOImpl extends GenericBOImpl<Recommendation, Long, Re
 
     private final transient UserBO userBO;
     private final transient ShowBO showBO;
+    @Serial
+    private static final long serialVersionUID = -1398957659191482019L;
+    private static final Logger LOG = LoggerFactory.getLogger(RecommendationBOImpl.class);
+
     public RecommendationBOImpl(RecommendationRepository repository, UserBO userBO, ShowBO showBO) {
         super(repository);
         this.userBO = userBO;
@@ -29,6 +36,7 @@ public class RecommendationBOImpl extends GenericBOImpl<Recommendation, Long, Re
     @Override
     @Transactional(readOnly = true)
     public Map<Long, ArrayList> getAllSentRecommendations(Long userId) {
+        LOG.debug("RecommendationBOImpl: getAllSentRecomendations");
         List<Recommendation> sentRecommendations = this.repository.getAllSentRecommendations(userId);
         Map<Long, Long> recommendationSentToIds = new HashMap<>();
         for (Recommendation sentRecommendation : sentRecommendations) {
@@ -47,6 +55,7 @@ public class RecommendationBOImpl extends GenericBOImpl<Recommendation, Long, Re
     @Override
     @Transactional(readOnly = true)
     public Map<Long, ArrayList> getAllReceivedRecommendations(Long userId) {
+        LOG.debug("RecommendationBOImpl: getAllReceivedRecomendations");
         List<Recommendation> receivedRecommendations = this.repository.getAllReceivedRecommendations(userId);
         Map<Long, Long> recommendationReceivedFromIds = new HashMap<>();
         for (Recommendation receivedRecommendation : receivedRecommendations) {
@@ -65,11 +74,13 @@ public class RecommendationBOImpl extends GenericBOImpl<Recommendation, Long, Re
     @Override
     @Transactional(readOnly = true)
     public boolean checkIfRecommended(Long senderId, Long receiverId, Long showId) {
+        LOG.debug("RecommendationBOImpl: checkIfRecommended");
         return this.repository.getBySenderAndReceiverAndShowId(senderId, receiverId, showId) != null;
     }
 
     @Override
     public ArrayList convertToDTO(Map<Long, Long> recommendations) {
+        LOG.debug("RecommendationBOImpl: convertToDTO");
         ArrayList allRecommendationInfo = new ArrayList<>();
         for(Map.Entry<Long, Long> recommendation : recommendations.entrySet()){
             UserProfileDTO userDTO = new UserProfileDTO();
