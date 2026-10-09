@@ -28,9 +28,11 @@ import es.judith.controller.UserController;
 import es.judith.domain.user.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.Serial;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -83,7 +85,7 @@ public class UserControllerImpl implements UserController {
   @ApiResponse(
           responseCode = "201",
           description = "Created",
-          content = {@Content(schema = @Schema(hidden = true))})
+          content = {@Content(schema = @Schema(implementation = User.class))})
   @ApiResponse(
           responseCode = "409",
           description = "Conflict",
@@ -105,8 +107,14 @@ public class UserControllerImpl implements UserController {
     userInputDTO.setPassword(authBO.encryptPassword(userInputDTO.getPassword()));
     userInputDTO.setRole(Role.USER);
     LOG.debug("UserControllerImpl: Registering new user");
-    userBO.save(userInputDTO.obtainDomainObject());
-    return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    User newUser = userInputDTO.obtainDomainObject();
+    userBO.save(newUser);
+    URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(newUser.getId())
+            .toUri();
+    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(newUser);
   }
 
   @Operation(method = "GET", summary = "Fetch data of currently logged in user")
@@ -236,6 +244,9 @@ public class UserControllerImpl implements UserController {
     User user = authBO.getCurrentUser();
     if (file.getSize() == 0) {
       throw new BadInputException("A file must be attached to request");
+    }
+    if (file.getSize() > 65535) {
+      throw new BadInputException("File is too big. Max size allowed: 65535kb");
     }
     if (!Objects.equals(file.getContentType(), "image/png")
             && !Objects.equals(file.getContentType(), "image/jpeg")) {

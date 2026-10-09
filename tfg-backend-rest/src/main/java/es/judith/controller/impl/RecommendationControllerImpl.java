@@ -21,8 +21,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
+import java.net.URI;
 import java.util.*;
 
 @RestController
@@ -95,7 +97,7 @@ public class RecommendationControllerImpl implements RecommendationController {
     @ApiResponse(
             responseCode = "201",
             description = "Created",
-            content = {@Content(schema = @Schema(hidden = true))})
+            content = {@Content(schema = @Schema(implementation = Recommendation.class))})
     @ApiResponse(
             responseCode = "403",
             description = "Forbidden",
@@ -138,7 +140,7 @@ public class RecommendationControllerImpl implements RecommendationController {
         recommendation.setUserSender(currentUser);
         LOG.debug("RecommendationControllerImpl: Sending new recommendation");
         recommendationBO.save(recommendation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @Override

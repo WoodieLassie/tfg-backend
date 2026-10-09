@@ -29,6 +29,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.Serial;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -163,7 +164,7 @@ public class CharacterControllerImpl implements CharacterController {
   @ApiResponse(
       responseCode = "201",
       description = "Created",
-      content = {@Content(schema = @Schema(hidden = true))})
+      content = {@Content(schema = @Schema(implementation = Character.class))})
   @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Character> add(@RequestBody CharacterInputDTO characterDTO) {
@@ -173,7 +174,12 @@ public class CharacterControllerImpl implements CharacterController {
     Character character = characterDTO.obtainDomainObject();
     LOG.debug("CharacterControllerImpl: Saving data");
     bo.save(character);
-    return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(character.getId())
+            .toUri();
+    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(character);
   }
 
   @Override

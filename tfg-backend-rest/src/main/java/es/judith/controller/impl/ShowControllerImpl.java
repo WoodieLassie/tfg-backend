@@ -27,9 +27,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.Serial;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -132,7 +134,7 @@ public class ShowControllerImpl implements ShowController {
   @ApiResponse(
           responseCode = "201",
           description = "Created",
-          content = {@Content(schema = @Schema(hidden = true))})
+          content = {@Content(schema = @Schema(implementation = Show.class))})
   @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
@@ -154,7 +156,12 @@ public class ShowControllerImpl implements ShowController {
     Show show = showDTO.obtainDomainObject();
     LOG.debug("ShowControllerImpl: Saving data");
     bo.save(show);
-    return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(show.getId())
+            .toUri();
+    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(show);
   }
 
   @Override

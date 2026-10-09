@@ -25,8 +25,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,7 +74,7 @@ public class CommentControllerImpl implements CommentController {
   @ApiResponse(
           responseCode = "201",
           description = "Created",
-          content = {@Content(schema = @Schema(hidden = true))})
+          content = {@Content(schema = @Schema(implementation = Comment.class))})
   @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
@@ -102,7 +104,12 @@ public class CommentControllerImpl implements CommentController {
     comment.setUser(user);
     LOG.debug("CommentControllerImpl: Saving data");
     bo.save(comment);
-    return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(comment.getId())
+            .toUri();
+    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(comment);
   }
 
   @Override

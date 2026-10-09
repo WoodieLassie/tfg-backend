@@ -1,5 +1,7 @@
 package es.judith.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -30,9 +32,11 @@ public class Season extends GenericEntity {
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "season", cascade = CascadeType.REMOVE)
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  @JsonManagedReference
   private List<Episode> episodes;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "show_id", nullable = false)
+  @JsonBackReference
   private Show show;
 }

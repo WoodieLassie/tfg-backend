@@ -61,7 +61,7 @@ public class SecurityConfig {
                         HttpMethod.PATCH, "/api/actors/**", "/api/characters/**", "/api/episodes/**", "/api/seasons/**", "/api/shows/**", "/api/users/promote/**")
                         .hasAuthority("ADMIN")
                 .requestMatchers(
-                        HttpMethod.PATCH, "/api/friends/**", "/api/users/details/**")
+                        HttpMethod.PATCH, "/api/friends/**", "/api/users/details/**", "/api/users/image/**")
                         .hasAnyAuthority("ADMIN", "USER")
                 .requestMatchers(
                         HttpMethod.DELETE,

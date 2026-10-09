@@ -23,8 +23,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
+import java.net.URI;
 import java.util.Objects;
 
 @RestController
@@ -75,7 +77,7 @@ public class SeasonControllerImpl implements SeasonController {
   @ApiResponse(
       responseCode = "201",
       description = "Created",
-      content = {@Content(schema = @Schema(hidden = true))})
+      content = {@Content(schema = @Schema(implementation = Season.class))})
   @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
@@ -103,7 +105,12 @@ public class SeasonControllerImpl implements SeasonController {
     season.setShow(show);
     LOG.debug("SeasonControllerImpl: Saving data");
     bo.save(season);
-    return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(season.getId())
+            .toUri();
+    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(season);
   }
 
   @Override

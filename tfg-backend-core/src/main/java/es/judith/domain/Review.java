@@ -1,5 +1,6 @@
 package es.judith.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import es.judith.domain.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -27,5 +28,6 @@ public class Review extends GenericEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "show_id")
+  @JsonBackReference
   private Show show;
 }

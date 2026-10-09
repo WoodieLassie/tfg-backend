@@ -1,6 +1,7 @@
 package es.judith.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import es.judith.domain.*;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -38,6 +39,7 @@ public class User extends GenericEntity {
   @Column(name = "password", nullable = false, length = 100)
   @NotNull
   @Size(max = 100)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
 
   @Column(name = "role", nullable = false)
@@ -48,6 +50,7 @@ public class User extends GenericEntity {
   @Lob
   @Column(name = "image_data", length = 65535)
   @Size(max = 65535)
+  @JsonIgnore
   private byte[] imageData;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "userSender", cascade = CascadeType.REMOVE)

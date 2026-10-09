@@ -1,5 +1,6 @@
 package es.judith.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -48,6 +49,7 @@ public class Actor extends GenericEntity {
           name = "actor_character",
           joinColumns = {@JoinColumn(name = "actor_id")},
           inverseJoinColumns = {@JoinColumn(name = "character_id")})
+  @JsonManagedReference
   private List<Character> characters;
 
   @Lob

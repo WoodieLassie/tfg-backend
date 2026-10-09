@@ -25,8 +25,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -81,7 +83,15 @@ public class EpisodeControllerImpl implements EpisodeController {
   @ApiResponse(
       responseCode = "201",
       description = "Created",
-      content = {@Content(schema = @Schema(hidden = true))})
+      content = {@Content(schema = @Schema(implementation = Episode.class))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Episode> add(@RequestBody EpisodeInputDTO episodeDTO) {
@@ -103,7 +113,12 @@ public class EpisodeControllerImpl implements EpisodeController {
     episode.setSeason(season);
     LOG.debug("EpisodeControllerImpl: Saving data");
     bo.save(episode);
-    return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(episode.getId())
+            .toUri();
+    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(episode);
   }
 
   @Override

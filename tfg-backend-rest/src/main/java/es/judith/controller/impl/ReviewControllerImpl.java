@@ -25,8 +25,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,7 +127,7 @@ public class ReviewControllerImpl implements ReviewController {
   @ApiResponse(
           responseCode = "201",
           description = "Created",
-          content = {@Content(schema = @Schema(hidden = true))})
+          content = {@Content(schema = @Schema(implementation = Review.class))})
   @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
@@ -151,12 +153,22 @@ public class ReviewControllerImpl implements ReviewController {
     newReviewInfo.setUser(user);
     if (existingUserReviewInShow != null) {
       newReviewInfo.setId(existingUserReviewInShow.getId());
+      URI location = ServletUriComponentsBuilder
+              .fromCurrentRequest()
+              .path("/{id}")
+              .buildAndExpand(newReviewInfo.getId())
+              .toUri();
       bo.save(newReviewInfo);
-      return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+      return ResponseEntity.status(HttpStatus.CREATED).location(location).body(newReviewInfo);
     }
+    URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(newReviewInfo.getId())
+            .toUri();
     LOG.debug("ReviewControllerImpl: Saving new review");
     bo.save(newReviewInfo);
-    return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(newReviewInfo);
   }
 
   @Override

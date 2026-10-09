@@ -1,6 +1,7 @@
 package es.judith.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -37,18 +38,22 @@ public class Show extends GenericEntity {
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "show", cascade = CascadeType.REMOVE)
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  @JsonManagedReference
   private List<Season> seasons;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "show", cascade = CascadeType.REMOVE)
   @JsonIgnore
+  @JsonManagedReference
   private List<Review> reviews;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "show", cascade = CascadeType.REMOVE)
   @JsonIgnore
+  @JsonManagedReference
   private List<Comment> comments;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "show", cascade = CascadeType.REMOVE)
   @JsonIgnore
+  @JsonManagedReference
   private List<Recommendation> recommendations;
 
 }

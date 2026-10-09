@@ -1,5 +1,6 @@
 package es.judith.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -47,5 +48,10 @@ public class Character extends GenericEntity {
   private byte[] imageData;
 
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "characters")
+  @JsonBackReference
   private List<Actor> actors;
+
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "characters")
+  @JsonBackReference
+  private List<Episode> episodes;
 }

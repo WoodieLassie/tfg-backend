@@ -25,8 +25,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
+import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 
@@ -117,9 +119,9 @@ public class FriendControllerImpl implements FriendController {
     @Override
     @Operation(method = "POST", summary = "Send a friend request")
     @ApiResponse(
-            responseCode = "201",
-            description = "Created",
-            content = {@Content(schema = @Schema(hidden = true))})
+            responseCode = "204",
+            description = "No Content",
+            content = {@Content(schema = @Schema(implementation = Friend.class))})
     @ApiResponse(
             responseCode = "403",
             description = "Forbidden",
@@ -134,30 +136,30 @@ public class FriendControllerImpl implements FriendController {
             content = {@Content(schema = @Schema(hidden = true))})
     @SecurityRequirement(name = "Authorization")
     @PostMapping
-    public ResponseEntity<Friend> sendRequest(@RequestBody FriendInputDTO friendDTO) {
+    public ResponseEntity<Friend> sendRequest(@RequestBody FriendInputDTO friendInputDTO) {
         User currentUser = authBO.getCurrentUser();
-        if (Objects.equals(currentUser.getId(), friendDTO.getUserReceiverId())) {
+        if (Objects.equals(currentUser.getId(), friendInputDTO.getUserReceiverId())) {
             throw new BadInputException(
                     "You cannot be your own friend, sorry :("
             );
         }
-        User requestedUser = userBO.findOne(friendDTO.getUserReceiverId());
+        User requestedUser = userBO.findOne(friendInputDTO.getUserReceiverId());
         if (requestedUser == null) {
             throw new NotExistingIdException(
-                    "User with id " + friendDTO.getUserReceiverId() + " does not exist"
+                    "User with id " + friendInputDTO.getUserReceiverId() + " does not exist"
             );
         }
-        if (friendBO.checkIfRelated(currentUser.getId(), friendDTO.getUserReceiverId())) {
+        if (friendBO.checkIfRelated(currentUser.getId(), friendInputDTO.getUserReceiverId())) {
             throw new AlreadyExistsException(
                     "An active request or a friendship with this user already exists"
             );
         }
-        Friend friend = friendDTO.obtainDomainObject();
+        Friend friend = friendInputDTO.obtainDomainObject();
         friend.setUserReceiver(requestedUser);
         friend.setUserSender(currentUser);
         LOG.debug("FriendControllerImpl: Sending friend request");
         friendBO.save(friend);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @Override

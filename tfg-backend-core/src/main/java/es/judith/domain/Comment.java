@@ -1,5 +1,6 @@
 package es.judith.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import es.judith.domain.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +17,8 @@ import java.io.Serial;
 @Data
 @Table(name = "comments")
 public class Comment extends GenericEntity {
-  @Serial static final long serialVersionUID = 8182917368975655915L;
+  @Serial
+  private static final long serialVersionUID = 8182917368975655915L;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
@@ -29,5 +31,6 @@ public class Comment extends GenericEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "show_id")
+  @JsonBackReference
   private Show show;
 }

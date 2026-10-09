@@ -32,8 +32,4 @@ public class SeasonDTO extends GenericDTO<Season> {
 
   @Schema(description = "Season episodes")
   private List<EpisodeNoSeasonDTO> episodes;
-
-  @Schema(description = "Season show")
-  @NotNull
-  private ShowDTO show;
 }
