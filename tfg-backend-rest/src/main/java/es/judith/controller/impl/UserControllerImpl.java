@@ -132,6 +132,14 @@ public class UserControllerImpl implements UserController {
     UserDTO userDTO = new UserDTO();
     User user = authBO.getCurrentUser();
     userDTO.loadFromDomain(user);
+    if (userDTO.getImageData() != null) {
+      String userImageDownloadUrl =
+              ServletUriComponentsBuilder.fromCurrentContextPath()
+                      .path("/api/users/image/")
+                      .path(String.valueOf(userDTO.getId()))
+                      .toUriString();
+      userDTO.setImageUrl(userImageDownloadUrl);
+    }
     LOG.debug("UserControllerImpl: Getting currently logged in user info with id {}", user.getId());
     return ResponseEntity.status(HttpStatus.OK).body(userDTO);
   }
@@ -154,6 +162,14 @@ public class UserControllerImpl implements UserController {
     }
     LOG.debug("UserControllerImpl: Getting user profile with id {}", user.getId());
     userDTO.loadFromDomain(user);
+    if (userDTO.getImageData() != null) {
+      String userImageDownloadUrl =
+              ServletUriComponentsBuilder.fromCurrentContextPath()
+                      .path("/api/users/image/")
+                      .path(String.valueOf(userDTO.getId()))
+                      .toUriString();
+      userDTO.setImageUrl(userImageDownloadUrl);
+    }
     return ResponseEntity.status(HttpStatus.OK).body(userDTO);
   }
 
