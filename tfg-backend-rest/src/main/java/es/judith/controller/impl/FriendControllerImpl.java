@@ -8,6 +8,8 @@ import es.judith.domain.Friend;
 import es.judith.domain.user.User;
 import es.judith.dto.friend.FriendDTO;
 import es.judith.dto.friend.FriendInputDTO;
+import es.judith.dto.swagger.FriendSwaggerDTO;
+import es.judith.dto.swagger.RecommendationSwaggerDTO;
 import es.judith.dto.user.UserProfileDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
@@ -47,6 +49,19 @@ public class FriendControllerImpl implements FriendController {
     }
 
     @Override
+    @Operation(
+            method = "GET",
+            summary = "Get all friendships")
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = FriendSwaggerDTO.class))
+            })
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content = @Content(schema = @Schema(hidden = true)))
     @GetMapping
     public ResponseEntity<Map<Long, UserProfileDTO>> findAllFriends() {
         LOG.debug("FriendControllerImpl: Finding all friendships");
@@ -56,6 +71,19 @@ public class FriendControllerImpl implements FriendController {
     }
 
     @Override
+    @Operation(
+            method = "GET",
+            summary = "Get all sent unaccepted friend requests")
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = FriendSwaggerDTO.class))
+            })
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content = @Content(schema = @Schema(hidden = true)))
     @GetMapping("/requests")
     public ResponseEntity<Map<Long, UserProfileDTO>> findAllSentRequests() {
         LOG.debug("FriendControllerImpl: Finding all sent requests");
@@ -65,6 +93,19 @@ public class FriendControllerImpl implements FriendController {
     }
 
     @Override
+    @Operation(
+            method = "GET",
+            summary = "Get all unaccepted received requests")
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = FriendSwaggerDTO.class))
+            })
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content = @Content(schema = @Schema(hidden = true)))
     @GetMapping("/requested")
     public ResponseEntity<Map<Long, UserProfileDTO>> findAllReceivedRequests() {
         LOG.debug("FriendControllerImpl: Finding all received requests");

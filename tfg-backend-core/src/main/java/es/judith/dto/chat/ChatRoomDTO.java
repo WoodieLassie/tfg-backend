@@ -18,6 +18,4 @@ public class ChatRoomDTO extends GenericDTO<ChatRoom> {
     private static final long serialVersionUID = -4617271513903570885L;
 
     @NotNull private String chatRoomReference;
-    @NotNull private UserProfileDTO userSender;
-    @NotNull private UserProfileDTO userReceiver;
 }

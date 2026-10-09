@@ -6,9 +6,11 @@ import es.judith.domain.Recommendation;
 import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.recommendation.RecommendationInputDTO;
+import es.judith.dto.swagger.RecommendationSwaggerDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.NotExistingIdException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,6 +48,19 @@ public class RecommendationControllerImpl implements RecommendationController {
     }
 
     @GetMapping("/sent")
+    @Operation(
+            method = "GET",
+            summary = "Get all sent recommendations")
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = RecommendationSwaggerDTO.class))
+            })
+    @ApiResponse(
+            responseCode = "404",
+            description = "Not found",
+            content = @Content(schema = @Schema(hidden = true)))
     @Override
     public ResponseEntity<Map<Long, ArrayList>> findAllSentRecommendations() {
         LOG.debug("RecommendationControllerImpl: Finding all sent recommendations");
@@ -55,6 +70,19 @@ public class RecommendationControllerImpl implements RecommendationController {
     }
 
     @GetMapping("/received")
+    @Operation(
+            method = "GET",
+            summary = "Get all received recommendations")
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = RecommendationSwaggerDTO.class))
+            })
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content = @Content(schema = @Schema(hidden = true)))
     @Override
     public ResponseEntity<Map<Long, ArrayList>> findAllReceivedRecommendations() {
         LOG.debug("RecommendationControllerImpl: Finding all received recommendations");

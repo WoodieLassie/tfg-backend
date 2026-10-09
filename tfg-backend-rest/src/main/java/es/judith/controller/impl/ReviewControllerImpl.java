@@ -8,11 +8,13 @@ import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.review.ReviewDTO;
 import es.judith.dto.review.ReviewInputDTO;
+import es.judith.dto.swagger.FriendSwaggerDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -87,7 +89,7 @@ public class ReviewControllerImpl implements ReviewController {
           responseCode = "200",
           description = "OK",
           content = {
-                  @Content(mediaType = "application/json", schema = @Schema(implementation = ReviewDTO.class))
+                  @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ReviewDTO.class)))
           })
   @ApiResponse(
           responseCode = "403",

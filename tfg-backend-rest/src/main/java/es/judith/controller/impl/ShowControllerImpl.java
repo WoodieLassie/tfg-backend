@@ -7,12 +7,14 @@ import es.judith.domain.Show;
 import es.judith.dto.show.ShowDTO;
 import es.judith.dto.show.ShowInputDTO;
 import es.judith.dto.show.ShowNoSeasonsDTO;
+import es.judith.dto.swagger.FriendSwaggerDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
 import es.judith.utils.ImageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -55,7 +57,7 @@ public class ShowControllerImpl implements ShowController {
   @ApiResponse(
           responseCode = "200",
           description = "OK",
-          content = {@Content(schema = @Schema(implementation = ShowDTO.class))})
+          content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ShowNoSeasonsDTO.class))))
   @GetMapping
   public ResponseEntity<List<ShowNoSeasonsDTO>> findAll(
       @Parameter @RequestParam(defaultValue = "") String name) {

@@ -8,7 +8,13 @@ import es.judith.domain.chat.ChatNotification;
 import es.judith.domain.user.User;
 import es.judith.dto.chat.ChatMessageDTO;
 import es.judith.dto.chat.ChatMessageInputDTO;
+import es.judith.dto.swagger.FriendSwaggerDTO;
 import es.judith.exceptions.NotExistingIdException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/messages")
 @Tag(name = "chats")
+//TODO: Autenticacion?
 public class ChatControllerImpl implements ChatController {
 
     @Serial
@@ -43,6 +50,19 @@ public class ChatControllerImpl implements ChatController {
     }
 
     @GetMapping("/{senderId}/{receiverId}")
+    @Operation(
+            method = "GET",
+            summary = "Get all messages between two users")
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ChatMessageDTO.class)))
+            })
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
+            content = @Content(schema = @Schema(hidden = true)))
     public ResponseEntity<List<ChatMessageDTO>> getMessages(@PathVariable Long senderId, @PathVariable Long receiverId) {
         LOG.debug("ChatControllerImpl: Fetching all messages");
         List<ChatMessage> chatMessages = chatMessageBO.findChatMessages(senderId, receiverId);
@@ -54,7 +74,7 @@ public class ChatControllerImpl implements ChatController {
     }
 
     @MessageMapping("/chat")
-    public void processMessage(ChatMessageInputDTO chatMessageDTO) { //ChatMessageInputDTO chatMessageDTO
+    public void processMessage(ChatMessageInputDTO chatMessageDTO) {
         User userSender = userBO.findOne(chatMessageDTO.getUserSenderId());
         User userReceiver = userBO.findOne(chatMessageDTO.getUserReceiverId());
         if (userSender == null || userReceiver == null) {
