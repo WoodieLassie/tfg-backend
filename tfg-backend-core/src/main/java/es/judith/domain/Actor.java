@@ -1,5 +1,6 @@
 package es.judith.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -55,5 +56,6 @@ public class Actor extends GenericEntity {
   @Lob
   @Column(name = "image_data", length = 65535)
   @Size(max = 65535)
+  @JsonIgnore
   private byte[] imageData;
 }

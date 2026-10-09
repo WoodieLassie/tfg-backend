@@ -34,6 +34,7 @@ public class Show extends GenericEntity {
   @Lob
   @Column(name = "image_data", length = 65535)
   @Size(max = 65535)
+  @JsonIgnore
   private byte[] imageData;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "show", cascade = CascadeType.REMOVE)
