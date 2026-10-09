@@ -3,7 +3,6 @@ package es.judith.bo.impl;
 import es.judith.bo.FriendBO;
 import es.judith.bo.UserBO;
 import es.judith.dao.FriendRepository;
-import es.judith.dao.UserRepository;
 import es.judith.domain.Friend;
 import es.judith.domain.user.User;
 import es.judith.dto.user.UserProfileDTO;

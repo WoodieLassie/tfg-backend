@@ -3,7 +3,6 @@ package es.judith.bo.impl;
 import es.judith.bo.ChatRoomBO;
 import es.judith.bo.UserBO;
 import es.judith.dao.ChatRoomRepository;
-import es.judith.dao.UserRepository;
 import es.judith.domain.chat.ChatRoom;
 import es.judith.domain.user.User;
 import org.slf4j.Logger;
