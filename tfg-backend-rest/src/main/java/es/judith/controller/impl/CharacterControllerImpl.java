@@ -199,16 +199,28 @@ public class CharacterControllerImpl implements CharacterController {
   @PatchMapping("/{id}")
   public ResponseEntity<Character> update(
       @PathVariable Long id, @RequestBody CharacterInputDTO characterDTO) {
-    if (!characterDTO.allFieldsArePresent()) {
-      throw new BadInputException("All fields must be present in request body");
-    }
     Character newCharacterInfo = characterDTO.obtainDomainObject();
     Character character = bo.findOne(id);
     if (character == null) {
       throw new NotExistingIdException("Character with id " + id + " does not exist");
     }
-    newCharacterInfo.setId(character.getId());
     LOG.debug("CharacterControllerImpl: Modifying data with id {}", id);
+    if (newCharacterInfo.getName() == null) {
+      newCharacterInfo.setName(character.getName());
+    }
+    if (newCharacterInfo.getNationality() == null) {
+      newCharacterInfo.setNationality(character.getNationality());
+    }
+    if (newCharacterInfo.getGender() == null) {
+      newCharacterInfo.setGender(character.getGender());
+    }
+    if (newCharacterInfo.getDescription() == null) {
+      newCharacterInfo.setDescription(character.getDescription());
+    }
+    if (newCharacterInfo.getAge() == null) {
+      newCharacterInfo.setAge(character.getAge());
+    }
+    newCharacterInfo.setId(character.getId());
     bo.save(newCharacterInfo);
     return ResponseEntity.noContent().build();
   }

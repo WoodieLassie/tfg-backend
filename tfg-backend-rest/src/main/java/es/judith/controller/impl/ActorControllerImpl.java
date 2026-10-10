@@ -184,20 +184,37 @@ public class ActorControllerImpl implements ActorController {
   @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Actor> update(@PathVariable Long id, @RequestBody ActorInputDTO actorDTO) {
-    if (!actorDTO.allFieldsArePresent()) {
-      throw new BadInputException("All fields must be present in request body");
-    }
     Actor newActorInfo = actorDTO.obtainDomainObject();
     Actor actor = bo.findOne(id);
     if (actor == null) {
       throw new NotExistingIdException("Actor with id " + id + " does not exist");
     }
-    List<Long> characterIds = actorDTO.getCharacterIds();
-    List<Character> charactersInfo = characterBO.findAllById(characterIds);
-    if (characterIds.size() != charactersInfo.size()) {
-      throw new NotExistingIdException("Some characters provided in request body do not exist");
+    if (actorDTO.getCharacterIds() == null) {
+      newActorInfo.setCharacters(actor.getCharacters());
     }
-    newActorInfo.setCharacters(charactersInfo);
+    else {
+      List<Long> characterIds = actorDTO.getCharacterIds();
+      List<Character> charactersInfo = characterBO.findAllById(characterIds);
+      if (characterIds.size() != charactersInfo.size()) {
+        throw new NotExistingIdException("Some characters provided in request body do not exist");
+      }
+      newActorInfo.setCharacters(charactersInfo);
+    }
+    if (newActorInfo.getName() == null) {
+      newActorInfo.setName(actor.getName());
+    }
+    if (newActorInfo.getNationality() == null) {
+      newActorInfo.setNationality(actor.getNationality());
+    }
+    if (newActorInfo.getGender() == null) {
+      newActorInfo.setGender(actor.getGender());
+    }
+    if (newActorInfo.getBirthLocation() == null) {
+      newActorInfo.setBirthLocation(actor.getBirthLocation());
+    }
+    if (newActorInfo.getBirthDate() == null) {
+      newActorInfo.setBirthDate(actor.getBirthDate());
+    }
     newActorInfo.setId(id);
     LOG.debug("ActorControllerImpl: Modifying data with id {}", id);
     bo.save(newActorInfo);

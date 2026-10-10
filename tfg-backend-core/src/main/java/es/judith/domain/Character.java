@@ -54,6 +54,7 @@ public class Character extends GenericEntity {
   private List<Actor> actors;
 
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "characters")
+  @JsonIgnore
   @JsonBackReference
   private List<Episode> episodes;
 }

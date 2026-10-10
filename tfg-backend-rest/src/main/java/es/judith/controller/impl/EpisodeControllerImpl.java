@@ -138,26 +138,43 @@ public class EpisodeControllerImpl implements EpisodeController {
   @PatchMapping("/{id}")
   public ResponseEntity<Episode> update(
       @PathVariable Long id, @RequestBody EpisodeInputDTO episodeDTO) {
-    if (!episodeDTO.allFieldsArePresent()) {
-      throw new BadInputException("All fields must be present in request body");
-    }
     Episode episode = bo.findOne(id);
     if (episode == null) {
       throw new NotExistingIdException("Episode with id " + id + " does not exist");
     }
     Episode newEpisodeInfo = episodeDTO.obtainDomainObject();
-    Season season = seasonBO.findOne(episodeDTO.getSeasonId());
-    List<Long> characterIds = episodeDTO.getCharacterIds();
-    List<Character> charactersInfo = characterBO.findAllById(characterIds);
-    if (characterIds.size() != charactersInfo.size()) {
-      throw new NotExistingIdException("Some characters provided in request body do not exist");
+
+    if (episodeDTO.getCharacterIds() == null) {
+      newEpisodeInfo.setCharacters(episode.getCharacters());
     }
-    if (season == null) {
-      throw new NotExistingIdException(
-          "Season with id " + episodeDTO.getSeasonId() + " does not exist");
+    else {
+      List<Long> characterIds = episodeDTO.getCharacterIds();
+      List<Character> charactersInfo = characterBO.findAllById(characterIds);
+      if (characterIds.size() != charactersInfo.size()) {
+        throw new NotExistingIdException("Some characters provided in request body do not exist");
+      }
+      newEpisodeInfo.setCharacters(charactersInfo);
     }
-    newEpisodeInfo.setCharacters(charactersInfo);
-    newEpisodeInfo.setSeason(season);
+    if (episodeDTO.getSeasonId() == null) {
+      newEpisodeInfo.setSeason(episode.getSeason());
+    }
+    else {
+      Season season = seasonBO.findOne(episodeDTO.getSeasonId());
+      if (season == null) {
+        throw new NotExistingIdException(
+                "Season with id " + episodeDTO.getSeasonId() + " does not exist");
+      }
+      newEpisodeInfo.setSeason(season);
+    }
+    if (newEpisodeInfo.getEpisodeNum() == null) {
+      newEpisodeInfo.setEpisodeNum(episode.getEpisodeNum());
+    }
+    if (newEpisodeInfo.getSummary() == null) {
+      newEpisodeInfo.setSummary(episode.getSummary());
+    }
+    if (newEpisodeInfo.getTitle() == null) {
+      newEpisodeInfo.setTitle(episode.getTitle());
+    }
     newEpisodeInfo.setId(id);
     LOG.debug("EpisodeControllerImpl: Modifying data with id {}", id);
     bo.save(newEpisodeInfo);

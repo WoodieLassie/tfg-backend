@@ -134,26 +134,36 @@ public class SeasonControllerImpl implements SeasonController {
   @PatchMapping("/{id}")
   public ResponseEntity<Season> update(
       @PathVariable Long id, @RequestBody SeasonInputDTO seasonDTO) {
-    if (!seasonDTO.allFieldsArePresent()) {
-      throw new BadInputException("All fields must be present in request body");
-    }
     Season newSeasonInfo = seasonDTO.obtainDomainObject();
     Season season = bo.findOne(id);
     if (season == null) {
-      throw new NotExistingIdException("Actor with id " + id + " does not exist");
+      throw new NotExistingIdException("Season with id " + id + " does not exist");
     }
-    Show show = showBO.findOne(seasonDTO.getShowId());
-    if (show == null) {
-      throw new NotFoundException("Show with id " + seasonDTO.getShowId() + " does not exist");
-    }
-    if (Boolean.TRUE.equals(bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId()))
-            && !Objects.equals(seasonDTO.getShowId(), season.getShow().getId())) {
-      throw new AlreadyExistsException(
-          "Season with number " + seasonDTO.getSeasonNum() + " already exists");
-    }
-    newSeasonInfo.setId(id);
-    newSeasonInfo.setShow(show);
     LOG.debug("SeasonControllerImpl: Modifying data with id {}", id);
+    newSeasonInfo.setId(id);
+    if (seasonDTO.getShowId() == null) {
+      newSeasonInfo.setShow(season.getShow());
+    }
+    else {
+      Show show = showBO.findOne(seasonDTO.getShowId());
+      if (show == null) {
+        throw new NotFoundException("Show with id " + seasonDTO.getShowId() + " does not exist");
+      }
+      newSeasonInfo.setShow(show);
+    }
+    if (newSeasonInfo.getSeasonNum() == null) {
+      newSeasonInfo.setSeasonNum(season.getSeasonNum());
+    }
+    else {
+      if (Boolean.TRUE.equals(bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId()))
+              && !Objects.equals(seasonDTO.getShowId(), season.getShow().getId())) {
+        throw new AlreadyExistsException(
+                "Season with number " + seasonDTO.getSeasonNum() + " already exists");
+      }
+    }
+    if (newSeasonInfo.getDescription() == null) {
+      newSeasonInfo.setDescription(season.getDescription());
+    }
     bo.save(newSeasonInfo);
     return ResponseEntity.noContent().build();
   }

@@ -201,16 +201,19 @@ public class ShowControllerImpl implements ShowController {
   @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Show> update(@PathVariable Long id, @RequestBody ShowInputDTO showDTO) {
-    if (!showDTO.allFieldsArePresent()) {
-      throw new BadInputException("All fields must be present in request body");
-    }
     Show newShowInfo = showDTO.obtainDomainObject();
     Show show = bo.findOne(id);
     if (show == null) {
       throw new NotExistingIdException("Show with id " + id + " does not exist");
     }
-    newShowInfo.setId(id);
     LOG.debug("ShowControllerImpl: Modifying data with id {}", id);
+    newShowInfo.setId(id);
+    if (newShowInfo.getName() == null) {
+      newShowInfo.setName(show.getName());
+    }
+    if (newShowInfo.getDescription() == null) {
+      newShowInfo.setDescription(show.getDescription());
+    }
     bo.save(newShowInfo);
     return ResponseEntity.noContent().build();
   }
