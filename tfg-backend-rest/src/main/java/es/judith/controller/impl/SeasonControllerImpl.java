@@ -92,6 +92,9 @@ public class SeasonControllerImpl implements SeasonController {
     if (!seasonDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
+    if (bo.checkForIllegalStrings(seasonDTO.getDescription(), 100)) {
+      throw new BadInputException("Season description cannot be greater than 100 characters");
+    }
     if (Boolean.TRUE.equals(
         bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId()))) {
       throw new AlreadyExistsException(
@@ -134,12 +137,14 @@ public class SeasonControllerImpl implements SeasonController {
   @PatchMapping("/{id}")
   public ResponseEntity<Season> update(
       @PathVariable Long id, @RequestBody SeasonInputDTO seasonDTO) {
+    if (bo.checkForIllegalStrings(seasonDTO.getDescription(), 100)) {
+      throw new BadInputException("Season description cannot be greater than 100 characters");
+    }
     Season newSeasonInfo = seasonDTO.obtainDomainObject();
     Season season = bo.findOne(id);
     if (season == null) {
       throw new NotExistingIdException("Season with id " + id + " does not exist");
     }
-    LOG.debug("SeasonControllerImpl: Modifying data with id {}", id);
     newSeasonInfo.setId(id);
     if (seasonDTO.getShowId() == null) {
       newSeasonInfo.setShow(season.getShow());
@@ -164,6 +169,7 @@ public class SeasonControllerImpl implements SeasonController {
     if (newSeasonInfo.getDescription() == null) {
       newSeasonInfo.setDescription(season.getDescription());
     }
+    LOG.debug("SeasonControllerImpl: Modifying data with id {}", id);
     bo.save(newSeasonInfo);
     return ResponseEntity.noContent().build();
   }

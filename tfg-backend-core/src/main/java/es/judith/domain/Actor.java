@@ -26,7 +26,7 @@ public class Actor extends GenericEntity {
   @Size(max = 100)
   private String name;
 
-  @Column(name = "birth_date", nullable = false)
+  @Column(name = "birth_date", nullable = false, length = 100)
   @NotNull
   private Date birthDate;
 

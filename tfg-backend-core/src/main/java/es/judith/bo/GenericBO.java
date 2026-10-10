@@ -112,4 +112,6 @@ public interface GenericBO<
 
   /** Deletes all entities managed by the repository. */
   void deleteAll();
+
+  boolean checkForIllegalStrings(String string, Integer maxLength);
 }

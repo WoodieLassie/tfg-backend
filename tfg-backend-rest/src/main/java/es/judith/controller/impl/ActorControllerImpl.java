@@ -151,6 +151,21 @@ public class ActorControllerImpl implements ActorController {
     if (!actorDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
+    if (bo.checkForIllegalStrings(actorDTO.getName(), 100)) {
+      throw new BadInputException("Actor name cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(actorDTO.getNationality(), 100)) {
+      throw new BadInputException("Actor nationality cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(actorDTO.getGender(), 100)) {
+      throw new BadInputException("Actor gender cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(actorDTO.getBirthLocation(), 100)) {
+      throw new BadInputException("Actor birth location cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(actorDTO.getBirthDate().toString(), 100)) {
+      throw new BadInputException("Actor birth date cannot be greater than 100 characters");
+    }
     Actor actor = actorDTO.obtainDomainObject();
     List<Long> characterIds = actorDTO.getCharacterIds();
     List<Character> charactersInfo = characterBO.findAllById(characterIds);
@@ -184,6 +199,21 @@ public class ActorControllerImpl implements ActorController {
   @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Actor> update(@PathVariable Long id, @RequestBody ActorInputDTO actorDTO) {
+    if (bo.checkForIllegalStrings(actorDTO.getName(), 100)) {
+      throw new BadInputException("Actor name cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(actorDTO.getNationality(), 100)) {
+      throw new BadInputException("Actor nationality cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(actorDTO.getGender(), 100)) {
+      throw new BadInputException("Actor gender cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(actorDTO.getBirthLocation(), 100)) {
+      throw new BadInputException("Actor birth location cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(actorDTO.getBirthDate().toString(), 100)) {
+      throw new BadInputException("Actor birth date cannot be greater than 100 characters");
+    }
     Actor newActorInfo = actorDTO.obtainDomainObject();
     Actor actor = bo.findOne(id);
     if (actor == null) {

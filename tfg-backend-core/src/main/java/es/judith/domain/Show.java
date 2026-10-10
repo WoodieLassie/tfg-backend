@@ -22,7 +22,7 @@ public class Show extends GenericEntity {
   @Serial
   private static final long serialVersionUID = 7575277469267296146L;
 
-  @Column(name = "name", nullable = false)
+  @Column(name = "name", nullable = false, length = 100)
   @NotNull
   private String name;
 

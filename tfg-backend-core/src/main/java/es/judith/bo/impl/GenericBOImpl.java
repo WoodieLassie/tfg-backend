@@ -4,6 +4,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -173,4 +175,13 @@ public class GenericBOImpl<T extends GenericEntity, I extends Serializable, R ex
     repository.deleteAll();
   }
 
+  @Override
+  public boolean checkForIllegalStrings(String string, Integer maxLength) {
+    Pattern regex = Pattern.compile("[^A-Za-z0-9]");
+    Matcher matcher = regex.matcher(string);
+    if (matcher.find()) {
+      return true;
+    }
+    return string.length() > maxLength;
+  }
 }

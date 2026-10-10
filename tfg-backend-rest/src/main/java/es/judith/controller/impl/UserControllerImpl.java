@@ -90,24 +90,33 @@ public class UserControllerImpl implements UserController {
           responseCode = "409",
           description = "Conflict",
           content = {@Content(schema = @Schema(hidden = true))})
-  public ResponseEntity<User> register(@RequestBody UserInputDTO userInputDTO) {
-    if (!userInputDTO.allFieldsArePresent()) {
+  public ResponseEntity<User> register(@RequestBody UserInputDTO userDTO) {
+    if (!userDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
-    User dbUser = userBO.findByEmail(userInputDTO.getEmail());
+    if (userBO.checkForIllegalStrings(userDTO.getUsername(), 100)) {
+      throw new BadInputException("Username length cannot be greater than 100 characters");
+    }
+    if (userBO.checkForIllegalStrings(userDTO.getEmail(), 100)) {
+      throw new BadInputException("Email length cannot be greater than 100 characters");
+    }
+    if (userBO.checkForIllegalStrings(userDTO.getPassword(), 100)) {
+      throw new BadInputException("Password length cannot be greater than 100 characters");
+    }
+    User dbUser = userBO.findByEmail(userDTO.getEmail());
     if (dbUser != null) {
       throw new AlreadyExistsException(
-              "User with email " + userInputDTO.getEmail() + " already exists");
+              "User with email " + userDTO.getEmail() + " already exists");
     }
-    dbUser = userBO.findByUsername(userInputDTO.getUsername());
+    dbUser = userBO.findByUsername(userDTO.getUsername());
     if (dbUser != null) {
       throw new AlreadyExistsException(
-              "User with username " + userInputDTO.getUsername() + " already exists");
+              "User with username " + userDTO.getUsername() + " already exists");
     }
-    userInputDTO.setPassword(authBO.encryptPassword(userInputDTO.getPassword()));
-    userInputDTO.setRole(Role.USER);
+    userDTO.setPassword(authBO.encryptPassword(userDTO.getPassword()));
+    userDTO.setRole(Role.USER);
     LOG.debug("UserControllerImpl: Registering new user");
-    User newUser = userInputDTO.obtainDomainObject();
+    User newUser = userDTO.obtainDomainObject();
     userBO.save(newUser);
     URI location = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -218,6 +227,9 @@ public class UserControllerImpl implements UserController {
     User currentUser = authBO.getCurrentUser();
     userDTO.setId(currentUser.getId());
     if (userDTO.getEmail() != null) {
+      if (userBO.checkForIllegalStrings(userDTO.getEmail(), 100)) {
+        throw new BadInputException("Email length cannot be greater than 100 characters");
+      }
       if (userBO.findByEmail(userDTO.getEmail()) != null) {
         throw new AlreadyExistsException(
                 "User with email " + userDTO.getEmail() + " already exists"
@@ -226,9 +238,15 @@ public class UserControllerImpl implements UserController {
       currentUser.setEmail(userDTO.getEmail());
     }
     if (userDTO.getPassword() != null) {
+      if (userBO.checkForIllegalStrings(userDTO.getPassword(), 100)) {
+        throw new BadInputException("Password length cannot be greater than 100 characters");
+      }
       currentUser.setPassword(authBO.encryptPassword(userDTO.getPassword()));
     }
     if (userDTO.getUsername() != null) {
+      if (userBO.checkForIllegalStrings(userDTO.getUsername(), 100)) {
+        throw new BadInputException("Username length cannot be greater than 100 characters");
+      }
       if (userBO.findByUsername(userDTO.getUsername()) != null) {
         throw new AlreadyExistsException(
                 "User with username " + userDTO.getUsername() + " already exists"

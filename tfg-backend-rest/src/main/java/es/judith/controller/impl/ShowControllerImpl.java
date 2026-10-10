@@ -7,7 +7,6 @@ import es.judith.domain.Show;
 import es.judith.dto.show.ShowDTO;
 import es.judith.dto.show.ShowInputDTO;
 import es.judith.dto.show.ShowNoSeasonsDTO;
-import es.judith.dto.swagger.FriendSwaggerDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
@@ -169,6 +168,12 @@ public class ShowControllerImpl implements ShowController {
     if (!showDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
+    if (bo.checkForIllegalStrings(showDTO.getName(), 100)) {
+      throw new BadInputException("Show name cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(showDTO.getDescription(), 100)) {
+      throw new BadInputException("Show description cannot be greater than 100 characters");
+    }
     Show show = showDTO.obtainDomainObject();
     LOG.debug("ShowControllerImpl: Saving data");
     bo.save(show);
@@ -201,12 +206,17 @@ public class ShowControllerImpl implements ShowController {
   @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Show> update(@PathVariable Long id, @RequestBody ShowInputDTO showDTO) {
+    if (bo.checkForIllegalStrings(showDTO.getName(), 100)) {
+      throw new BadInputException("Show name cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(showDTO.getDescription(), 100)) {
+      throw new BadInputException("Show description cannot be greater than 100 characters");
+    }
     Show newShowInfo = showDTO.obtainDomainObject();
     Show show = bo.findOne(id);
     if (show == null) {
       throw new NotExistingIdException("Show with id " + id + " does not exist");
     }
-    LOG.debug("ShowControllerImpl: Modifying data with id {}", id);
     newShowInfo.setId(id);
     if (newShowInfo.getName() == null) {
       newShowInfo.setName(show.getName());
@@ -214,6 +224,7 @@ public class ShowControllerImpl implements ShowController {
     if (newShowInfo.getDescription() == null) {
       newShowInfo.setDescription(show.getDescription());
     }
+    LOG.debug("ShowControllerImpl: Modifying data with id {}", id);
     bo.save(newShowInfo);
     return ResponseEntity.noContent().build();
   }

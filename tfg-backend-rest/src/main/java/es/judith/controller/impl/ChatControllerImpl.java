@@ -8,7 +8,6 @@ import es.judith.domain.chat.ChatNotification;
 import es.judith.domain.user.User;
 import es.judith.dto.chat.ChatMessageDTO;
 import es.judith.dto.chat.ChatMessageInputDTO;
-import es.judith.dto.swagger.FriendSwaggerDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -78,6 +77,9 @@ public class ChatControllerImpl implements ChatController {
     public void processMessage(ChatMessageInputDTO chatMessageDTO) {
         if (!chatMessageDTO.allFieldsArePresent()) {
             throw new BadInputException("All fields must be present in request body");
+        }
+        if (chatMessageBO.checkForIllegalStrings(chatMessageDTO.getContent(), 255)) {
+            throw new BadInputException("Message content cannot be greater than 255 characters");
         }
         User userSender = userBO.findOne(chatMessageDTO.getUserSenderId());
         User userReceiver = userBO.findOne(chatMessageDTO.getUserReceiverId());

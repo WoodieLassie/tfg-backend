@@ -98,6 +98,12 @@ public class EpisodeControllerImpl implements EpisodeController {
     if (!episodeDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
+    if (bo.checkForIllegalStrings(episodeDTO.getTitle(), 100)) {
+      throw new BadInputException("Episode title cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(episodeDTO.getSummary(), 100)) {
+      throw new BadInputException("Episode summary cannot be greater than 100 characters");
+    }
     Episode episode = episodeDTO.obtainDomainObject();
     Season season = seasonBO.findOne(episodeDTO.getSeasonId());
     List<Long> characterIds = episodeDTO.getCharacterIds();
@@ -141,6 +147,12 @@ public class EpisodeControllerImpl implements EpisodeController {
     Episode episode = bo.findOne(id);
     if (episode == null) {
       throw new NotExistingIdException("Episode with id " + id + " does not exist");
+    }
+    if (bo.checkForIllegalStrings(episodeDTO.getTitle(), 100)) {
+      throw new BadInputException("Episode title cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(episodeDTO.getSummary(), 100)) {
+      throw new BadInputException("Episode summary cannot be greater than 100 characters");
     }
     Episode newEpisodeInfo = episodeDTO.obtainDomainObject();
 

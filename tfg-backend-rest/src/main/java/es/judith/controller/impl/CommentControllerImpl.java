@@ -93,6 +93,9 @@ public class CommentControllerImpl implements CommentController {
     if (!commentDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
+    if (bo.checkForIllegalStrings(commentDTO.getText(), 255)) {
+      throw new BadInputException("Comment content cannot be greater than 255 characters");
+    }
     Show show = showBO.findOne(commentDTO.getShowId());
     if (show == null) {
       throw new NotExistingIdException(

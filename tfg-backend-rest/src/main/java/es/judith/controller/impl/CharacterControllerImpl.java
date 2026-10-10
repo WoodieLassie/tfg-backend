@@ -171,6 +171,18 @@ public class CharacterControllerImpl implements CharacterController {
     if (!characterDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
+    if (bo.checkForIllegalStrings(characterDTO.getName(), 100)) {
+      throw new BadInputException("Character name cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(characterDTO.getNationality(), 100)) {
+      throw new BadInputException("Character nationality cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(characterDTO.getGender(), 100)) {
+      throw new BadInputException("Character gender cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(characterDTO.getDescription(), 100)) {
+      throw new BadInputException("Character description cannot be greater than 100 characters");
+    }
     Character character = characterDTO.obtainDomainObject();
     LOG.debug("CharacterControllerImpl: Saving data");
     bo.save(character);
@@ -199,6 +211,18 @@ public class CharacterControllerImpl implements CharacterController {
   @PatchMapping("/{id}")
   public ResponseEntity<Character> update(
       @PathVariable Long id, @RequestBody CharacterInputDTO characterDTO) {
+    if (bo.checkForIllegalStrings(characterDTO.getName(), 100)) {
+      throw new BadInputException("Character name cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(characterDTO.getNationality(), 100)) {
+      throw new BadInputException("Character nationality cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(characterDTO.getGender(), 100)) {
+      throw new BadInputException("Character gender cannot be greater than 100 characters");
+    }
+    if (bo.checkForIllegalStrings(characterDTO.getDescription(), 100)) {
+      throw new BadInputException("Character description cannot be greater than 100 characters");
+    }
     Character newCharacterInfo = characterDTO.obtainDomainObject();
     Character character = bo.findOne(id);
     if (character == null) {
