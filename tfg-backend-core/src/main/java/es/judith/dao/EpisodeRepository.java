@@ -12,11 +12,6 @@ import java.util.Optional;
 public interface EpisodeRepository
     extends GenericRepository<Episode, Long>,
         JpaSpecificationExecutor<Episode> {
-  @Query("SELECT e FROM Episode e " + "LEFT JOIN FETCH e.season s " + "WHERE s.id = :showId")
-  List<Episode> findAllBySeason(@Param("showId") Long showId);
-
-  @Query("SELECT e FROM Episode e " + "WHERE e.id IN :ids")
-  List<Episode> findAllById(List<Long> ids);
 
   @Query(
       "SELECT e FROM Episode e "
@@ -27,13 +22,9 @@ public interface EpisodeRepository
   @Query(
       "SELECT e FROM Episode e "
           + "LEFT JOIN FETCH e.season s "
-          + "WHERE (:seasonId IS NULL OR e.season.id = :seasonId) "
-          + "AND LOWER(e.title) LIKE LOWER(CONCAT('%', :title, '%')) "
-          + "AND (:episodeNum IS NULL OR e.episodeNum = :episodeNum)")
-  List<Episode> findBySeasonIdAndTitleAndEpisodeNum(
-      @Param("seasonId") Long seasonId,
-      @Param("title") String title,
-      @Param("episodeNum") Integer episodeNum);
+          + "WHERE LOWER(e.title) LIKE LOWER(CONCAT('%', :title, '%')) ")
+  List<Episode> findByTitle(
+      @Param("title") String title);
 
   // Hace fetch de los actores de cada personaje en una query aparte para evitar
   // MultipleBagFetchException

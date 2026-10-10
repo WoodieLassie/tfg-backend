@@ -27,9 +27,9 @@ public class EpisodeBOImpl extends GenericBOImpl<Episode, Long, EpisodeRepositor
 
   @Transactional(readOnly = true)
   @Override
-  public List<Episode> findAllSortedAndPaged(Long seasonId, String title, Integer episodeNum) {
-    LOG.debug("EpisodeBOImpl: findAllSortedAndPaged");
-    return repository.findBySeasonIdAndTitleAndEpisodeNum(seasonId, title, episodeNum);
+  public List<Episode> findAllByTitle(String title) {
+    LOG.debug("EpisodeBOImpl: findAllByTitle");
+    return repository.findByTitle(title);
   }
 
   @Transactional(readOnly = true)
