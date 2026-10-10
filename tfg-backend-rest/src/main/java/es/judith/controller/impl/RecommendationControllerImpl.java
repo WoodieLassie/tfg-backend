@@ -8,6 +8,7 @@ import es.judith.domain.user.User;
 import es.judith.dto.recommendation.RecommendationInputDTO;
 import es.judith.dto.swagger.RecommendationSwaggerDTO;
 import es.judith.exceptions.AlreadyExistsException;
+import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -113,6 +114,9 @@ public class RecommendationControllerImpl implements RecommendationController {
     @SecurityRequirement(name = "Authorization")
     @Override
     public ResponseEntity<Recommendation> sendRecommendation(@RequestBody RecommendationInputDTO recommendationDTO) {
+        if (!recommendationDTO.allFieldsArePresent()) {
+            throw new BadInputException("All fields must be present in request body");
+        }
         User currentUser = authBO.getCurrentUser();
         User sentToUser = userBO.findOne(recommendationDTO.getUserReceiverId());
         Show recommendedShow = showBO.findOne(recommendationDTO.getShowId());

@@ -137,6 +137,9 @@ public class FriendControllerImpl implements FriendController {
     @SecurityRequirement(name = "Authorization")
     @PostMapping
     public ResponseEntity<Friend> sendRequest(@RequestBody FriendInputDTO friendInputDTO) {
+        if (!friendInputDTO.allFieldsArePresent()) {
+            throw new BadInputException("All fields must be present in request body");
+        }
         User currentUser = authBO.getCurrentUser();
         if (Objects.equals(currentUser.getId(), friendInputDTO.getUserReceiverId())) {
             throw new BadInputException(

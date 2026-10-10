@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.minidev.json.annotate.JsonIgnore;
 
+import java.util.Objects;
+import java.util.stream.Stream;
+
 @Schema(name = "FriendInputDTO", description = "Data transfer object for input: friend")
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -16,4 +19,8 @@ public class FriendInputDTO extends GenericDTO<Friend> {
     @JsonIgnore private Long userSenderId;
     @NotNull private Long userReceiverId;
     @JsonIgnore private boolean requestStatus;
+
+    public boolean allFieldsArePresent() {
+        return Stream.of(this.userReceiverId).allMatch(Objects::nonNull);
+    }
 }
