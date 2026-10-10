@@ -7,6 +7,7 @@ import es.judith.domain.Actor;
 import es.judith.domain.Character;
 import es.judith.dto.actor.ActorDTO;
 import es.judith.dto.actor.ActorInputDTO;
+import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
@@ -21,6 +22,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +65,11 @@ public class ActorControllerImpl implements ActorController {
             array = @ArraySchema(schema = @Schema(implementation = ActorDTO.class)))
       })
   @GetMapping
-  public ResponseEntity<List<ActorDTO>> findAll() {
+  public ResponseEntity<Page<ActorDTO>> findAll(
+          @Parameter @RequestParam(defaultValue = "0") Integer page,
+          @Parameter @RequestParam(defaultValue = "20") Integer size,
+          Pageable pageable) {
+    //TODO: Permitir búsqueda por nombre como en show. Añadir AQUI el check (findAll sin argumentos si string es "", si no, pues eso. Ajustar LOG tambien)
     LOG.debug("ActorControllerImpl: Fetching all results");
     List<Actor> actors = bo.findAll();
     List<ActorDTO> convertedActors = new ArrayList<>();
@@ -78,7 +86,9 @@ public class ActorControllerImpl implements ActorController {
       }
       convertedActors.add(actorDTO);
     }
-    return ResponseEntity.ok(convertedActors);
+    int pageEnd = Math.min((page + size), convertedActors.size());
+    Page<ActorDTO> pagedConvertedActors = new PageImpl<>(convertedActors.subList(page, pageEnd), pageable, convertedActors.size());
+    return ResponseEntity.ok(pagedConvertedActors);
   }
 
   @Override

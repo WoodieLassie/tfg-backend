@@ -10,10 +10,12 @@ import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.comment.CommentDTO;
 import es.judith.dto.comment.CommentInputDTO;
+import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,6 +24,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,10 +68,16 @@ public class CommentControllerImpl implements CommentController {
             array = @ArraySchema(schema = @Schema(implementation = CommentDTO.class)))
       })
   @GetMapping("/{showId}")
-  public ResponseEntity<List<CommentDTO>> findAll(@PathVariable Long showId) {
+  public ResponseEntity<Page<CommentDTO>> findAll(
+          @PathVariable Long showId,
+          @Parameter @RequestParam(defaultValue = "0") Integer page,
+          @Parameter @RequestParam(defaultValue = "20") Integer size,
+          Pageable pageable) {
     LOG.debug("Fetching results with user id {}", showId);
     List<CommentDTO> commentList = bo.findAllByShowIdWithUser(showId);
-    return ResponseEntity.ok(commentList);
+    int pageEnd = Math.min((page + size), commentList.size());
+    Page<CommentDTO> pagedCommentList = new PageImpl<>(commentList.subList(page, pageEnd), pageable, commentList.size());
+    return ResponseEntity.ok(pagedCommentList);
   }
 
   @Override

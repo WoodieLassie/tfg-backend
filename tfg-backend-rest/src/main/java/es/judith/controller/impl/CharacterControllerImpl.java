@@ -6,6 +6,7 @@ import es.judith.domain.Character;
 import es.judith.dto.actor.ActorNoCharacterDTO;
 import es.judith.dto.character.CharacterDTO;
 import es.judith.dto.character.CharacterInputDTO;
+import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
@@ -20,6 +21,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +63,11 @@ public class CharacterControllerImpl implements CharacterController {
             array = @ArraySchema(schema = @Schema(implementation = CharacterDTO.class)))
       })
   @GetMapping
-  public ResponseEntity<List<CharacterDTO>> findAll() {
+  public ResponseEntity<Page<CharacterDTO>> findAll(
+          @Parameter @RequestParam(defaultValue = "0") Integer page,
+          @Parameter @RequestParam(defaultValue = "20") Integer size,
+          Pageable pageable) {
+    //TODO: Permitir búsqueda por nombre como en show. Añadir AQUI el check (findAll sin argumentos si string es "", si no, pues eso. Ajustar LOG tambien)
     LOG.debug("CharacterControllerImpl: Fetching all results");
     List<Character> characterList = bo.findAll();
     List<CharacterDTO> convertedCharacterList = new ArrayList<>();
@@ -86,7 +94,9 @@ public class CharacterControllerImpl implements CharacterController {
       }
       convertedCharacterList.add(characterDTO);
     }
-    return ResponseEntity.ok(convertedCharacterList);
+    int pageEnd = Math.min((page + size), convertedCharacterList.size());
+    Page<CharacterDTO> pagedConvertedCharacterList = new PageImpl<>(convertedCharacterList.subList(page, pageEnd), pageable, convertedCharacterList.size());
+    return ResponseEntity.ok(pagedConvertedCharacterList);
   }
 
   @Override

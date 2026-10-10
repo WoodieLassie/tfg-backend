@@ -22,6 +22,6 @@ public class RecommendationInputDTO extends GenericDTO<Recommendation> {
     @NotNull private Long showId;
 
     public boolean allFieldsArePresent() {
-        return Stream.of(this.userSenderId, this.userReceiverId, this.showId).allMatch(Objects::nonNull);
+        return Stream.of(this.userReceiverId, this.showId).allMatch(Objects::nonNull);
     }
 }

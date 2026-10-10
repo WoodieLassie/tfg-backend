@@ -15,6 +15,7 @@ import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,6 +23,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +33,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -65,11 +70,16 @@ public class FriendControllerImpl implements FriendController {
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
     @GetMapping
-    public ResponseEntity<Map<Long, UserProfileDTO>> findAllFriends() {
+    public ResponseEntity<Page<Map.Entry<Long, UserProfileDTO>>> findAllFriends(@Parameter @RequestParam(defaultValue = "0") Integer page,
+                                                                          @Parameter @RequestParam(defaultValue = "20") Integer size,
+                                                                          Pageable pageable) {
         LOG.debug("FriendControllerImpl: Finding all friendships");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentUserFriends = friendBO.getAllFriends(currentUserId);
-        return ResponseEntity.status(HttpStatus.OK).body(currentUserFriends);
+        int pageEnd = Math.min((page + size), currentUserFriends.size());
+        ArrayList<Map.Entry<Long, UserProfileDTO>> currentUserFriendsToList = new ArrayList<>(currentUserFriends.entrySet());
+        Page<Map.Entry<Long, UserProfileDTO>> pagedCurrentUserFriends = new PageImpl<>(currentUserFriendsToList.subList(page, pageEnd), pageable, currentUserFriendsToList.size());
+        return ResponseEntity.status(HttpStatus.OK).body(pagedCurrentUserFriends);
     }
 
     @Override
@@ -87,11 +97,16 @@ public class FriendControllerImpl implements FriendController {
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
     @GetMapping("/requests")
-    public ResponseEntity<Map<Long, UserProfileDTO>> findAllSentRequests() {
+    public ResponseEntity<Page<Map.Entry<Long, UserProfileDTO>>> findAllSentRequests(@Parameter @RequestParam(defaultValue = "0") Integer page,
+                                                                         @Parameter @RequestParam(defaultValue = "20") Integer size,
+                                                                         Pageable pageable) {
         LOG.debug("FriendControllerImpl: Finding all sent requests");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentSentRequests = friendBO.getAllSentRequests(currentUserId);
-        return ResponseEntity.status(HttpStatus.OK).body(currentSentRequests);
+        int pageEnd = Math.min((page + size), currentSentRequests.size());
+        ArrayList<Map.Entry<Long, UserProfileDTO>> currentSentRequestsToList = new ArrayList<>(currentSentRequests.entrySet());
+        Page<Map.Entry<Long, UserProfileDTO>> pagedCurrentSentRequests = new PageImpl<>(currentSentRequestsToList.subList(page, pageEnd), pageable, currentSentRequestsToList.size());
+        return ResponseEntity.status(HttpStatus.OK).body(pagedCurrentSentRequests);
     }
 
     @Override
@@ -109,11 +124,16 @@ public class FriendControllerImpl implements FriendController {
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
     @GetMapping("/requested")
-    public ResponseEntity<Map<Long, UserProfileDTO>> findAllReceivedRequests() {
+    public ResponseEntity<Page<Map.Entry<Long, UserProfileDTO>>> findAllReceivedRequests(@Parameter @RequestParam(defaultValue = "0") Integer page,
+                                                                                         @Parameter @RequestParam(defaultValue = "20") Integer size,
+                                                                                         Pageable pageable) {
         LOG.debug("FriendControllerImpl: Finding all received requests");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentReceivedRequests = friendBO.getAllReceivedRequests(currentUserId);
-        return ResponseEntity.status(HttpStatus.OK).body(currentReceivedRequests);
+        int pageEnd = Math.min((page + size), currentReceivedRequests.size());
+        ArrayList<Map.Entry<Long, UserProfileDTO>> currentReceivedRequestsToList = new ArrayList<>(currentReceivedRequests.entrySet());
+        Page<Map.Entry<Long, UserProfileDTO>> pagedCurrentReceivedRequests = new PageImpl<>(currentReceivedRequestsToList.subList(page, pageEnd), pageable, currentReceivedRequestsToList.size());
+        return ResponseEntity.status(HttpStatus.OK).body(pagedCurrentReceivedRequests);
     }
 
     @Override

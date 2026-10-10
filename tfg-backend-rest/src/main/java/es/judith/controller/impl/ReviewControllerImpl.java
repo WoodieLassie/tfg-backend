@@ -8,6 +8,7 @@ import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.review.ReviewDTO;
 import es.judith.dto.review.ReviewInputDTO;
+import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.dto.swagger.FriendSwaggerDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
@@ -22,6 +23,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -103,7 +107,10 @@ public class ReviewControllerImpl implements ReviewController {
           content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @GetMapping("/user/{userId}")
-  public ResponseEntity<List<ReviewDTO>> findAllByUserId(@PathVariable Long userId) {
+  public ResponseEntity<Page<ReviewDTO>> findAllByUserId(@PathVariable Long userId,
+                                                         @Parameter @RequestParam(defaultValue = "0") Integer page,
+                                                         @Parameter @RequestParam(defaultValue = "20") Integer size,
+                                                         Pageable pageable) {
     User currentUser = authBO.getCurrentUser();
     if (userBO.findOne(userId) == null) {
       throw new NotExistingIdException(
@@ -119,7 +126,9 @@ public class ReviewControllerImpl implements ReviewController {
     for (Review userReview : userReviews) {
       convertedUserReviews.add(bo.convertToDTO(userReview));
     }
-    return ResponseEntity.status(HttpStatus.OK).body(convertedUserReviews);
+    int pageEnd = Math.min((page + size), convertedUserReviews.size());
+    Page<ReviewDTO> pagedConvertedUserReviews = new PageImpl<>(convertedUserReviews.subList(page, pageEnd), pageable, convertedUserReviews.size());
+    return ResponseEntity.status(HttpStatus.OK).body(pagedConvertedUserReviews);
   }
 
   @Override

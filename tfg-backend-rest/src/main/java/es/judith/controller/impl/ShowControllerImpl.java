@@ -21,6 +21,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -60,8 +63,11 @@ public class ShowControllerImpl implements ShowController {
           description = "OK",
           content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ShowNoSeasonsDTO.class))))
   @GetMapping
-  public ResponseEntity<List<ShowNoSeasonsDTO>> findAll(
-      @Parameter @RequestParam(defaultValue = "") String name) {
+  public ResponseEntity<Page<ShowNoSeasonsDTO>> findAll(
+      @Parameter @RequestParam(defaultValue = "") String name,
+      @Parameter @RequestParam(defaultValue = "0") Integer page,
+      @Parameter @RequestParam(defaultValue = "20") Integer size,
+      Pageable pageable) {
     if (Objects.equals(name, "")) {
       LOG.debug("ShowControllerImpl: Fetching all results");
       List<Show> showList = bo.findAll();
@@ -70,7 +76,9 @@ public class ShowControllerImpl implements ShowController {
         ShowNoSeasonsDTO showDTO = bo.convertToShowNoSeasonsDTO(show);
         convertedShowList.add(showDTO);
       }
-      return ResponseEntity.ok(convertedShowList);
+      int pageEnd = Math.min((page + size), convertedShowList.size());
+      Page<ShowNoSeasonsDTO> pagedConvertedShowList = new PageImpl<>(convertedShowList.subList(page, pageEnd), pageable, convertedShowList.size());
+      return ResponseEntity.ok(pagedConvertedShowList);
     }
     LOG.debug("ShowControllerImpl: Fetching all results with name {}", name);
     List<Show> showList = bo.findAllByName(name);
@@ -87,7 +95,9 @@ public class ShowControllerImpl implements ShowController {
       }
       convertedShowList.add(showDTO);
     }
-    return ResponseEntity.ok(convertedShowList);
+    int pageEnd = Math.min((page + size), convertedShowList.size());
+    Page<ShowNoSeasonsDTO> pagedConvertedShowList = new PageImpl<>(convertedShowList.subList(page, pageEnd), pageable, convertedShowList.size());
+    return ResponseEntity.ok(pagedConvertedShowList);
   }
 
   @Override

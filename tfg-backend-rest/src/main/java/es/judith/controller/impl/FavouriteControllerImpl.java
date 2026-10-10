@@ -8,6 +8,7 @@ import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.dto.favourite.FavouriteInputDTO;
+import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
@@ -22,6 +23,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +70,11 @@ public class FavouriteControllerImpl implements FavouriteController {
             array = @ArraySchema(schema = @Schema(implementation = FavouriteDTO.class)))
       })
   @GetMapping("/{userId}")
-  public ResponseEntity<List<FavouriteDTO>> findAllByUser(@PathVariable Long userId) {
+  public ResponseEntity<Page<FavouriteDTO>> findAllByUser(
+          @PathVariable Long userId,
+          @Parameter @RequestParam(defaultValue = "0") Integer page,
+          @Parameter @RequestParam(defaultValue = "20") Integer size,
+          Pageable pageable) {
     if (userBO.findOne(userId) == null) {
       throw new NotExistingIdException(
               "User with id " + userId + " does not exist"
@@ -84,7 +92,9 @@ public class FavouriteControllerImpl implements FavouriteController {
       favouriteDTO.loadFromDomain(favourite);
       convertedFavouriteList.add(favouriteDTO);
     }
-    return ResponseEntity.ok(convertedFavouriteList);
+    int pageEnd = Math.min((page + size), convertedFavouriteList.size());
+    Page<FavouriteDTO> pagedConvertedFavouriteList = new PageImpl<>(convertedFavouriteList.subList(page, pageEnd), pageable, convertedFavouriteList.size());
+    return ResponseEntity.ok(pagedConvertedFavouriteList);
   }
 
   @Override

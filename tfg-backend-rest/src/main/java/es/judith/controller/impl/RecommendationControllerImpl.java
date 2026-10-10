@@ -6,6 +6,7 @@ import es.judith.domain.Recommendation;
 import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.recommendation.RecommendationInputDTO;
+import es.judith.dto.review.ReviewDTO;
 import es.judith.dto.swagger.RecommendationSwaggerDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
@@ -19,6 +20,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,11 +69,16 @@ public class RecommendationControllerImpl implements RecommendationController {
             description = "Not found",
             content = @Content(schema = @Schema(hidden = true)))
     @Override
-    public ResponseEntity<Map<Long, ArrayList>> findAllSentRecommendations() {
+    public ResponseEntity<Page<Map.Entry<Long, ArrayList>>> findAllSentRecommendations(@Parameter @RequestParam(defaultValue = "0") Integer page,
+                                                                           @Parameter @RequestParam(defaultValue = "20") Integer size,
+                                                                           Pageable pageable) {
         LOG.debug("RecommendationControllerImpl: Finding all sent recommendations");
         User currentUser = authBO.getCurrentUser();
         Map<Long, ArrayList> sentRecommendations = recommendationBO.getAllSentRecommendations(currentUser.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(sentRecommendations);
+        int pageEnd = Math.min((page + size), sentRecommendations.size());
+        ArrayList<Map.Entry<Long, ArrayList>> sentRecommendationsToList = new ArrayList<>(sentRecommendations.entrySet());
+        Page<Map.Entry<Long, ArrayList>> pagedSentRecommendations = new PageImpl<>(sentRecommendationsToList.subList(page, pageEnd), pageable, sentRecommendationsToList.size());
+        return ResponseEntity.status(HttpStatus.OK).body(pagedSentRecommendations);
     }
 
     @GetMapping("/received")
@@ -87,11 +96,16 @@ public class RecommendationControllerImpl implements RecommendationController {
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
     @Override
-    public ResponseEntity<Map<Long, ArrayList>> findAllReceivedRecommendations() {
+    public ResponseEntity<Page<Map.Entry<Long, ArrayList>>> findAllReceivedRecommendations(@Parameter @RequestParam(defaultValue = "0") Integer page,
+                                                                               @Parameter @RequestParam(defaultValue = "20") Integer size,
+                                                                               Pageable pageable) {
         LOG.debug("RecommendationControllerImpl: Finding all received recommendations");
         User currentUser = authBO.getCurrentUser();
         Map<Long, ArrayList> receivedRecommendations = recommendationBO.getAllReceivedRecommendations(currentUser.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(receivedRecommendations);
+        int pageEnd = Math.min((page + size), receivedRecommendations.size());
+        ArrayList<Map.Entry<Long, ArrayList>> receivedRecommendationsToList = new ArrayList<>(receivedRecommendations.entrySet());
+        Page<Map.Entry<Long, ArrayList>> pagedReceivedRecommendations = new PageImpl<>(receivedRecommendationsToList.subList(page, pageEnd), pageable, receivedRecommendationsToList.size());
+        return ResponseEntity.status(HttpStatus.OK).body(pagedReceivedRecommendations);
     }
     @PostMapping
     @Operation(method = "POST", summary = "Send a recommendation to a user")

@@ -8,9 +8,11 @@ import es.judith.domain.chat.ChatNotification;
 import es.judith.domain.user.User;
 import es.judith.dto.chat.ChatMessageDTO;
 import es.judith.dto.chat.ChatMessageInputDTO;
+import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,13 +20,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -49,6 +51,7 @@ public class ChatControllerImpl implements ChatController {
         this.messagingTemplate = messagingTemplate;
     }
 
+    @Override
     @GetMapping("/{senderId}/{receiverId}")
     @Operation(
             method = "GET",
@@ -63,16 +66,24 @@ public class ChatControllerImpl implements ChatController {
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
-    public ResponseEntity<List<ChatMessageDTO>> getMessages(@PathVariable Long senderId, @PathVariable Long receiverId) {
+    public ResponseEntity<Page<ChatMessageDTO>> getMessages(
+            @PathVariable Long senderId,
+            @PathVariable Long receiverId,
+            @Parameter @RequestParam(defaultValue = "0") Integer page,
+            @Parameter @RequestParam(defaultValue = "20") Integer size,
+            Pageable pageable) {
         LOG.debug("ChatControllerImpl: Fetching all messages");
         List<ChatMessage> chatMessages = chatMessageBO.findChatMessages(senderId, receiverId);
         List<ChatMessageDTO> convertedChatMessages = new ArrayList<>();
         for (ChatMessage chatMessage : chatMessages) {
             convertedChatMessages.add(chatMessageBO.convertToDTO(chatMessage));
         }
-        return ResponseEntity.ok(convertedChatMessages);
+        int pageEnd = Math.min((page + size), convertedChatMessages.size());
+        Page<ChatMessageDTO> pagedConvertedChatMessages = new PageImpl<>(convertedChatMessages.subList(page, pageEnd), pageable, convertedChatMessages.size());
+        return ResponseEntity.ok(pagedConvertedChatMessages);
     }
 
+    @Override
     @MessageMapping("/chat")
     public void processMessage(ChatMessageInputDTO chatMessageDTO) {
         if (!chatMessageDTO.allFieldsArePresent()) {
