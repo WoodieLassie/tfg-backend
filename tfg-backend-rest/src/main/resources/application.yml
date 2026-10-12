@@ -48,3 +48,6 @@ logging.level.org.hibernate.type.descriptor.sql: @logging-level-hibernate-descri
 # Swagger config
 springdoc.swagger-ui.disable-swagger-default-url: @springdoc-swagger-ui-disable-swagger-default-url@
 springdoc.swagger-ui.path: @springdoc-swagger-ui-path@
+springdoc.api-docs.path: @springdoc-api-docs-path@
+springdoc.swagger-ui.enabled: @springdoc-api-docs-enabled@
+springdoc.api-docs.enabled: @springdoc-api-docs-enabled@
