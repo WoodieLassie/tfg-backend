@@ -68,18 +68,6 @@ public class ShowControllerImpl implements ShowController {
       @Parameter @RequestParam(defaultValue = "0") Integer page,
       @Parameter @RequestParam(defaultValue = "20") Integer size,
       Pageable pageable) {
-    if (Objects.equals(name, "")) {
-      LOG.debug("ShowControllerImpl: Fetching all results");
-      List<Show> showList = bo.findAll();
-      List<ShowNoSeasonsDTO> convertedShowList = new ArrayList<>();
-      for (Show show : showList) {
-        ShowNoSeasonsDTO showDTO = bo.convertToShowNoSeasonsDTO(show);
-        convertedShowList.add(showDTO);
-      }
-      int pageEnd = Math.min((page + size), convertedShowList.size());
-      Page<ShowNoSeasonsDTO> pagedConvertedShowList = new PageImpl<>(convertedShowList.subList(page, pageEnd), pageable, convertedShowList.size());
-      return ResponseEntity.ok(pagedConvertedShowList);
-    }
     LOG.debug("ShowControllerImpl: Fetching all results with name {}", name);
     List<Show> showList = bo.findAllByName(name);
     List<ShowNoSeasonsDTO> convertedShowList = new ArrayList<>();
