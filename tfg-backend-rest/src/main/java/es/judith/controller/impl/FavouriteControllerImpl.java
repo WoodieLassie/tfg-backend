@@ -9,10 +9,7 @@ import es.judith.domain.user.User;
 import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.dto.favourite.FavouriteInputDTO;
 import es.judith.dto.show.ShowNoSeasonsDTO;
-import es.judith.exceptions.AlreadyExistsException;
-import es.judith.exceptions.BadInputException;
-import es.judith.exceptions.NotExistingIdException;
-import es.judith.exceptions.NotFoundException;
+import es.judith.exceptions.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -82,7 +79,7 @@ public class FavouriteControllerImpl implements FavouriteController {
     }
     User currentUser = authBO.getCurrentUser();
     if (!Objects.equals(currentUser.getId(), userId) && !friendBO.checkIfFriend(currentUser.getId(), userId)) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+      throw new ForbiddenException("Operation not allowed");
     }
     LOG.debug("Fetching results with user id {}", userId);
     List<Favourite> favouriteList = bo.findAllByUser(userId);
@@ -104,9 +101,17 @@ public class FavouriteControllerImpl implements FavouriteController {
       description = "Created",
       content = {@Content(schema = @Schema(implementation = Favourite.class))})
   @ApiResponse(
-      responseCode = "409",
-      description = "Conflict",
-      content = {@Content(schema = @Schema(hidden = true))})
+          responseCode = "403",
+          description = "Forbidden",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "409",
+          description = "Conflict",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
           responseCode = "400",
           description = "Bad Request",
@@ -161,7 +166,7 @@ public class FavouriteControllerImpl implements FavouriteController {
     }
     if (!Objects.equals(bo.findOne(id).getUser().getId(), currentUser.getId())
         && currentUser.getRole() != Role.ADMIN) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+      throw new ForbiddenException("Operation not allowed");
     }
     LOG.debug("FavouriteControllerImpl: Deleting data with id {}", id);
     bo.delete(id);

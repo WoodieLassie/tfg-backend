@@ -155,6 +155,14 @@ public class ActorControllerImpl implements ActorController {
       responseCode = "201",
       description = "Created",
       content = {@Content(schema = @Schema(implementation = Actor.class))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Actor> add(@RequestBody ActorInputDTO actorDTO) {
@@ -202,6 +210,14 @@ public class ActorControllerImpl implements ActorController {
       responseCode = "204",
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
       responseCode = "404",
       description = "Not found",
@@ -271,6 +287,14 @@ public class ActorControllerImpl implements ActorController {
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
@@ -305,6 +329,14 @@ public class ActorControllerImpl implements ActorController {
       responseCode = "204",
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
           responseCode = "404",
           description = "Not found",

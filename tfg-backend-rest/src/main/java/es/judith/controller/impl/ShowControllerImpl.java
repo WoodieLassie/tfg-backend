@@ -165,6 +165,10 @@ public class ShowControllerImpl implements ShowController {
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
           responseCode = "409",
           description = "Conflict",
           content = {@Content(schema = @Schema(hidden = true))})
@@ -205,6 +209,10 @@ public class ShowControllerImpl implements ShowController {
           responseCode = "403",
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
           responseCode = "409",
           description = "Conflict",
@@ -253,6 +261,10 @@ public class ShowControllerImpl implements ShowController {
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
@@ -293,6 +305,10 @@ public class ShowControllerImpl implements ShowController {
           responseCode = "403",
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
           responseCode = "404",
           description = "Not Found",

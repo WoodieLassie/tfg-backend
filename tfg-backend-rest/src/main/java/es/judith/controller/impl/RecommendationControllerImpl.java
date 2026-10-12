@@ -10,6 +10,7 @@ import es.judith.dto.review.ReviewDTO;
 import es.judith.dto.swagger.RecommendationSwaggerDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
+import es.judith.exceptions.ForbiddenException;
 import es.judith.exceptions.NotExistingIdException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -65,8 +66,12 @@ public class RecommendationControllerImpl implements RecommendationController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = RecommendationSwaggerDTO.class))
             })
     @ApiResponse(
-            responseCode = "404",
-            description = "Not found",
+            responseCode = "401",
+            description = "Unauthorized",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
     @Override
     public ResponseEntity<Page<Map.Entry<Long, ArrayList>>> findAllSentRecommendations(@Parameter @RequestParam(defaultValue = "0") Integer page,
@@ -91,6 +96,10 @@ public class RecommendationControllerImpl implements RecommendationController {
             content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = RecommendationSwaggerDTO.class))
             })
+    @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized",
+            content = {@Content(schema = @Schema(hidden = true))})
     @ApiResponse(
             responseCode = "403",
             description = "Forbidden",
@@ -117,6 +126,10 @@ public class RecommendationControllerImpl implements RecommendationController {
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
+    @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized",
+            content = {@Content(schema = @Schema(hidden = true))})
     @ApiResponse(
             responseCode = "409",
             description = "Conflict",
@@ -145,7 +158,7 @@ public class RecommendationControllerImpl implements RecommendationController {
             );
         }
         if (!friendBO.checkIfFriend(currentUser.getId(), recommendationDTO.getUserReceiverId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            throw new ForbiddenException("Operation not allowed");
         }
         if (recommendationBO.checkIfRecommended(currentUser.getId(), recommendationDTO.getUserReceiverId(), recommendationDTO.getShowId())) {
             throw new AlreadyExistsException(
@@ -174,6 +187,10 @@ public class RecommendationControllerImpl implements RecommendationController {
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
     @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
             responseCode = "404",
             description = "Not Found",
             content = @Content(schema = @Schema(hidden = true)))
@@ -188,7 +205,7 @@ public class RecommendationControllerImpl implements RecommendationController {
             );
         }
         if (!Objects.equals(currentUser.getId(), recommendation.getUserSender().getId()) && !Objects.equals(currentUser.getId(), recommendation.getUserReceiver().getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            throw new ForbiddenException("Operation not allowed");
         }
         LOG.debug("RecommendationControllerImpl: Deleting recomendation with id {}", recommendationId);
         recommendationBO.delete(recommendationId);

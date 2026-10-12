@@ -13,6 +13,7 @@ import es.judith.dto.swagger.RecommendationSwaggerDTO;
 import es.judith.dto.user.UserProfileDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
+import es.judith.exceptions.ForbiddenException;
 import es.judith.exceptions.NotExistingIdException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -93,6 +94,10 @@ public class FriendControllerImpl implements FriendController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = FriendSwaggerDTO.class))
             })
     @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
@@ -120,6 +125,10 @@ public class FriendControllerImpl implements FriendController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = FriendSwaggerDTO.class))
             })
     @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
@@ -146,6 +155,10 @@ public class FriendControllerImpl implements FriendController {
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
+    @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized",
+            content = {@Content(schema = @Schema(hidden = true))})
     @ApiResponse(
             responseCode = "409",
             description = "Conflict",
@@ -196,6 +209,10 @@ public class FriendControllerImpl implements FriendController {
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
     @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
             responseCode = "409",
             description = "Conflict",
             content = {@Content(schema = @Schema(hidden = true))})
@@ -214,7 +231,7 @@ public class FriendControllerImpl implements FriendController {
             );
         }
         if (!friendBO.checkIfRequestReceiver(currentUser.getId(), friendRequest.getUserSender().getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            throw new ForbiddenException("Operation not allowed");
         }
         if (friendRequest.isRequestStatus()) {
             throw new AlreadyExistsException(
@@ -241,6 +258,10 @@ public class FriendControllerImpl implements FriendController {
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
     @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized",
+            content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
             responseCode = "404",
             description = "Not Found",
             content = @Content(schema = @Schema(hidden = true)))
@@ -256,11 +277,11 @@ public class FriendControllerImpl implements FriendController {
         }
         if (Objects.equals(currentUser.getId(), friendRequest.getUserSender().getId())) {
             if (!friendBO.checkIfRelated(currentUser.getId(), friendRequest.getUserReceiver().getId())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+                throw new ForbiddenException("Operation not allowed");
             }
         }
         else if (!friendBO.checkIfRelated(currentUser.getId(), friendRequest.getUserSender().getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            throw new ForbiddenException("Operation not allowed");
         }
         LOG.debug("FriendControllerImpl: Deleting friendship with id {}", requestId);
         friendBO.delete(requestId);

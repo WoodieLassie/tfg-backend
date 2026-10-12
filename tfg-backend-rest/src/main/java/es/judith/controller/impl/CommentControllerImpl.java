@@ -12,6 +12,7 @@ import es.judith.dto.comment.CommentDTO;
 import es.judith.dto.comment.CommentInputDTO;
 import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.exceptions.BadInputException;
+import es.judith.exceptions.ForbiddenException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -91,6 +92,10 @@ public class CommentControllerImpl implements CommentController {
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
           responseCode = "409",
           description = "Conflict",
           content = {@Content(schema = @Schema(hidden = true))})
@@ -139,6 +144,10 @@ public class CommentControllerImpl implements CommentController {
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
           responseCode = "404",
           description = "Not Found",
           content = @Content(schema = @Schema(hidden = true)))
@@ -150,7 +159,7 @@ public class CommentControllerImpl implements CommentController {
     }
     if (!Objects.equals(bo.findOne(id).getUser().getId(), authBO.getCurrentUser().getId())
         && authBO.getCurrentUser().getRole() != Role.ADMIN) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+      throw new ForbiddenException("Login failed. Invalid credentials");
     }
     LOG.debug("CommentControllerImpl: Deleting data with id {}", id);
     bo.delete(id);

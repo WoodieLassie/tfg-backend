@@ -11,6 +11,7 @@ import es.judith.dto.review.ReviewInputDTO;
 import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.dto.swagger.FriendSwaggerDTO;
 import es.judith.exceptions.BadInputException;
+import es.judith.exceptions.ForbiddenException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -98,6 +99,10 @@ public class ReviewControllerImpl implements ReviewController {
                   @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ReviewDTO.class)))
           })
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
@@ -118,7 +123,7 @@ public class ReviewControllerImpl implements ReviewController {
       );
     }
     if (!friendBO.checkIfFriend(currentUser.getId(), userId) && !Objects.equals(currentUser.getId(), userId)) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+      throw new ForbiddenException("Operation not allowed");
     }
     LOG.debug("ReviewControllerImpl: Finding all reviews by user id {}", userId);
     List<Review> userReviews = reviewBO.findAllByUserId(userId);
@@ -137,6 +142,10 @@ public class ReviewControllerImpl implements ReviewController {
           responseCode = "201",
           description = "Created",
           content = {@Content(schema = @Schema(implementation = Review.class))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
@@ -191,6 +200,10 @@ public class ReviewControllerImpl implements ReviewController {
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
           responseCode = "404",
           description = "Not found",
           content = @Content(schema = @Schema(hidden = true)))
@@ -203,7 +216,7 @@ public class ReviewControllerImpl implements ReviewController {
     User currentUser = authBO.getCurrentUser();
     if (!Objects.equals(bo.findOne(id).getUser().getId(), currentUser.getId())
         && currentUser.getRole() != Role.ADMIN) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+      throw new ForbiddenException("Operation not allowed");
     }
     LOG.debug("ReviewControllerImpl: Deleting data with id {}", id);
     bo.delete(id);

@@ -6,10 +6,7 @@ import es.judith.domain.Role;
 import es.judith.dto.user.UserDTO;
 import es.judith.dto.user.UserInputDTO;
 import es.judith.dto.user.UserProfileDTO;
-import es.judith.exceptions.AlreadyExistsException;
-import es.judith.exceptions.BadInputException;
-import es.judith.exceptions.NotExistingIdException;
-import es.judith.exceptions.NotFoundException;
+import es.judith.exceptions.*;
 import es.judith.utils.ImageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -76,7 +73,7 @@ public class UserControllerImpl implements UserController {
       LOG.debug("UserControllerImpl: Generating new token for user");
       return ResponseEntity.status(HttpStatus.OK).body(generatedToken);
     }
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    throw new ForbiddenException("Login failed. Invalid credentials");
   }
 
   @Override
@@ -94,14 +91,9 @@ public class UserControllerImpl implements UserController {
     if (!userDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
-    if (userBO.checkForIllegalStrings(userDTO.getUsername(), 100)) {
-      throw new BadInputException("Username length cannot be greater than 100 characters");
-    }
-    if (userBO.checkForIllegalStrings(userDTO.getEmail(), 100)) {
-      throw new BadInputException("Email length cannot be greater than 100 characters");
-    }
-    if (userBO.checkForIllegalStrings(userDTO.getPassword(), 100)) {
-      throw new BadInputException("Password length cannot be greater than 100 characters");
+    String illegalStringResult = userBO.checkForIllegalStrings(userDTO.getEmail(), userDTO.getPassword(), userDTO.getUsername());
+    if (!Objects.equals(illegalStringResult, "")) {
+      throw new BadInputException(illegalStringResult);
     }
     User dbUser = userBO.findByEmail(userDTO.getEmail());
     if (dbUser != null) {
@@ -214,6 +206,10 @@ public class UserControllerImpl implements UserController {
           description = "No content",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
           responseCode = "409",
           description = "Conflict",
           content = @Content(schema = @Schema(hidden = true)))
@@ -268,6 +264,10 @@ public class UserControllerImpl implements UserController {
           description = "No content",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
           responseCode = "400",
           description = "Bad Request",
           content = @Content(schema = @Schema(hidden = true)))
@@ -307,6 +307,10 @@ public class UserControllerImpl implements UserController {
           responseCode = "403",
           description = "Forbidden",
           content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @PatchMapping("/promote/{userId}")
   @SecurityRequirement(name = "Authorization")
   public ResponseEntity<User> promoteUser(@PathVariable Long userId) {
@@ -328,6 +332,10 @@ public class UserControllerImpl implements UserController {
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
           responseCode = "404",
           description = "Not Found",
           content = @Content(schema = @Schema(hidden = true)))
@@ -335,7 +343,7 @@ public class UserControllerImpl implements UserController {
   public ResponseEntity<User> delete(@PathVariable Long userId) {
     User currentUser = authBO.getCurrentUser();
     if (!Objects.equals(currentUser.getId(), userId) && currentUser.getRole() != Role.ADMIN) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+      throw new ForbiddenException("Operation not allowed");
     }
     if (userBO.findOne(userId) == null) {
       throw new NotExistingIdException(

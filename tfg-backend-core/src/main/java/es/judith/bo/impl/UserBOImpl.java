@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serial;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Implements interface {@link UserBO}.
@@ -57,5 +59,24 @@ public class UserBOImpl extends GenericBOImpl<User, Long, UserRepository> implem
       user.get().setRole(Role.ADMIN);
       repository.save(user.get());
     }
+  }
+
+  public String checkForIllegalStrings(String email, String password, String username) {
+    Pattern usernameRegex = Pattern.compile("[^A-Za-z0-9 ]");
+    Pattern emailRegex = Pattern.compile("[^A-Za-z0-9 @.]");
+    Pattern passwordRegex = Pattern.compile("[^A-Za-z0-9 @_!#%&*¿?.]");
+    Matcher usernameMatcher = usernameRegex.matcher(username);
+    Matcher emailMatcher = emailRegex.matcher(email);
+    Matcher passwordMatcher = passwordRegex.matcher(password);
+    if (emailMatcher.find() || passwordMatcher.find() || usernameMatcher.find()) {
+      return "Username fields contain illegal characters";
+    }
+    if (password.length() < 8) {
+      return "Password must be greater than 8";
+    }
+    if (email.length() > 100 || username.length() > 20 || password.length() > 100) {
+      return "Username fields exceed max length";
+    }
+    return "";
   }
 }

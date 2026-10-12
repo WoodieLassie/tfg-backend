@@ -3,10 +3,12 @@ package es.judith.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+import java.io.Serial;
+
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid request body")
 public class BadInputException extends RuntimeException {
 
-  /** serialVersionUID for object serialization. */
+  @Serial
   private static final long serialVersionUID = 1941351070214026991L;
 
   public BadInputException() {

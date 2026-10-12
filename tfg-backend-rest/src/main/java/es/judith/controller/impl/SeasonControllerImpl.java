@@ -83,6 +83,10 @@ public class SeasonControllerImpl implements SeasonController {
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
       responseCode = "409",
       description = "Conflict",
       content = {@Content(schema = @Schema(hidden = true))})
@@ -129,6 +133,10 @@ public class SeasonControllerImpl implements SeasonController {
           responseCode = "403",
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
       responseCode = "404",
       description = "Not found",
@@ -184,6 +192,10 @@ public class SeasonControllerImpl implements SeasonController {
           responseCode = "403",
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
       responseCode = "404",
       description = "Not found",

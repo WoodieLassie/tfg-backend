@@ -89,6 +89,10 @@ public class EpisodeControllerImpl implements EpisodeController {
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
           responseCode = "400",
           description = "Bad Request",
           content = {@Content(schema = @Schema(hidden = true))})
@@ -136,6 +140,14 @@ public class EpisodeControllerImpl implements EpisodeController {
       responseCode = "204",
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
       responseCode = "404",
       description = "Not found",
@@ -199,6 +211,14 @@ public class EpisodeControllerImpl implements EpisodeController {
       responseCode = "204",
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
       responseCode = "404",
       description = "Not found",

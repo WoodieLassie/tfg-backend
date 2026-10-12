@@ -3,7 +3,7 @@ package es.judith.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.CONFLICT)
+@ResponseStatus(value = HttpStatus.CONFLICT, reason = "Object with same unique field value already exists")
 public class AlreadyExistsException extends RuntimeException {
 
   private static final long serialVersionUID = 3220735874915464565L;

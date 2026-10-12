@@ -175,6 +175,14 @@ public class CharacterControllerImpl implements CharacterController {
       responseCode = "201",
       description = "Created",
       content = {@Content(schema = @Schema(implementation = Character.class))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Character> add(@RequestBody CharacterInputDTO characterDTO) {
@@ -213,6 +221,14 @@ public class CharacterControllerImpl implements CharacterController {
       responseCode = "204",
       description = "No content",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "403",
+          description = "Forbidden",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
       responseCode = "404",
       description = "Not found",
