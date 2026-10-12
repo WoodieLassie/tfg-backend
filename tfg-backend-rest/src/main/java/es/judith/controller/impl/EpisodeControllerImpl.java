@@ -7,6 +7,7 @@ import es.judith.controller.EpisodeController;
 import es.judith.domain.Character;
 import es.judith.domain.Episode;
 import es.judith.domain.Season;
+import es.judith.dto.comment.CommentDTO;
 import es.judith.dto.episode.EpisodeDTO;
 import es.judith.dto.episode.EpisodeInputDTO;
 import es.judith.dto.episode.EpisodeNoSeasonDTO;
@@ -15,6 +16,7 @@ import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,6 +24,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +34,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,6 +53,35 @@ public class EpisodeControllerImpl implements EpisodeController {
     this.bo = bo;
     this.characterBO = characterBO;
     this.seasonBO = seasonBO;
+  }
+
+  @Override
+  @Operation(
+          method = "GET",
+          summary = "Get episodes by title",
+          parameters = @Parameter(ref = "title"))
+  @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {
+                  @Content(
+                          mediaType = "application/json",
+                          array = @ArraySchema(schema = @Schema(implementation = EpisodeNoSeasonDTO.class)))
+          })
+  @GetMapping
+  public ResponseEntity<Page<EpisodeNoSeasonDTO>> findAllByTitle(
+          @Parameter @RequestParam(defaultValue = "") String title,
+          @Parameter @RequestParam(defaultValue = "0") Integer page,
+          @Parameter @RequestParam(defaultValue = "20") Integer size,
+          Pageable pageable) {
+    List<Episode> episodeList = bo.findAllByTitle(title);
+    List<EpisodeNoSeasonDTO> convertedEpisodeList = new ArrayList<>();
+    for (Episode episode : episodeList) {
+      convertedEpisodeList.add(bo.convertToDTO(episode));
+    }
+    int pageEnd = Math.min((page + size), convertedEpisodeList.size());
+    Page<EpisodeNoSeasonDTO> pagedEpisodeList = new PageImpl<>(convertedEpisodeList.subList(page, pageEnd), pageable, convertedEpisodeList.size());
+    return ResponseEntity.ok(pagedEpisodeList);
   }
 
   @Override
@@ -73,8 +108,7 @@ public class EpisodeControllerImpl implements EpisodeController {
       throw new NotFoundException();
     }
     Episode episode = bo.findOneWithCharacters(id);
-    EpisodeNoSeasonDTO convertedEpisode = new EpisodeNoSeasonDTO();
-    convertedEpisode.loadFromDomain(episode);
+    EpisodeNoSeasonDTO convertedEpisode = bo.convertToDTO(episode);
     return ResponseEntity.ok(convertedEpisode);
   }
 

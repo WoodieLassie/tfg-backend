@@ -4,6 +4,7 @@ import es.judith.bo.EpisodeBO;
 import es.judith.dao.EpisodeRepository;
 import es.judith.domain.*;
 import es.judith.domain.Character;
+import es.judith.dto.episode.EpisodeNoSeasonDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,12 @@ public class EpisodeBOImpl extends GenericBOImpl<Episode, Long, EpisodeRepositor
       }
     }
     return episode;
+  }
+
+  @Override
+  public EpisodeNoSeasonDTO convertToDTO(Episode episode) {
+    EpisodeNoSeasonDTO convertedEpisode = new EpisodeNoSeasonDTO();
+    convertedEpisode.loadFromDomain(episode);
+    return convertedEpisode;
   }
 }
