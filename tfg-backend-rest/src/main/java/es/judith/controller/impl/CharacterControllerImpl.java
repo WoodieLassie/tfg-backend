@@ -183,6 +183,10 @@ public class CharacterControllerImpl implements CharacterController {
           responseCode = "401",
           description = "Unauthorized",
           content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Character> add(@RequestBody CharacterInputDTO characterDTO) {
@@ -233,6 +237,10 @@ public class CharacterControllerImpl implements CharacterController {
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Character> update(
@@ -288,6 +296,10 @@ public class CharacterControllerImpl implements CharacterController {
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PatchMapping(value = "/image/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Character> updateImageById(

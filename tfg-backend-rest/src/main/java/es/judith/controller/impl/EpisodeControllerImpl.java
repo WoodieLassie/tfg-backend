@@ -152,6 +152,10 @@ public class EpisodeControllerImpl implements EpisodeController {
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Episode> update(

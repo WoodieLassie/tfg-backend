@@ -87,6 +87,10 @@ public class UserControllerImpl implements UserController {
           responseCode = "409",
           description = "Conflict",
           content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   public ResponseEntity<User> register(@RequestBody UserInputDTO userDTO) {
     if (!userDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");

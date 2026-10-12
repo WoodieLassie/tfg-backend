@@ -163,6 +163,10 @@ public class ActorControllerImpl implements ActorController {
           responseCode = "401",
           description = "Unauthorized",
           content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Actor> add(@RequestBody ActorInputDTO actorDTO) {
@@ -222,6 +226,10 @@ public class ActorControllerImpl implements ActorController {
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Actor> update(@PathVariable Long id, @RequestBody ActorInputDTO actorDTO) {
@@ -298,6 +306,10 @@ public class ActorControllerImpl implements ActorController {
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PatchMapping(value = "/image/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Actor> updateImageById(

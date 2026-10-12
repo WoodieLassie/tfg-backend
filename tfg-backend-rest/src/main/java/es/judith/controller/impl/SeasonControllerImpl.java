@@ -90,6 +90,10 @@ public class SeasonControllerImpl implements SeasonController {
       responseCode = "409",
       description = "Conflict",
       content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Season> add(@RequestBody SeasonInputDTO seasonDTO) {
@@ -141,6 +145,10 @@ public class SeasonControllerImpl implements SeasonController {
       responseCode = "404",
       description = "Not found",
       content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PatchMapping("/{id}")
   public ResponseEntity<Season> update(

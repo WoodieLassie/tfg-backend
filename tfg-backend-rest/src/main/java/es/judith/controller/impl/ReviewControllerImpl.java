@@ -150,6 +150,10 @@ public class ReviewControllerImpl implements ReviewController {
           responseCode = "403",
           description = "Forbidden",
           content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "400",
+          description = "Bad Request",
+          content = @Content(schema = @Schema(hidden = true)))
   @SecurityRequirement(name = "Authorization")
   @PostMapping
   public ResponseEntity<Review> add(@RequestBody ReviewInputDTO reviewDTO) {
