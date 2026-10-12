@@ -75,8 +75,9 @@ public class CommentControllerImpl implements CommentController {
           Pageable pageable) {
     LOG.debug("Fetching results with user id {}", showId);
     List<CommentDTO> commentList = bo.findAllByShowIdWithUser(showId);
-    int pageEnd = Math.min((page + size), commentList.size());
-    Page<CommentDTO> pagedCommentList = new PageImpl<>(commentList.subList(page, pageEnd), pageable, commentList.size());
+    int start = (int)pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), commentList.size());
+    Page<CommentDTO> pagedCommentList = new PageImpl<>(commentList.subList(start, end), pageable, commentList.size());
     return ResponseEntity.ok(pagedCommentList);
   }
 

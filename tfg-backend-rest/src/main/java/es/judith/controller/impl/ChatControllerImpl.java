@@ -77,8 +77,9 @@ public class ChatControllerImpl implements ChatController {
         for (ChatMessage chatMessage : chatMessages) {
             convertedChatMessages.add(chatMessageBO.convertToDTO(chatMessage));
         }
-        int pageEnd = Math.min((page + size), convertedChatMessages.size());
-        Page<ChatMessageDTO> pagedConvertedChatMessages = new PageImpl<>(convertedChatMessages.subList(page, pageEnd), pageable, convertedChatMessages.size());
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), convertedChatMessages.size());
+        Page<ChatMessageDTO> pagedConvertedChatMessages = new PageImpl<>(convertedChatMessages.subList(start, end), pageable, convertedChatMessages.size());
         return ResponseEntity.ok(pagedConvertedChatMessages);
     }
 

@@ -93,8 +93,9 @@ public class CharacterControllerImpl implements CharacterController {
       }
       convertedCharacterList.add(characterDTO);
     }
-    int pageEnd = Math.min((page + size), convertedCharacterList.size());
-    Page<CharacterDTO> pagedConvertedCharacterList = new PageImpl<>(convertedCharacterList.subList(page, pageEnd), pageable, convertedCharacterList.size());
+    int start = (int)pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), convertedCharacterList.size());
+    Page<CharacterDTO> pagedConvertedCharacterList = new PageImpl<>(convertedCharacterList.subList(start, end), pageable, convertedCharacterList.size());
     return ResponseEntity.ok(pagedConvertedCharacterList);
   }
 

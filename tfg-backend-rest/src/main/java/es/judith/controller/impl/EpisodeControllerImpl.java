@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,14 +74,15 @@ public class EpisodeControllerImpl implements EpisodeController {
           @Parameter @RequestParam(defaultValue = "") String title,
           @Parameter @RequestParam(defaultValue = "0") Integer page,
           @Parameter @RequestParam(defaultValue = "20") Integer size,
-          Pageable pageable) {
+          @PageableDefault(size = 20) Pageable pageable) {
     List<Episode> episodeList = bo.findAllByTitle(title);
     List<EpisodeNoSeasonDTO> convertedEpisodeList = new ArrayList<>();
     for (Episode episode : episodeList) {
       convertedEpisodeList.add(bo.convertToDTO(episode));
     }
-    int pageEnd = Math.min((page + size), convertedEpisodeList.size());
-    Page<EpisodeNoSeasonDTO> pagedEpisodeList = new PageImpl<>(convertedEpisodeList.subList(page, pageEnd), pageable, convertedEpisodeList.size());
+    int start = (int)pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), convertedEpisodeList.size());
+    Page<EpisodeNoSeasonDTO> pagedEpisodeList = new PageImpl<>(convertedEpisodeList.subList(start, end), pageable, convertedEpisodeList.size());
     return ResponseEntity.ok(pagedEpisodeList);
   }
 

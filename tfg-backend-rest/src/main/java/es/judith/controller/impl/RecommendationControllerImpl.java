@@ -77,9 +77,10 @@ public class RecommendationControllerImpl implements RecommendationController {
         LOG.debug("RecommendationControllerImpl: Finding all sent recommendations");
         User currentUser = authBO.getCurrentUser();
         Map<Long, ArrayList> sentRecommendations = recommendationBO.getAllSentRecommendations(currentUser.getId());
-        int pageEnd = Math.min((page + size), sentRecommendations.size());
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), sentRecommendations.size());
         ArrayList<Map.Entry<Long, ArrayList>> sentRecommendationsToList = new ArrayList<>(sentRecommendations.entrySet());
-        Page<Map.Entry<Long, ArrayList>> pagedSentRecommendations = new PageImpl<>(sentRecommendationsToList.subList(page, pageEnd), pageable, sentRecommendationsToList.size());
+        Page<Map.Entry<Long, ArrayList>> pagedSentRecommendations = new PageImpl<>(sentRecommendationsToList.subList(start, end), pageable, sentRecommendationsToList.size());
         return ResponseEntity.status(HttpStatus.OK).body(pagedSentRecommendations);
     }
 

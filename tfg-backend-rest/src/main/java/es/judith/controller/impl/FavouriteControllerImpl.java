@@ -88,8 +88,9 @@ public class FavouriteControllerImpl implements FavouriteController {
       favouriteDTO.loadFromDomain(favourite);
       convertedFavouriteList.add(favouriteDTO);
     }
-    int pageEnd = Math.min((page + size), convertedFavouriteList.size());
-    Page<FavouriteDTO> pagedConvertedFavouriteList = new PageImpl<>(convertedFavouriteList.subList(page, pageEnd), pageable, convertedFavouriteList.size());
+    int start = (int)pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), convertedFavouriteList.size());
+    Page<FavouriteDTO> pagedConvertedFavouriteList = new PageImpl<>(convertedFavouriteList.subList(start, end), pageable, convertedFavouriteList.size());
     return ResponseEntity.ok(pagedConvertedFavouriteList);
   }
 

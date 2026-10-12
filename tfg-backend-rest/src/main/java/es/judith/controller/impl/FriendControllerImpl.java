@@ -74,9 +74,10 @@ public class FriendControllerImpl implements FriendController {
         LOG.debug("FriendControllerImpl: Finding all friendships");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentUserFriends = friendBO.getAllFriends(currentUserId);
-        int pageEnd = Math.min((page + size), currentUserFriends.size());
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), currentUserFriends.size());
         ArrayList<Map.Entry<Long, UserProfileDTO>> currentUserFriendsToList = new ArrayList<>(currentUserFriends.entrySet());
-        Page<Map.Entry<Long, UserProfileDTO>> pagedCurrentUserFriends = new PageImpl<>(currentUserFriendsToList.subList(page, pageEnd), pageable, currentUserFriendsToList.size());
+        Page<Map.Entry<Long, UserProfileDTO>> pagedCurrentUserFriends = new PageImpl<>(currentUserFriendsToList.subList(start, end), pageable, currentUserFriendsToList.size());
         return ResponseEntity.status(HttpStatus.OK).body(pagedCurrentUserFriends);
     }
 
@@ -105,9 +106,10 @@ public class FriendControllerImpl implements FriendController {
         LOG.debug("FriendControllerImpl: Finding all sent requests");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentSentRequests = friendBO.getAllSentRequests(currentUserId);
-        int pageEnd = Math.min((page + size), currentSentRequests.size());
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), currentSentRequests.size());
         ArrayList<Map.Entry<Long, UserProfileDTO>> currentSentRequestsToList = new ArrayList<>(currentSentRequests.entrySet());
-        Page<Map.Entry<Long, UserProfileDTO>> pagedCurrentSentRequests = new PageImpl<>(currentSentRequestsToList.subList(page, pageEnd), pageable, currentSentRequestsToList.size());
+        Page<Map.Entry<Long, UserProfileDTO>> pagedCurrentSentRequests = new PageImpl<>(currentSentRequestsToList.subList(start, end), pageable, currentSentRequestsToList.size());
         return ResponseEntity.status(HttpStatus.OK).body(pagedCurrentSentRequests);
     }
 
@@ -136,9 +138,10 @@ public class FriendControllerImpl implements FriendController {
         LOG.debug("FriendControllerImpl: Finding all received requests");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentReceivedRequests = friendBO.getAllReceivedRequests(currentUserId);
-        int pageEnd = Math.min((page + size), currentReceivedRequests.size());
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), currentReceivedRequests.size());
         ArrayList<Map.Entry<Long, UserProfileDTO>> currentReceivedRequestsToList = new ArrayList<>(currentReceivedRequests.entrySet());
-        Page<Map.Entry<Long, UserProfileDTO>> pagedCurrentReceivedRequests = new PageImpl<>(currentReceivedRequestsToList.subList(page, pageEnd), pageable, currentReceivedRequestsToList.size());
+        Page<Map.Entry<Long, UserProfileDTO>> pagedCurrentReceivedRequests = new PageImpl<>(currentReceivedRequestsToList.subList(start, end), pageable, currentReceivedRequestsToList.size());
         return ResponseEntity.status(HttpStatus.OK).body(pagedCurrentReceivedRequests);
     }
 

@@ -129,8 +129,9 @@ public class ReviewControllerImpl implements ReviewController {
     for (Review userReview : userReviews) {
       convertedUserReviews.add(bo.convertToDTO(userReview));
     }
-    int pageEnd = Math.min((page + size), convertedUserReviews.size());
-    Page<ReviewDTO> pagedConvertedUserReviews = new PageImpl<>(convertedUserReviews.subList(page, pageEnd), pageable, convertedUserReviews.size());
+    int start = (int)pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), convertedUserReviews.size());
+    Page<ReviewDTO> pagedConvertedUserReviews = new PageImpl<>(convertedUserReviews.subList(start, end), pageable, convertedUserReviews.size());
     return ResponseEntity.status(HttpStatus.OK).body(pagedConvertedUserReviews);
   }
 

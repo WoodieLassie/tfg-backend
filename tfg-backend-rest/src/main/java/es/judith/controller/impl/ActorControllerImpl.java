@@ -85,8 +85,9 @@ public class ActorControllerImpl implements ActorController {
       }
       convertedActors.add(actorDTO);
     }
-    int pageEnd = Math.min((page + size), convertedActors.size());
-    Page<ActorDTO> pagedConvertedActors = new PageImpl<>(convertedActors.subList(page, pageEnd), pageable, convertedActors.size());
+    int start = (int)pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), convertedActors.size());
+    Page<ActorDTO> pagedConvertedActors = new PageImpl<>(convertedActors.subList(start, end), pageable, convertedActors.size());
     return ResponseEntity.ok(pagedConvertedActors);
   }
 

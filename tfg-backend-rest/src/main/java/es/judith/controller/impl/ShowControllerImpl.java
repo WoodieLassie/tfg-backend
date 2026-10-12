@@ -83,8 +83,9 @@ public class ShowControllerImpl implements ShowController {
       }
       convertedShowList.add(showDTO);
     }
-    int pageEnd = Math.min((page + size), convertedShowList.size());
-    Page<ShowNoSeasonsDTO> pagedConvertedShowList = new PageImpl<>(convertedShowList.subList(page, pageEnd), pageable, convertedShowList.size());
+    int start = (int)pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), convertedShowList.size());
+    Page<ShowNoSeasonsDTO> pagedConvertedShowList = new PageImpl<>(convertedShowList.subList(start, end), pageable, convertedShowList.size());
     return ResponseEntity.ok(pagedConvertedShowList);
   }
 
