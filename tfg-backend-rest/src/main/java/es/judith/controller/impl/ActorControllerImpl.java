@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +69,7 @@ public class ActorControllerImpl implements ActorController {
           @Parameter @RequestParam(defaultValue = "") String name,
           @Parameter @RequestParam(defaultValue = "0") Integer page,
           @Parameter @RequestParam(defaultValue = "20") Integer size,
-          Pageable pageable) {
+          @PageableDefault(size = 20) Pageable pageable) {
     LOG.debug("ActorControllerImpl: Fetching all results with name {}", name);
     List<Actor> actors = bo.findAllByName(name);
     List<ActorDTO> convertedActors = new ArrayList<>();

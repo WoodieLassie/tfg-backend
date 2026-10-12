@@ -3,6 +3,7 @@ package es.judith.controller.impl;
 import es.judith.bo.AuthBO;
 import es.judith.bo.JwtBO;
 import es.judith.domain.Role;
+import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.dto.user.UserDTO;
 import es.judith.dto.user.UserInputDTO;
 import es.judith.dto.user.UserProfileDTO;
@@ -16,6 +17,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +35,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.io.Serial;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -120,6 +123,47 @@ public class UserControllerImpl implements UserController {
             .buildAndExpand(newUser.getId())
             .toUri();
     return ResponseEntity.status(HttpStatus.CREATED).location(location).body(newUser);
+  }
+
+  @Operation(method = "GET", summary = "Fetch data of users by username")
+  @ApiResponse(
+          responseCode = "200",
+          description = "OK",
+          content = {@Content(schema = @Schema(implementation = UserDTO.class))})
+  @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @SecurityRequirement(name = "Authorization")
+  @GetMapping("/search")
+  public ResponseEntity<Page<UserProfileDTO>> findAllByUsername(
+          @Parameter @RequestParam String username,
+          @Parameter @RequestParam(defaultValue = "0") Integer page,
+          @Parameter @RequestParam(defaultValue = "20") Integer size,
+          @PageableDefault(size = 20) Pageable pageable) {
+    User currentUser = authBO.getCurrentUser();
+    if (currentUser == null) {
+      throw new UnauthorizedException("You must be logged in");
+    }
+    List<User> userList = userBO.findAllByUsername(username);
+    List<UserProfileDTO> convertedUserList = new ArrayList<>();
+    for (User user : userList) {
+      UserProfileDTO userDTO = new UserProfileDTO();
+      userDTO.loadFromDomain(user);
+      if (userDTO.getImageData() != null) {
+        String userImageDownloadUrl =
+                ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/api/users/image/")
+                        .path(String.valueOf(userDTO.getId()))
+                        .toUriString();
+        userDTO.setImageUrl(userImageDownloadUrl);
+      }
+      convertedUserList.add(userDTO);
+    }
+    int start = (int)pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), convertedUserList.size());
+    Page<UserProfileDTO> pagedConvertedUserList = new PageImpl<>(convertedUserList.subList(start, end), pageable, convertedUserList.size());
+    return ResponseEntity.ok(pagedConvertedUserList);
   }
 
   @Operation(method = "GET", summary = "Fetch data of currently logged in user")

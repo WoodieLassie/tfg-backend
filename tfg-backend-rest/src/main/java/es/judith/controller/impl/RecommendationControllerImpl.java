@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,7 +74,7 @@ public class RecommendationControllerImpl implements RecommendationController {
     @Override
     public ResponseEntity<Page<Map.Entry<Long, ArrayList>>> findAllSentRecommendations(@Parameter @RequestParam(defaultValue = "0") Integer page,
                                                                            @Parameter @RequestParam(defaultValue = "20") Integer size,
-                                                                           Pageable pageable) {
+                                                                           @PageableDefault(size = 20) Pageable pageable) {
         LOG.debug("RecommendationControllerImpl: Finding all sent recommendations");
         User currentUser = authBO.getCurrentUser();
         Map<Long, ArrayList> sentRecommendations = recommendationBO.getAllSentRecommendations(currentUser.getId());
@@ -105,7 +106,7 @@ public class RecommendationControllerImpl implements RecommendationController {
     @Override
     public ResponseEntity<Page<Map.Entry<Long, ArrayList>>> findAllReceivedRecommendations(@Parameter @RequestParam(defaultValue = "0") Integer page,
                                                                                @Parameter @RequestParam(defaultValue = "20") Integer size,
-                                                                               Pageable pageable) {
+                                                                               @PageableDefault(size = 20) Pageable pageable) {
         LOG.debug("RecommendationControllerImpl: Finding all received recommendations");
         User currentUser = authBO.getCurrentUser();
         Map<Long, ArrayList> receivedRecommendations = recommendationBO.getAllReceivedRecommendations(currentUser.getId());

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,8 +70,8 @@ public class FriendControllerImpl implements FriendController {
             content = @Content(schema = @Schema(hidden = true)))
     @GetMapping
     public ResponseEntity<Page<Map.Entry<Long, UserProfileDTO>>> findAllFriends(@Parameter @RequestParam(defaultValue = "0") Integer page,
-                                                                          @Parameter @RequestParam(defaultValue = "20") Integer size,
-                                                                          Pageable pageable) {
+                                                                                @Parameter @RequestParam(defaultValue = "20") Integer size,
+                                                                                @PageableDefault(size = 20) Pageable pageable) {
         LOG.debug("FriendControllerImpl: Finding all friendships");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentUserFriends = friendBO.getAllFriends(currentUserId);
@@ -102,7 +103,7 @@ public class FriendControllerImpl implements FriendController {
     @GetMapping("/requests")
     public ResponseEntity<Page<Map.Entry<Long, UserProfileDTO>>> findAllSentRequests(@Parameter @RequestParam(defaultValue = "0") Integer page,
                                                                          @Parameter @RequestParam(defaultValue = "20") Integer size,
-                                                                         Pageable pageable) {
+                                                                         @PageableDefault(size = 20) Pageable pageable) {
         LOG.debug("FriendControllerImpl: Finding all sent requests");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentSentRequests = friendBO.getAllSentRequests(currentUserId);
@@ -134,7 +135,7 @@ public class FriendControllerImpl implements FriendController {
     @GetMapping("/requested")
     public ResponseEntity<Page<Map.Entry<Long, UserProfileDTO>>> findAllReceivedRequests(@Parameter @RequestParam(defaultValue = "0") Integer page,
                                                                                          @Parameter @RequestParam(defaultValue = "20") Integer size,
-                                                                                         Pageable pageable) {
+                                                                                         @PageableDefault(size = 20) Pageable pageable) {
         LOG.debug("FriendControllerImpl: Finding all received requests");
         Long currentUserId = authBO.getCurrentUser().getId();
         Map<Long, UserProfileDTO> currentReceivedRequests = friendBO.getAllReceivedRequests(currentUserId);

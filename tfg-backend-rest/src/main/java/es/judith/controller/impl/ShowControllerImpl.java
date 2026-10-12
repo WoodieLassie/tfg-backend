@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -67,7 +68,7 @@ public class ShowControllerImpl implements ShowController {
       @Parameter @RequestParam(defaultValue = "") String name,
       @Parameter @RequestParam(defaultValue = "0") Integer page,
       @Parameter @RequestParam(defaultValue = "20") Integer size,
-      Pageable pageable) {
+      @PageableDefault(size = 20) Pageable pageable) {
     LOG.debug("ShowControllerImpl: Fetching all results with name {}", name);
     List<Show> showList = bo.findAllByName(name);
     List<ShowNoSeasonsDTO> convertedShowList = new ArrayList<>();

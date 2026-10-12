@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serial;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,20 +32,29 @@ public class UserBOImpl extends GenericBOImpl<User, Long, UserRepository> implem
   public UserBOImpl(UserRepository repository) {
     super(repository);
   }
-  
+
   @Override
+  @Transactional(readOnly = true)
+  public List<User> findAllByUsername(String username) {
+    return repository.findAllByUsername(username);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
   public User findByEmail(String email) {
     LOG.debug("UserBOImpl: findByEmail");
     return this.repository.findByEmail(email);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public User findByUsername(String username) {
     LOG.debug("UserBOImpl: findByUsername");
     return this.repository.findByUsername(username);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public byte[] findImageById(Long id) {
     LOG.debug("UserBOImpl: findImageById");
     Optional<User> user = repository.findById(id);
@@ -52,6 +62,7 @@ public class UserBOImpl extends GenericBOImpl<User, Long, UserRepository> implem
   }
 
   @Override
+  @Transactional
   public void promoteUser(Long id) {
     LOG.debug("UserBOImpl: promoteUser");
     Optional<User> user = repository.findById(id);

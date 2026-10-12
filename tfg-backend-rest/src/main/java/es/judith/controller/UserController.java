@@ -4,6 +4,8 @@ import es.judith.domain.user.User;
 import es.judith.dto.user.UserDTO;
 import es.judith.dto.user.UserInputDTO;
 import es.judith.dto.user.UserProfileDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +14,7 @@ import java.util.Map;
 
 @SuppressWarnings("unused")
 public interface UserController extends Serializable {
+    ResponseEntity<Page<UserProfileDTO>> findAllByUsername(String username, Integer page, Integer size, Pageable pageable);
     ResponseEntity<UserDTO> getLoggedUser();
     ResponseEntity<Map<String, String>> login(UserInputDTO userInputDTO);
     ResponseEntity<User> register(UserInputDTO userDTO);
