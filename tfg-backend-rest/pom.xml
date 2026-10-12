@@ -23,56 +23,44 @@
             <artifactId>${project.parent.artifactId}-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!--Spring Boot-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.1.0</version>
+            <version>${springboot-parent.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-tomcat</artifactId>-->
-<!--            <scope>${tomcat.scope}</scope>-->
-<!--        </dependency>-->
-        <!--Spring devtools-->        
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-devtools</artifactId>-->
-<!--            <scope>runtime</scope>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
-
         <!--Flyway-->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
         </dependency>
         <dependency>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-mysql</artifactId>
-                <version>${flyway.version}</version>
-            </dependency>
-
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+            <version>${flyway.version}</version>
+        </dependency>
       	<!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>${springboot-parent.version}</version>
             <scope>test</scope>
         </dependency>
-        
+        <!--Commons io-->
         <dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.14.0</version>
+			<version>${commons-io.version}</version>
 		</dependency>
+        <!--Web Socket-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
-            <version>3.1.0</version>
+            <version>${spring-websocket.version}</version>
             <scope>compile</scope>
         </dependency>
-
     </dependencies>
-
     <build>
         <finalName>${project.artifactId}</finalName>
         <resources>
@@ -113,10 +101,9 @@
 			</plugin>
         </plugins>
     </build>
-
   	<properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <commons-io.version>2.14.0</commons-io.version>
     </properties>
-
 </project>
