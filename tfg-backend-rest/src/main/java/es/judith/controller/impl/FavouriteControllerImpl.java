@@ -8,7 +8,6 @@ import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.dto.favourite.FavouriteInputDTO;
-import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.exceptions.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

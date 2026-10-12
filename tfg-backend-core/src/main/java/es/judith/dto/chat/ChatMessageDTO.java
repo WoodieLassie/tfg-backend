@@ -1,8 +1,6 @@
 package es.judith.dto.chat;
 
 import es.judith.domain.chat.ChatMessage;
-import es.judith.domain.chat.ChatRoom;
-import es.judith.domain.user.User;
 import es.judith.dto.GenericDTO;
 import es.judith.dto.user.UserProfileDTO;
 import io.swagger.v3.oas.annotations.media.Schema;

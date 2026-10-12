@@ -10,7 +10,6 @@ import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.comment.CommentDTO;
 import es.judith.dto.comment.CommentInputDTO;
-import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.ForbiddenException;
 import es.judith.exceptions.NotExistingIdException;

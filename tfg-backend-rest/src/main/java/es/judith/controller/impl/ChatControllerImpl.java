@@ -8,7 +8,6 @@ import es.judith.domain.chat.ChatNotification;
 import es.judith.domain.user.User;
 import es.judith.dto.chat.ChatMessageDTO;
 import es.judith.dto.chat.ChatMessageInputDTO;
-import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import io.swagger.v3.oas.annotations.Operation;

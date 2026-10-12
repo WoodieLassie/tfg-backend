@@ -305,7 +305,7 @@ public class UserControllerImpl implements UserController {
           summary = "Promote user to admin role")
   @ApiResponse(
           responseCode = "204",
-          description = "OK",
+          description = "No Content",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
           responseCode = "403",

@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
-import java.util.List;
 
 public interface CommentController extends Serializable {
     ResponseEntity<Page<CommentDTO>> findAll(Long showId, Integer page, Integer size, Pageable pageable);

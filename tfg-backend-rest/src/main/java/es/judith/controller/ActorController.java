@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
-import java.util.List;
 
 public interface ActorController extends Serializable {
     ResponseEntity<Page<ActorDTO>> findAll(Integer page, Integer size, Pageable pageable);

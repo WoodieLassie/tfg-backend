@@ -4,7 +4,6 @@ package es.judith.dto.chat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import es.judith.domain.chat.ChatMessage;
 import es.judith.dto.GenericDTO;
-import es.judith.dto.user.UserProfileDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

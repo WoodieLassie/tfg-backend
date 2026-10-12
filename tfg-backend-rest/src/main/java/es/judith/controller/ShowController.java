@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
-import java.util.List;
 
 public interface ShowController extends Serializable {
     ResponseEntity<Page<ShowNoSeasonsDTO>> findAll(String name, Integer page, Integer size, Pageable pageable);

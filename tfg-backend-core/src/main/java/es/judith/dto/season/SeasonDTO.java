@@ -2,7 +2,6 @@ package es.judith.dto.season;
 
 import es.judith.domain.Season;
 import es.judith.dto.GenericDTO;
-import es.judith.dto.show.ShowDTO;
 import es.judith.dto.episode.EpisodeNoSeasonDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

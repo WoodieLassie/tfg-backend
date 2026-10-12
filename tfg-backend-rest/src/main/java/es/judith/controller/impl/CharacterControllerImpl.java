@@ -6,7 +6,6 @@ import es.judith.domain.Character;
 import es.judith.dto.actor.ActorNoCharacterDTO;
 import es.judith.dto.character.CharacterDTO;
 import es.judith.dto.character.CharacterInputDTO;
-import es.judith.dto.favourite.FavouriteDTO;
 import es.judith.exceptions.BadInputException;
 import es.judith.exceptions.NotExistingIdException;
 import es.judith.exceptions.NotFoundException;

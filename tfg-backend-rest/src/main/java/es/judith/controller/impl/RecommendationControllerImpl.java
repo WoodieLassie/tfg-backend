@@ -6,7 +6,6 @@ import es.judith.domain.Recommendation;
 import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.recommendation.RecommendationInputDTO;
-import es.judith.dto.review.ReviewDTO;
 import es.judith.dto.swagger.RecommendationSwaggerDTO;
 import es.judith.exceptions.AlreadyExistsException;
 import es.judith.exceptions.BadInputException;
@@ -27,10 +26,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
-import java.net.URI;
 import java.util.*;
 
 @RestController
