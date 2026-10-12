@@ -625,6 +625,17 @@
       "name": "Episodes",
       "item": [
         {
+          "name": "Get episodes by title",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Get episode by id",
           "request": {
             "method": "GET",
