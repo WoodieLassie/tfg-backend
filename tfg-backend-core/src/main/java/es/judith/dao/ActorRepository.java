@@ -11,8 +11,12 @@ import java.util.Optional;
 public interface ActorRepository
         extends GenericRepository<Actor, Long>,
         JpaSpecificationExecutor<Actor> {
-    @Query("SELECT a from Actor a LEFT JOIN FETCH a.characters c")
-    List<Actor> findAll();
+    @Query(
+            "SELECT a FROM Actor a "
+                    + "LEFT JOIN FETCH a.characters c "
+                    + "WHERE LOWER(a.name) LIKE LOWER(CONCAT('%', :name, '%')) ")
+    List<Actor> findByName(
+            @Param("name") String name);
     @Query("SELECT a from Actor a LEFT JOIN FETCH a.characters c where a.id = :id")
     Optional<Actor> findById(@Param("id") Long id);
 }

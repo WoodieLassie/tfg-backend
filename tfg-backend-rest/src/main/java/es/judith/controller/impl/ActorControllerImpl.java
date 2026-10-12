@@ -65,12 +65,12 @@ public class ActorControllerImpl implements ActorController {
       })
   @GetMapping
   public ResponseEntity<Page<ActorDTO>> findAll(
+          @Parameter @RequestParam(defaultValue = "") String name,
           @Parameter @RequestParam(defaultValue = "0") Integer page,
           @Parameter @RequestParam(defaultValue = "20") Integer size,
           Pageable pageable) {
-    //TODO: Permitir búsqueda por nombre como en show. Añadir AQUI el check (findAll sin argumentos si string es "", si no, pues eso. Ajustar LOG tambien)
-    LOG.debug("ActorControllerImpl: Fetching all results");
-    List<Actor> actors = bo.findAll();
+    LOG.debug("ActorControllerImpl: Fetching all results with name {}", name);
+    List<Actor> actors = bo.findAllByName(name);
     List<ActorDTO> convertedActors = new ArrayList<>();
     for (Actor actor : actors) {
       ActorDTO actorDTO = new ActorDTO();

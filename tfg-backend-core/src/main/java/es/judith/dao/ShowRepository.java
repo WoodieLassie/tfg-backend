@@ -16,7 +16,4 @@ public interface ShowRepository extends GenericRepository<Show, Long>,
     Optional<Show> findById(@Param("id") Long id);
     @Query("SELECT s FROM Show s WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%')) ORDER BY s.id")
     List<Show> findAllByName(@Param("name") String name);
-    @Query("DELETE FROM Season s WHERE s.show.id = :showId")
-    @Modifying
-    void deleteAllSeasons(@Param("showId") Long showId);
 }

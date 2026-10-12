@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.Serializable;
 
 public interface CharacterController extends Serializable {
-    ResponseEntity<Page<CharacterDTO>> findAll(Integer page, Integer size, Pageable pageable);
+    ResponseEntity<Page<CharacterDTO>> findAll(String name, Integer page, Integer size, Pageable pageable);
     ResponseEntity<CharacterDTO> findById(Long id);
     ResponseEntity<byte[]> findImageById(Long id);
     ResponseEntity<Character> add(CharacterInputDTO characterDTO);

@@ -28,6 +28,14 @@ public class CharacterBOImpl
     super(repository);
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public List<Character> findAllByName(String name) {
+    LOG.debug("CharacterBOImpl: findAllByName");
+    return repository.findAllByName(name);
+  }
+
+  @Override
   @Transactional(readOnly = true)
   public List<Character> findAllById(List<Long> ids) {
     LOG.debug("CharacterBOImpl: findAllById");
@@ -35,16 +43,10 @@ public class CharacterBOImpl
   }
 
   @Override
+  @Transactional(readOnly = true)
   public byte[] findImageById(Long id) {
     LOG.debug("CharacterBOImpl: findImageById");
     Optional<Character> character = repository.findById(id);
     return character.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
-  }
-
-  @Override
-  public void delete(Long id) {
-    LOG.debug("CharacterBOImpl: delete");
-    repository.deleteFromRelatedTable(id);
-    repository.deleteById(id);
   }
 }

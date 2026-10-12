@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serial;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +25,14 @@ public class ActorBOImpl extends GenericBOImpl<Actor, Long, ActorRepository> imp
     super(repository);
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public List<Actor> findAllByName(String name) {
+    LOG.debug("ActorBOImpl: findAllByName");
+    return repository.findByName(name);
+  }
+
+  @Override
   @Transactional(readOnly = true)
   public byte[] findImageById(Long id) {
     LOG.debug("ActorBOImpl: findImageById");
