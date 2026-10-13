@@ -1,5 +1,6 @@
 package es.judith.controller.impl;
 
+import es.judith.bo.ActorBO;
 import es.judith.bo.CharacterBO;
 import es.judith.controller.CharacterController;
 import es.judith.domain.Character;
@@ -46,10 +47,12 @@ public class CharacterControllerImpl implements CharacterController {
   @Serial
   private static final long serialVersionUID = 4627888723729775421L;
   private static final Logger LOG = LoggerFactory.getLogger(CharacterControllerImpl.class);
-  private final CharacterBO bo;
+  private final transient CharacterBO bo;
+  private final transient ActorBO actorBO;
 
-  public CharacterControllerImpl(CharacterBO bo) {
+  public CharacterControllerImpl(CharacterBO bo, ActorBO actorBO) {
     this.bo = bo;
+    this.actorBO = actorBO;
   }
 
   @Override
@@ -75,20 +78,12 @@ public class CharacterControllerImpl implements CharacterController {
       CharacterDTO characterDTO = new CharacterDTO();
       characterDTO.loadFromDomain(character);
       if (character.getImageData() != null) {
-        String characterImageDownloadURL =
-            ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/characters/images/")
-                .path(String.valueOf(character.getId()))
-                .toUriString();
+        String characterImageDownloadURL = bo.generateImageUrl(characterDTO.getId());
         characterDTO.setImageUrl(characterImageDownloadURL);
       }
       for (ActorNoCharacterDTO actor : characterDTO.getActors()) {
         if (actor.getImageData() != null) {
-          String actorImageDownloadUrl =
-              ServletUriComponentsBuilder.fromCurrentContextPath()
-                  .path("/actors/images/")
-                  .path(String.valueOf(actor.getId()))
-                  .toUriString();
+          String actorImageDownloadUrl = actorBO.generateImageUrl(actor.getId());
           actor.setImageUrl(actorImageDownloadUrl);
         }
       }
@@ -127,20 +122,12 @@ public class CharacterControllerImpl implements CharacterController {
     CharacterDTO convertedCharacter = new CharacterDTO();
     convertedCharacter.loadFromDomain(character);
     if (character.getImageData() != null) {
-      String characterImageDownloadURL =
-          ServletUriComponentsBuilder.fromCurrentContextPath()
-              .path("/characters/images/")
-              .path(String.valueOf(character.getId()))
-              .toUriString();
+      String characterImageDownloadURL = bo.generateImageUrl(convertedCharacter.getId());
       convertedCharacter.setImageUrl(characterImageDownloadURL);
     }
     for (ActorNoCharacterDTO actor : convertedCharacter.getActors()) {
       if (actor.getImageData() != null) {
-        String actorImageDownloadUrl =
-            ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/actors/images/")
-                .path(String.valueOf(actor.getId()))
-                .toUriString();
+        String actorImageDownloadUrl = actorBO.generateImageUrl(actor.getId());
         actor.setImageUrl(actorImageDownloadUrl);
       }
     }

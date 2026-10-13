@@ -74,4 +74,12 @@ public class ShowBOImpl
     }
     return showDTO;
   }
+
+  @Override
+  public String generateImageUrl(Long showId) {
+    return ServletUriComponentsBuilder.fromCurrentContextPath()
+            .path("/api/shows/image/")
+            .path(String.valueOf(showId))
+            .toUriString();
+  }
 }

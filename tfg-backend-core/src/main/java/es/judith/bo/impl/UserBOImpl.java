@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
 import java.util.List;
@@ -89,5 +90,13 @@ public class UserBOImpl extends GenericBOImpl<User, Long, UserRepository> implem
       return "Username fields exceed max length";
     }
     return "";
+  }
+
+  @Override
+  public String generateImageUrl(Long userId) {
+    return ServletUriComponentsBuilder.fromCurrentContextPath()
+            .path("/api/users/image/")
+            .path(String.valueOf(userId))
+            .toUriString();
   }
 }

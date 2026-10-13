@@ -1,6 +1,7 @@
 package es.judith.bo;
 
 import es.judith.domain.user.User;
+import es.judith.dto.GenericDTO;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface UserBO extends GenericBO<User, Long> {
   byte[] findImageById(Long id);
   void promoteUser(Long id);
   String checkForIllegalStrings(String email, String password, String username);
+  String generateImageUrl(Long userId);
 }

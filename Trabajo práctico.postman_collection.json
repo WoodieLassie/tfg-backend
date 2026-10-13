@@ -103,7 +103,18 @@
           "response": []
         },
         {
-          "name": "Get user data",
+          "name": "Get users by username",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get user by id",
           "request": {
             "method": "GET",
             "header": [],

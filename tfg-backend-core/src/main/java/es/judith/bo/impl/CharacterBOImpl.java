@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
 import java.util.List;
@@ -48,5 +49,13 @@ public class CharacterBOImpl
     LOG.debug("CharacterBOImpl: findImageById");
     Optional<Character> character = repository.findById(id);
     return character.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
+  }
+
+  @Override
+  public String generateImageUrl(Long characterId) {
+    return ServletUriComponentsBuilder.fromCurrentContextPath()
+            .path("/characters/images/")
+            .path(String.valueOf(characterId))
+            .toUriString();
   }
 }

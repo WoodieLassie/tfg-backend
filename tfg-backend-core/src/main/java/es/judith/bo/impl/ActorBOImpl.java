@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
 import java.util.List;
@@ -38,5 +39,13 @@ public class ActorBOImpl extends GenericBOImpl<Actor, Long, ActorRepository> imp
     LOG.debug("ActorBOImpl: findImageById");
     Optional<Actor> actor = repository.findById(id);
     return actor.map(image -> ImageUtil.decompressImage(image.getImageData())).orElse(null);
+  }
+
+  @Override
+  public String generateImageUrl(Long actorId) {
+    return ServletUriComponentsBuilder.fromCurrentContextPath()
+            .path("/api/actors/images/")
+            .path(String.valueOf(actorId))
+            .toUriString();
   }
 }

@@ -75,11 +75,7 @@ public class ShowControllerImpl implements ShowController {
     for (Show show : showList) {
       ShowNoSeasonsDTO showDTO = bo.convertToShowNoSeasonsDTO(show);
       if (showDTO.getImageData() != null) {
-        String showImageDownloadUrl =
-                ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/api/shows/image/")
-                        .path(String.valueOf(showDTO.getId()))
-                        .toUriString();
+        String showImageDownloadUrl = bo.generateImageUrl(showDTO.getId());
         showDTO.setImageUrl(showImageDownloadUrl);
       }
       convertedShowList.add(showDTO);
@@ -111,11 +107,7 @@ public class ShowControllerImpl implements ShowController {
     }
     ShowDTO showDTO = bo.convertToShowDTO(show);
     if (showDTO.getImageData() != null) {
-      String showImageDownloadUrl =
-              ServletUriComponentsBuilder.fromCurrentContextPath()
-                      .path("/api/shows/image/")
-                      .path(String.valueOf(showDTO.getId()))
-                      .toUriString();
+      String showImageDownloadUrl = bo.generateImageUrl(showDTO.getId());
       showDTO.setImageUrl(showImageDownloadUrl);
     }
     return ResponseEntity.ok(showDTO);

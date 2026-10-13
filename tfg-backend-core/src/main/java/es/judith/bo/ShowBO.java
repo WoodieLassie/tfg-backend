@@ -11,4 +11,5 @@ public interface ShowBO extends GenericBO<Show, Long> {
     byte[] findImageById(Long id);
     ShowDTO convertToShowDTO(Show show);
     ShowNoSeasonsDTO convertToShowNoSeasonsDTO(Show show);
+    String generateImageUrl(Long showId);
 }

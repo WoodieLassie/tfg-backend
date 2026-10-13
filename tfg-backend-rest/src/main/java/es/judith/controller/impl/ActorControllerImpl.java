@@ -77,11 +77,7 @@ public class ActorControllerImpl implements ActorController {
       ActorDTO actorDTO = new ActorDTO();
       actorDTO.loadFromDomain(actor);
       if (actorDTO.getImageData() != null) {
-        String actorImageDownloadUrl =
-            ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/actors/images/")
-                .path(String.valueOf(actorDTO.getId()))
-                .toUriString();
+        String actorImageDownloadUrl = bo.generateImageUrl(actorDTO.getId());
         actorDTO.setImageUrl(actorImageDownloadUrl);
       }
       convertedActors.add(actorDTO);
@@ -117,11 +113,7 @@ public class ActorControllerImpl implements ActorController {
     ActorDTO convertedActor = new ActorDTO();
     convertedActor.loadFromDomain(actor);
     if (convertedActor.getImageData() != null) {
-      String actorImageDownloadUrl =
-          ServletUriComponentsBuilder.fromCurrentContextPath()
-              .path("/api/actors/images/")
-              .path(String.valueOf(convertedActor.getId()))
-              .toUriString();
+      String actorImageDownloadUrl = bo.generateImageUrl(convertedActor.getId());
       convertedActor.setImageUrl(actorImageDownloadUrl);
     }
     return ResponseEntity.ok(convertedActor);
