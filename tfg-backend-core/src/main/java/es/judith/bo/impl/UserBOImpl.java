@@ -74,9 +74,9 @@ public class UserBOImpl extends GenericBOImpl<User, Long, UserRepository> implem
   }
 
   public String checkForIllegalStrings(String email, String password, String username) {
-    Pattern usernameRegex = Pattern.compile("[^A-Za-z0-9 ]");
-    Pattern emailRegex = Pattern.compile("[^A-Za-z0-9 @.]");
-    Pattern passwordRegex = Pattern.compile("[^A-Za-z0-9 @_!#%&*¿?.]");
+    Pattern usernameRegex = Pattern.compile("[^A-Za-z0-9]");
+    Pattern emailRegex = Pattern.compile("[^A-Za-z0-9@.]");
+    Pattern passwordRegex = Pattern.compile("[^A-Za-z0-9@_!#%&*¿?.]");
     Matcher usernameMatcher = usernameRegex.matcher(username);
     Matcher emailMatcher = emailRegex.matcher(email);
     Matcher passwordMatcher = passwordRegex.matcher(password);

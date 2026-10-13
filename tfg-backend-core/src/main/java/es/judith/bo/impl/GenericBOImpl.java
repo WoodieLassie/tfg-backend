@@ -177,6 +177,9 @@ public class GenericBOImpl<T extends GenericEntity, I extends Serializable, R ex
 
   @Override
   public boolean checkForIllegalStrings(String string, Integer maxLength) {
+    if (string == null) {
+      return false;
+    }
     Pattern regex = Pattern.compile("[^A-Za-z0-9 ]");
     Matcher matcher = regex.matcher(string);
     if (matcher.find()) {

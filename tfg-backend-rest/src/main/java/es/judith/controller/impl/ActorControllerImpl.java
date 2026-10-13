@@ -227,8 +227,8 @@ public class ActorControllerImpl implements ActorController {
   @PatchMapping("/{id}")
   public ResponseEntity<Actor> update(@PathVariable Long id, @RequestBody ActorInputDTO actorDTO) {
     if (bo.checkForIllegalStrings(actorDTO.getName(), 100)) {
-      throw new BadInputException("Actor name cannot be greater than 100 characters");
-    }
+        throw new BadInputException("Actor name cannot be greater than 100 characters");
+      }
     if (bo.checkForIllegalStrings(actorDTO.getNationality(), 100)) {
       throw new BadInputException("Actor nationality cannot be greater than 100 characters");
     }
@@ -238,8 +238,8 @@ public class ActorControllerImpl implements ActorController {
     if (bo.checkForIllegalStrings(actorDTO.getBirthLocation(), 100)) {
       throw new BadInputException("Actor birth location cannot be greater than 100 characters");
     }
-    if (bo.checkForIllegalStrings(actorDTO.getBirthDate().toString(), 100)) {
-      throw new BadInputException("Actor birth date cannot be greater than 100 characters");
+    if (actorDTO.getBirthDate() != null && bo.checkForIllegalStrings(actorDTO.getBirthDate().toString(), 100)) {
+        throw new BadInputException("Actor birth date cannot be greater than 100 characters");
     }
     Actor newActorInfo = actorDTO.obtainDomainObject();
     Actor actor = bo.findOne(id);
