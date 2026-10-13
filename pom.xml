@@ -169,6 +169,13 @@
                 <version>${spring-websocket.version}</version>
                 <scope>compile</scope>
             </dependency>
+            <!--SPRING BOOT SECURITY TEST-->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-test</artifactId>
+                <version>${spring-security-test.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <properties>
@@ -183,6 +190,7 @@
         <jwt.version>0.13.0</jwt.version>
         <hibernate-validator.version>8.0.3.Final</hibernate-validator.version>
         <springboot-parent.version>3.5.16</springboot-parent.version>
+        <spring-security-test.version>7.1.1</spring-security-test.version>
     </properties>
     <!-- Project modules -->
     <modules>
