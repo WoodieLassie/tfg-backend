@@ -71,6 +71,7 @@ public class RecommendationControllerImpl implements RecommendationController {
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
+    @SecurityRequirement(name = "Authorization")
     @Override
     public ResponseEntity<Page<Map.Entry<Long, ArrayList>>> findAllSentRecommendations(@Parameter @RequestParam(defaultValue = "0") Integer page,
                                                                            @Parameter @RequestParam(defaultValue = "20") Integer size,
@@ -103,6 +104,7 @@ public class RecommendationControllerImpl implements RecommendationController {
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
+    @SecurityRequirement(name = "Authorization")
     @Override
     public ResponseEntity<Page<Map.Entry<Long, ArrayList>>> findAllReceivedRecommendations(@Parameter @RequestParam(defaultValue = "0") Integer page,
                                                                                @Parameter @RequestParam(defaultValue = "20") Integer size,

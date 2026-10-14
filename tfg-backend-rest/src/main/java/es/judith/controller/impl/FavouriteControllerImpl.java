@@ -66,6 +66,7 @@ public class FavouriteControllerImpl implements FavouriteController {
             mediaType = "application/json",
             array = @ArraySchema(schema = @Schema(implementation = FavouriteDTO.class)))
       })
+  @SecurityRequirement(name = "Authorization")
   @GetMapping("/{userId}")
   public ResponseEntity<Page<FavouriteDTO>> findAllByUser(
           @PathVariable Long userId,

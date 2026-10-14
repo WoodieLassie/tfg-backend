@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/messages")
 @Tag(name = "chats")
-//TODO: Autenticacion?
+//TODO: Autenticacion. currentUser, etc
 public class ChatControllerImpl implements ChatController {
 
     @Serial
@@ -52,7 +53,6 @@ public class ChatControllerImpl implements ChatController {
     }
 
     @Override
-    @GetMapping("/{senderId}/{receiverId}")
     @Operation(
             method = "GET",
             summary = "Get all messages between two users")
@@ -66,6 +66,8 @@ public class ChatControllerImpl implements ChatController {
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
+    @SecurityRequirement(name = "Authorization")
+    @GetMapping("/{senderId}/{receiverId}")
     public ResponseEntity<Page<ChatMessageDTO>> getMessages(
             @PathVariable Long senderId,
             @PathVariable Long receiverId,

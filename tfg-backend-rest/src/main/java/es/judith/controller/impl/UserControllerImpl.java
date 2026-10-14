@@ -140,10 +140,6 @@ public class UserControllerImpl implements UserController {
           @Parameter @RequestParam(defaultValue = "0") Integer page,
           @Parameter @RequestParam(defaultValue = "20") Integer size,
           @PageableDefault(size = 20) Pageable pageable) {
-    User currentUser = authBO.getCurrentUser();
-    if (currentUser == null) {
-      throw new UnauthorizedException("You must be logged in");
-    }
     List<User> userList = userBO.findAllByUsername(username);
     List<UserProfileDTO> convertedUserList = new ArrayList<>();
     for (User user : userList) {
@@ -193,7 +189,8 @@ public class UserControllerImpl implements UserController {
           responseCode = "404",
           description = "Not Found",
           content = {@Content(schema = @Schema(hidden = true))})
-  @GetMapping("/{userId}")
+  @SecurityRequirement(name = "Authorization")
+  @GetMapping("/profile/{userId}")
   public ResponseEntity<UserProfileDTO> getUser(@PathVariable Long userId) {
     UserProfileDTO userDTO = new UserProfileDTO();
     User user = userBO.findOne(userId);

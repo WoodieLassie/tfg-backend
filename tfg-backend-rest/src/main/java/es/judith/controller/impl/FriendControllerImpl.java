@@ -68,6 +68,7 @@ public class FriendControllerImpl implements FriendController {
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
+    @SecurityRequirement(name = "Authorization")
     @GetMapping
     public ResponseEntity<Page<Map.Entry<Long, UserProfileDTO>>> findAllFriends(@Parameter @RequestParam(defaultValue = "0") Integer page,
                                                                                 @Parameter @RequestParam(defaultValue = "20") Integer size,
@@ -100,6 +101,7 @@ public class FriendControllerImpl implements FriendController {
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
+    @SecurityRequirement(name = "Authorization")
     @GetMapping("/requests")
     public ResponseEntity<Page<Map.Entry<Long, UserProfileDTO>>> findAllSentRequests(@Parameter @RequestParam(defaultValue = "0") Integer page,
                                                                          @Parameter @RequestParam(defaultValue = "20") Integer size,
@@ -132,6 +134,7 @@ public class FriendControllerImpl implements FriendController {
             responseCode = "403",
             description = "Forbidden",
             content = @Content(schema = @Schema(hidden = true)))
+    @SecurityRequirement(name = "Authorization")
     @GetMapping("/requested")
     public ResponseEntity<Page<Map.Entry<Long, UserProfileDTO>>> findAllReceivedRequests(@Parameter @RequestParam(defaultValue = "0") Integer page,
                                                                                          @Parameter @RequestParam(defaultValue = "20") Integer size,
