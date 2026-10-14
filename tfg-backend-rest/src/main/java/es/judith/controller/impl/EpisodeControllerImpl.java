@@ -7,7 +7,6 @@ import es.judith.controller.EpisodeController;
 import es.judith.domain.Character;
 import es.judith.domain.Episode;
 import es.judith.domain.Season;
-import es.judith.dto.comment.CommentDTO;
 import es.judith.dto.episode.EpisodeDTO;
 import es.judith.dto.episode.EpisodeInputDTO;
 import es.judith.dto.episode.EpisodeNoSeasonDTO;

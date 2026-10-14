@@ -22,9 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
   private final BCryptPasswordEncoder passwordEncoder;
-    {
-        new BCryptPasswordEncoder(10);
-    }
   private final CustomUserDetailsService userDetailsService;
   private final JwtFilter jwtFilter;
 

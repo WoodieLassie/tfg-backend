@@ -3,7 +3,6 @@ package es.judith.controller.impl;
 import es.judith.bo.AuthBO;
 import es.judith.bo.JwtBO;
 import es.judith.domain.Role;
-import es.judith.dto.show.ShowNoSeasonsDTO;
 import es.judith.dto.user.UserDTO;
 import es.judith.dto.user.UserInputDTO;
 import es.judith.dto.user.UserProfileDTO;

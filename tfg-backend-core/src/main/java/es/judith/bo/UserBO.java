@@ -1,7 +1,6 @@
 package es.judith.bo;
 
 import es.judith.domain.user.User;
-import es.judith.dto.GenericDTO;
 
 import java.util.List;
 

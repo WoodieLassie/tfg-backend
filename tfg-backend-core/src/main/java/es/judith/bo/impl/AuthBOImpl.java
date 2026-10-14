@@ -20,9 +20,6 @@ public class AuthBOImpl implements AuthBO, Serializable {
     @Serial
     private static final long serialVersionUID = 8489438578421447527L;
     private final transient BCryptPasswordEncoder passwordEncoder;
-    {
-        new BCryptPasswordEncoder(10);
-    }
     private final transient AuthenticationManager authenticationManager;
     private static final Logger LOG = LoggerFactory.getLogger(AuthBOImpl.class);
 

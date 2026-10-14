@@ -1,8 +1,11 @@
 package es.judith.exceptions;
 
+import java.io.Serial;
+
 public class UnhandledException extends RuntimeException {
 
   /** serialVersionUID for object serialization. */
+  @Serial
   private static final long serialVersionUID = -3359819502876027977L;
 
   public UnhandledException() {
