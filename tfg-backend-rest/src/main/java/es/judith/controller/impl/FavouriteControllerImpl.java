@@ -99,8 +99,8 @@ public class FavouriteControllerImpl implements FavouriteController {
   @Override
   @Operation(method = "POST", summary = "Save a favourite")
   @ApiResponse(
-      responseCode = "201",
-      description = "Created",
+      responseCode = "204",
+      description = "No Content",
       content = {@Content(schema = @Schema(implementation = Favourite.class))})
   @ApiResponse(
           responseCode = "403",
@@ -141,12 +141,7 @@ public class FavouriteControllerImpl implements FavouriteController {
     favourite.setUser(user);
     LOG.debug("FavouriteControllerImpl: Saving data");
     bo.save(favourite);
-    URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(favourite.getId())
-            .toUri();
-    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(favourite);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }
 
   @Override

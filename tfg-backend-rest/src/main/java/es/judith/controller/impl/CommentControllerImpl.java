@@ -85,8 +85,8 @@ public class CommentControllerImpl implements CommentController {
   @Override
   @Operation(method = "POST", summary = "Post a new comment")
   @ApiResponse(
-          responseCode = "201",
-          description = "Created",
+          responseCode = "204",
+          description = "No Content",
           content = {@Content(schema = @Schema(implementation = Comment.class))})
   @ApiResponse(
           responseCode = "403",
@@ -124,12 +124,7 @@ public class CommentControllerImpl implements CommentController {
     comment.setUser(user);
     LOG.debug("CommentControllerImpl: Saving data");
     bo.save(comment);
-    URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(comment.getId())
-            .toUri();
-    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(comment);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }
 
   @Override

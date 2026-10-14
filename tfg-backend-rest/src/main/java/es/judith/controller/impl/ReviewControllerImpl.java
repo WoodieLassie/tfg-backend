@@ -139,8 +139,8 @@ public class ReviewControllerImpl implements ReviewController {
   @Override
   @Operation(method = "POST", summary = "Save a new review")
   @ApiResponse(
-          responseCode = "201",
-          description = "Created",
+          responseCode = "204",
+          description = "No Content",
           content = {@Content(schema = @Schema(implementation = Review.class))})
   @ApiResponse(
           responseCode = "401",
@@ -175,22 +175,12 @@ public class ReviewControllerImpl implements ReviewController {
     newReviewInfo.setUser(user);
     if (existingUserReviewInShow != null) {
       newReviewInfo.setId(existingUserReviewInShow.getId());
-      URI location = ServletUriComponentsBuilder
-              .fromCurrentRequest()
-              .path("/{id}")
-              .buildAndExpand(newReviewInfo.getId())
-              .toUri();
       bo.save(newReviewInfo);
-      return ResponseEntity.status(HttpStatus.CREATED).location(location).body(newReviewInfo);
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
-    URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(newReviewInfo.getId())
-            .toUri();
     LOG.debug("ReviewControllerImpl: Saving new review");
     bo.save(newReviewInfo);
-    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(newReviewInfo);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }
 
   @Override
