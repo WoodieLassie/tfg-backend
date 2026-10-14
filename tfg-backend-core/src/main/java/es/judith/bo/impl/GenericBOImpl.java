@@ -180,7 +180,7 @@ public class GenericBOImpl<T extends GenericEntity, I extends Serializable, R ex
     if (string == null) {
       return false;
     }
-    Pattern regex = Pattern.compile("[^A-Za-z0-9 ]");
+    Pattern regex = Pattern.compile("[^A-Za-z0-9 ñÑ-]");
     Matcher matcher = regex.matcher(string);
     if (matcher.find()) {
       return true;
