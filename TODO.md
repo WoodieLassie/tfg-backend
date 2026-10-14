@@ -1,5 +1,6 @@
 # To do list
 
-- Rehacer tests
-- Limpiar usos innecesarios de authBO (controladores ya filtrados por securityConfig, que no necesiten comprobaciones específicas del ID del usuario)
-- Sonar sin advertencias
+- Hacer tests
+- Completar tareas de comentarios TODO (consultar sonar)
+- Verificar funcionamiento de websocket (debe hacerse desde frontend)
+- Habilitar CORS

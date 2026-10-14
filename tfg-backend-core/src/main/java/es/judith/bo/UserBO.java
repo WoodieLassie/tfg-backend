@@ -11,6 +11,6 @@ public interface UserBO extends GenericBO<User, Long> {
   User findByUsername(String username);
   byte[] findImageById(Long id);
   void promoteUser(Long id);
-  String checkForIllegalStrings(String email, String password, String username);
+  boolean checkForIllegalStrings(String string, String fieldType);
   String generateImageUrl(Long userId);
 }

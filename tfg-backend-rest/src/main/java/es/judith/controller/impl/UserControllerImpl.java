@@ -97,9 +97,14 @@ public class UserControllerImpl implements UserController {
     if (!userDTO.allFieldsArePresent()) {
       throw new BadInputException("All fields must be present in request body");
     }
-    String illegalStringResult = userBO.checkForIllegalStrings(userDTO.getEmail(), userDTO.getPassword(), userDTO.getUsername());
-    if (!Objects.equals(illegalStringResult, "")) {
-      throw new BadInputException(illegalStringResult);
+    if (userBO.checkForIllegalStrings(userDTO.getEmail(), "email")) {
+      throw new BadInputException("Email contains illegal characters or exceeds 100 character length");
+    }
+    if (userBO.checkForIllegalStrings(userDTO.getUsername(), "username")) {
+      throw new BadInputException("Username contains illegal characters or exceeds 20 character length");
+    }
+    if (userBO.checkForIllegalStrings(userDTO.getPassword(), "password")) {
+      throw new BadInputException("Password contains illegal characters, exceeds 100 character length, or length is lower than 8");
     }
     User dbUser = userBO.findByEmail(userDTO.getEmail());
     if (dbUser != null) {
@@ -255,10 +260,10 @@ public class UserControllerImpl implements UserController {
     User currentUser = authBO.getCurrentUser();
     userDTO.setId(currentUser.getId());
     if (userDTO.getEmail() != null) {
-      if (userBO.checkForIllegalStrings(userDTO.getEmail(), 100)) {
-        throw new BadInputException("Email length cannot be greater than 100 characters");
+      if (userBO.checkForIllegalStrings(userDTO.getEmail(), "email")) {
+        throw new BadInputException("Email contains illegal characters or exceeds 100 character length");
       }
-      if (userBO.findByEmail(userDTO.getEmail()) != null) {
+      if (userBO.findByEmail(userDTO.getEmail()) != null && !Objects.equals(userDTO.getEmail(), currentUser.getEmail())) {
         throw new AlreadyExistsException(
                 "User with email " + userDTO.getEmail() + " already exists"
         );
@@ -266,16 +271,16 @@ public class UserControllerImpl implements UserController {
       currentUser.setEmail(userDTO.getEmail());
     }
     if (userDTO.getPassword() != null) {
-      if (userBO.checkForIllegalStrings(userDTO.getPassword(), 100)) {
-        throw new BadInputException("Password length cannot be greater than 100 characters");
+      if (userBO.checkForIllegalStrings(userDTO.getPassword(), "password")) {
+        throw new BadInputException("Password contains illegal characters, exceeds 100 character length, or length is lower than 8");
       }
       currentUser.setPassword(authBO.encryptPassword(userDTO.getPassword()));
     }
     if (userDTO.getUsername() != null) {
-      if (userBO.checkForIllegalStrings(userDTO.getUsername(), 100)) {
-        throw new BadInputException("Username length cannot be greater than 100 characters");
+      if (userBO.checkForIllegalStrings(userDTO.getUsername(), "username")) {
+        throw new BadInputException("Username contains illegal characters or exceeds 20 character length");
       }
-      if (userBO.findByUsername(userDTO.getUsername()) != null) {
+      if (userBO.findByUsername(userDTO.getUsername()) != null && !Objects.equals(userDTO.getUsername(), currentUser.getUsername())) {
         throw new AlreadyExistsException(
                 "User with username " + userDTO.getUsername() + " already exists"
         );

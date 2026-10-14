@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -73,23 +74,25 @@ public class UserBOImpl extends GenericBOImpl<User, Long, UserRepository> implem
     }
   }
 
-  public String checkForIllegalStrings(String email, String password, String username) {
-    Pattern usernameRegex = Pattern.compile("[^A-Za-z0-9]");
-    Pattern emailRegex = Pattern.compile("[^A-Za-z0-9@.]");
-    Pattern passwordRegex = Pattern.compile("[^A-Za-z0-9@_!#%&*¿?.]");
-    Matcher usernameMatcher = usernameRegex.matcher(username);
-    Matcher emailMatcher = emailRegex.matcher(email);
-    Matcher passwordMatcher = passwordRegex.matcher(password);
-    if (emailMatcher.find() || passwordMatcher.find() || usernameMatcher.find()) {
-      return "Username fields contain illegal characters";
+  public boolean checkForIllegalStrings(String string, String fieldType) {
+    Pattern regex = null;
+    if (Objects.equals(fieldType, "email")) {
+      regex = Pattern.compile("[^A-Za-z0-9@.]");
     }
-    if (password.length() < 8) {
-      return "Password must be greater than 8";
+    if (Objects.equals(fieldType, "username")) {
+      regex = Pattern.compile("[^A-Za-z0-9]");
     }
-    if (email.length() > 100 || username.length() > 20 || password.length() > 100) {
-      return "Username fields exceed max length";
+    if (Objects.equals(fieldType, "password")) {
+      regex = Pattern.compile("[^A-Za-z0-9@_!#%&*¿?.]");
     }
-    return "";
+    Matcher matcher = regex.matcher(string);
+    if (matcher.find()) {
+      return true;
+    }
+    if (Objects.equals(fieldType, "password") && string.length() < 8) {
+      return true;
+    }
+    return Objects.equals(fieldType, "username") && string.length() > 20 || !Objects.equals(fieldType, "username") && string.length() > 100;
   }
 
   @Override
