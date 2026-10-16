@@ -3,15 +3,24 @@ package es.judith.controller.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.judith.bo.ActorBO;
 import es.judith.bo.CharacterBO;
+import es.judith.bo.JwtBO;
+import es.judith.config.JwtFilter;
+import es.judith.config.SecurityConfig;
 import es.judith.domain.Actor;
 import es.judith.domain.Character;
 import es.judith.dto.actor.ActorInputDTO;
 import es.judith.dto.actor.ActorNoCharacterDTO;
+import es.judith.security.CustomUserDetailsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,7 +40,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = ActorControllerImpl.class)
 @WebMvcTest(ActorControllerImpl.class)
+@Import({
+        SecurityConfig.class,
+        JwtFilter.class,
+        ActorControllerImplTest.SecurityBeans.class
+})
 class ActorControllerImplTest {
+
+    @TestConfiguration
+    static class SecurityBeans {
+        @Bean
+        BCryptPasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder(10);
+        }
+    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,11 +61,13 @@ class ActorControllerImplTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
+    private JwtBO jwtBO;
+    @MockitoBean
+    private CustomUserDetailsService userDetailsService;
+    @MockitoBean
     private ActorBO actorBO;
     @MockitoBean
     private CharacterBO characterBO;
-    @MockitoBean
-    private ActorInputDTO actorInputDTOMock;
 
     @Test
     void findAllTestOk() throws Exception {
@@ -96,6 +120,7 @@ class ActorControllerImplTest {
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN")
     void addOk() throws Exception {
         Character character = new Character();
         character.setId(1L);
@@ -104,9 +129,9 @@ class ActorControllerImplTest {
         ActorInputDTO actorInputDTO = new ActorInputDTO();
         actorInputDTO.setName("name");
         actorInputDTO.setBirthDate(new Date(1, 1, 1970));
-        actorInputDTO.setGender("el genero es un constructo social que debe ser abolido");
-        actorInputDTO.setBirthLocation("el planeta tierra");
-        actorInputDTO.setNationality("la humanidad");
+        actorInputDTO.setGender("gender");
+        actorInputDTO.setBirthLocation("test");
+        actorInputDTO.setNationality("test");
         actorInputDTO.setCharacterIds(list);
         Actor actor = actorInputDTO.obtainDomainObject();
         actor.setCharacters(listCharacters);
