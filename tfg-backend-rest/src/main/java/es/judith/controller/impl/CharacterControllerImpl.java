@@ -295,6 +295,9 @@ public class CharacterControllerImpl implements CharacterController {
     if (file.getSize() == 0) {
       throw new BadInputException("A file must be attached to request");
     }
+    if (file.getSize() > 65535) {
+      throw new BadInputException("File is too big. Max size allowed: 65535kb");
+    }
     if (!Objects.equals(file.getContentType(), "image/png")
         && !Objects.equals(file.getContentType(), "image/jpeg")) {
       throw new BadInputException("File must be png or jpg");
