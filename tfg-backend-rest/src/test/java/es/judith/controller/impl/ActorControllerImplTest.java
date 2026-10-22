@@ -462,7 +462,42 @@ class ActorControllerImplTest {
         given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
         mockMvc.perform(builder.file(newImage)).andDo(print()).andExpect(status().isBadRequest());
     }
-    //TODO: updateImageByIdForbidden
+    @Test
+    @WithMockUser(authorities = "USER")
+    void updateImageByIdForbiddenNotAdmin() throws Exception {
+        Actor dbActor = new Actor();
+        dbActor.setId(1L);
+        MockMultipartFile newImage =
+                new MockMultipartFile("image", "filename2.png", "image/png", "some png2".getBytes());
+        MockMultipartHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.multipart("/api/actors/image/{id}", dbActor.getId()).file(newImage);
+        builder.with(
+                request -> {
+                    request.setMethod("PATCH");
+                    return request;
+                });
+        given(actorBO.findOne(dbActor.getId())).willReturn(dbActor);
+        given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
+        mockMvc.perform(builder.file(newImage)).andDo(print()).andExpect(status().isForbidden());
+    }
+    @Test
+    @WithAnonymousUser
+    void updateImageByIdForbiddenNotLoggedIn() throws Exception {
+        Actor dbActor = new Actor();
+        dbActor.setId(1L);
+        MockMultipartFile newImage =
+                new MockMultipartFile("image", "filename22.png", "image/png", "some png2".getBytes());
+        MockMultipartHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.multipart("/api/actors/image/{id}", dbActor.getId()).file(newImage);
+        builder.with(
+                request -> {
+                    request.setMethod("PATCH");
+                    return request;
+                });
+        given(actorBO.findOne(dbActor.getId())).willReturn(dbActor);
+        given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
+        mockMvc.perform(builder.file(newImage)).andDo(print()).andExpect(status().isForbidden());
+    }
     @Test
     @WithMockUser(authorities = "ADMIN")
     void deleteOk() throws Exception {
