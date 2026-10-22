@@ -74,7 +74,7 @@ class ActorControllerImplTest {
     private CharacterBO characterBO;
 
     @Test
-    void findAllTestOk() throws Exception {
+    void findAllOk() throws Exception {
       mockMvc.perform(get("/api/actors"))
               .andExpect(status().isOk());
     }
@@ -462,6 +462,7 @@ class ActorControllerImplTest {
         given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
         mockMvc.perform(builder.file(newImage)).andDo(print()).andExpect(status().isBadRequest());
     }
+    //TODO: updateImageByIdForbidden
     @Test
     @WithMockUser(authorities = "ADMIN")
     void deleteOk() throws Exception {
