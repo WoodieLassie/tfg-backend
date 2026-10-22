@@ -392,6 +392,24 @@ class ActorControllerImplTest {
     }
     @Test
     @WithMockUser(authorities = "ADMIN")
+    void updateImageByIdNotFound() throws Exception {
+        Actor dbActor = new Actor();
+        dbActor.setId(1L);
+        MockMultipartFile newImage =
+                new MockMultipartFile("image", "filename2.png", "image/png", "some png2".getBytes());
+        MockMultipartHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.multipart("/api/actors/image/{id}", dbActor.getId()).file(newImage);
+        builder.with(
+                request -> {
+                    request.setMethod("PATCH");
+                    return request;
+                });
+        given(actorBO.findOne(dbActor.getId())).willReturn(null);
+        given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
+        mockMvc.perform(builder.file(newImage)).andDo(print()).andExpect(status().isNotFound());
+    }
+    @Test
+    @WithMockUser(authorities = "ADMIN")
     void updateImageByIdBadRequestFileNotAnImage() throws Exception {
         Actor dbActor = new Actor();
         dbActor.setId(1L);
@@ -443,24 +461,6 @@ class ActorControllerImplTest {
         given(actorBO.findOne(dbActor.getId())).willReturn(dbActor);
         given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
         mockMvc.perform(builder.file(newImage)).andDo(print()).andExpect(status().isBadRequest());
-    }
-    @Test
-    @WithMockUser(authorities = "ADMIN")
-    void updateImageByIdNotFound() throws Exception {
-        Actor dbActor = new Actor();
-        dbActor.setId(1L);
-        MockMultipartFile newImage =
-                new MockMultipartFile("image", "filename2.png", "image/png", "some png2".getBytes());
-        MockMultipartHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.multipart("/api/actors/image/{id}", dbActor.getId()).file(newImage);
-        builder.with(
-                request -> {
-                    request.setMethod("PATCH");
-                    return request;
-                });
-        given(actorBO.findOne(dbActor.getId())).willReturn(null);
-        given(actorBO.save(any(Actor.class))).willAnswer(invocation -> invocation.getArgument(0));
-        mockMvc.perform(builder.file(newImage)).andDo(print()).andExpect(status().isNotFound());
     }
     @Test
     @WithMockUser(authorities = "ADMIN")
