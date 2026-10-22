@@ -191,6 +191,10 @@ public class UserControllerImpl implements UserController {
           description = "OK",
           content = {@Content(schema = @Schema(implementation = UserProfileDTO.class))})
   @ApiResponse(
+          responseCode = "401",
+          description = "Unauthorized",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
           responseCode = "404",
           description = "Not Found",
           content = {@Content(schema = @Schema(hidden = true))})
@@ -224,6 +228,7 @@ public class UserControllerImpl implements UserController {
           responseCode = "404",
           description = "Not found",
           content = @Content(schema = @Schema(hidden = true)))
+  @SecurityRequirement(name = "Authorization")
   @GetMapping(value = "/image/{userId}", produces = MediaType.IMAGE_PNG_VALUE)
   public ResponseEntity<byte[]> findImageById(@PathVariable Long userId) {
     LOG.debug("UserControllerImpl: Fetching image results with user id {}", userId);
