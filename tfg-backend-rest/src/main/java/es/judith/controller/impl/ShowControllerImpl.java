@@ -151,10 +151,6 @@ public class ShowControllerImpl implements ShowController {
           description = "Unauthorized",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-          responseCode = "409",
-          description = "Conflict",
-          content = {@Content(schema = @Schema(hidden = true))})
-  @ApiResponse(
           responseCode = "400",
           description = "Bad Request",
           content = {@Content(schema = @Schema(hidden = true))})
@@ -196,8 +192,8 @@ public class ShowControllerImpl implements ShowController {
           description = "Unauthorized",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-          responseCode = "409",
-          description = "Conflict",
+          responseCode = "404",
+          description = "Not Found",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
           responseCode = "400",
@@ -247,9 +243,9 @@ public class ShowControllerImpl implements ShowController {
           description = "Unauthorized",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-      responseCode = "404",
-      description = "Not found",
-      content = @Content(schema = @Schema(hidden = true)))
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
           responseCode = "400",
           description = "Bad Request",

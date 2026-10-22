@@ -387,7 +387,7 @@ class CharacterControllerImplTest {
     }
     @Test
     @WithMockUser(authorities = "ADMIN")
-    void updateImageByIdFileTooLarge() throws Exception {
+    void updateImageByIdBadRequestFileTooLarge() throws Exception {
         Character character = new Character();
         character.setId(1L);
         MockMultipartFile newImage =
