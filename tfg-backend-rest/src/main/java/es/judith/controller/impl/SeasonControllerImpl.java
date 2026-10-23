@@ -75,9 +75,9 @@ public class SeasonControllerImpl implements SeasonController {
   @Override
   @Operation(method = "POST", summary = "Save a new season")
   @ApiResponse(
-      responseCode = "201",
-      description = "Created",
-      content = {@Content(schema = @Schema(implementation = Season.class))})
+          responseCode = "201",
+          description = "Created",
+          content = {@Content(schema = @Schema(implementation = Season.class))})
   @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
@@ -87,9 +87,13 @@ public class SeasonControllerImpl implements SeasonController {
           description = "Unauthorized",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-      responseCode = "409",
-      description = "Conflict",
-      content = {@Content(schema = @Schema(hidden = true))})
+          responseCode = "409",
+          description = "Conflict",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
           responseCode = "400",
           description = "Bad Request",
@@ -130,9 +134,9 @@ public class SeasonControllerImpl implements SeasonController {
       summary = "Edit an existing season",
       parameters = @Parameter(ref = "id"))
   @ApiResponse(
-      responseCode = "204",
-      description = "No content",
-      content = {@Content(schema = @Schema(hidden = true))})
+          responseCode = "204",
+          description = "No content",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
@@ -142,9 +146,13 @@ public class SeasonControllerImpl implements SeasonController {
           description = "Unauthorized",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-      responseCode = "404",
-      description = "Not found",
-      content = @Content(schema = @Schema(hidden = true)))
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
+  @ApiResponse(
+          responseCode = "409",
+          description = "Conflict",
+          content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
           responseCode = "400",
           description = "Bad Request",
@@ -175,12 +183,13 @@ public class SeasonControllerImpl implements SeasonController {
     if (newSeasonInfo.getSeasonNum() == null) {
       newSeasonInfo.setSeasonNum(season.getSeasonNum());
     }
-    else {
-      if (Boolean.TRUE.equals(bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId()))
-              && !Objects.equals(seasonDTO.getShowId(), season.getShow().getId())) {
+    else if (seasonDTO.getSeasonNum() != null && seasonDTO.getShowId() != null && bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), seasonDTO.getShowId()) && !Objects.equals(seasonDTO.getShowId(), season.getShow().getId())) {
         throw new AlreadyExistsException(
                 "Season with number " + seasonDTO.getSeasonNum() + " already exists");
-      }
+    }
+    else if (seasonDTO.getSeasonNum() != null && seasonDTO.getShowId() == null && Boolean.TRUE.equals(bo.existsBySeasonNumAndShowId(seasonDTO.getSeasonNum(), season.getId()))) {
+        throw new AlreadyExistsException(
+                "Season with number" + seasonDTO.getSeasonNum() + " already exists");
     }
     if (newSeasonInfo.getDescription() == null) {
       newSeasonInfo.setDescription(season.getDescription());
