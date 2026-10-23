@@ -141,7 +141,7 @@ public class UserControllerImpl implements UserController {
   @SecurityRequirement(name = "Authorization")
   @GetMapping("/search")
   public ResponseEntity<Page<UserProfileDTO>> findAllByUsername(
-          @Parameter @RequestParam String username,
+          @Parameter @RequestParam(defaultValue = "") String username,
           @Parameter @RequestParam(defaultValue = "0") Integer page,
           @Parameter @RequestParam(defaultValue = "20") Integer size,
           @PageableDefault(size = 20) Pageable pageable) {

@@ -6,7 +6,6 @@ import es.judith.bo.CharacterBO;
 import es.judith.bo.JwtBO;
 import es.judith.config.JwtFilter;
 import es.judith.config.SecurityConfig;
-import es.judith.domain.Actor;
 import es.judith.domain.Character;
 import es.judith.dto.character.CharacterInputDTO;
 import es.judith.dto.character.CharacterNoActorsDTO;
