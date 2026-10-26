@@ -64,8 +64,12 @@ public class FavouriteControllerImpl implements FavouriteController {
       content = {
         @Content(
             mediaType = "application/json",
-            array = @ArraySchema(schema = @Schema(implementation = FavouriteDTO.class)))
+            array = @ArraySchema(schema = @Schema(implementation = FavouriteDTO.class))),
       })
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not Found",
+          content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @GetMapping("/{userId}")
   public ResponseEntity<Page<FavouriteDTO>> findAllByUser(
@@ -157,12 +161,10 @@ public class FavouriteControllerImpl implements FavouriteController {
   @SecurityRequirement(name = "Authorization")
   @DeleteMapping("/{id}")
   public ResponseEntity<FavouriteDTO> delete(@PathVariable Long id) {
-    User currentUser = authBO.getCurrentUser();
     if (!bo.exists(id)) {
       throw new NotFoundException("Favourite with id " + id + " does not exist");
     }
-    if (!Objects.equals(bo.findOne(id).getUser().getId(), currentUser.getId())
-        && currentUser.getRole() != Role.ADMIN) {
+    if (!Objects.equals(bo.findOne(id).getUser().getId(), authBO.getCurrentUser().getId())) {
       throw new ForbiddenException("Operation not allowed");
     }
     LOG.debug("FavouriteControllerImpl: Deleting data with id {}", id);

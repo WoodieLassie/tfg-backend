@@ -46,7 +46,7 @@ public class SecurityConfig {
                         "/swagger-ui/**", "/webjars/**", "/v3/api-docs/**", "/api/users/login/**", "/api/users/register/**")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET,
-                        "/api/users/search/**", "/api/users/profile/**", "/api/users/image/**", "/api/users/**","/api/recommendations/**", "/api/friends/**", "/api/messages/**", "/api/chats/**")
+                        "/api/users/search/**", "/api/users/profile/**", "/api/users/image/**", "/api/users/**","/api/recommendations/**", "/api/friends/**", "/api/messages/**", "/api/chats/**", "/api/favourites/**")
                 .hasAnyAuthority("ADMIN", "USER")
                 .requestMatchers(HttpMethod.GET, "/**")
                 .permitAll()
