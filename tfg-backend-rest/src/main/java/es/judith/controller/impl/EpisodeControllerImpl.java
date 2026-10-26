@@ -105,7 +105,7 @@ public class EpisodeControllerImpl implements EpisodeController {
   @GetMapping("/{id}")
   public ResponseEntity<EpisodeNoSeasonDTO> findById(@PathVariable Long id) {
     LOG.debug("EpisodeControllerImpl: Fetching results with id {}", id);
-    if (bo.findOne(id) == null) {
+    if (!bo.exists(id)) {
       throw new NotFoundException();
     }
     Episode episode = bo.findOneWithCharacters(id);
@@ -116,9 +116,9 @@ public class EpisodeControllerImpl implements EpisodeController {
   @Override
   @Operation(method = "POST", summary = "Save a new episode")
   @ApiResponse(
-      responseCode = "201",
-      description = "Created",
-      content = {@Content(schema = @Schema(implementation = Episode.class))})
+          responseCode = "201",
+          description = "Created",
+          content = {@Content(schema = @Schema(implementation = Episode.class))})
   @ApiResponse(
           responseCode = "403",
           description = "Forbidden",
@@ -130,6 +130,10 @@ public class EpisodeControllerImpl implements EpisodeController {
   @ApiResponse(
           responseCode = "400",
           description = "Bad Request",
+          content = {@Content(schema = @Schema(hidden = true))})
+  @ApiResponse(
+          responseCode = "404",
+          description = "Not Found",
           content = {@Content(schema = @Schema(hidden = true))})
   @SecurityRequirement(name = "Authorization")
   @PostMapping
@@ -184,9 +188,9 @@ public class EpisodeControllerImpl implements EpisodeController {
           description = "Unauthorized",
           content = {@Content(schema = @Schema(hidden = true))})
   @ApiResponse(
-      responseCode = "404",
-      description = "Not found",
-      content = @Content(schema = @Schema(hidden = true)))
+          responseCode = "404",
+          description = "Not found",
+          content = @Content(schema = @Schema(hidden = true)))
   @ApiResponse(
           responseCode = "400",
           description = "Bad Request",

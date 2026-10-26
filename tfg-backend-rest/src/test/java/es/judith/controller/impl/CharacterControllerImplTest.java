@@ -136,7 +136,7 @@ class CharacterControllerImplTest {
         given(characterBO.save(character)).willReturn(character);
         mockMvc.perform(post("/api/characters")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(character)))
+                        .content(objectMapper.writeValueAsString(characterDTO)))
                 .andExpect(status().isCreated())
                 .andDo(print());
     }
@@ -154,7 +154,7 @@ class CharacterControllerImplTest {
         given(characterBO.save(character)).willReturn(character);
         mockMvc.perform(post("/api/characters")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(character)))
+                        .content(objectMapper.writeValueAsString(characterDTO)))
                 .andExpect(status().isForbidden())
                 .andDo(print());
     }
@@ -172,7 +172,7 @@ class CharacterControllerImplTest {
         given(characterBO.save(character)).willReturn(character);
         mockMvc.perform(post("/api/characters")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(character)))
+                        .content(objectMapper.writeValueAsString(characterDTO)))
                 .andExpect(status().isForbidden())
                 .andDo(print());
     }
@@ -185,7 +185,7 @@ class CharacterControllerImplTest {
         given(characterBO.save(character)).willReturn(character);
         mockMvc.perform(post("/api/characters")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(character)))
+                        .content(objectMapper.writeValueAsString(characterDTO)))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
@@ -203,7 +203,7 @@ class CharacterControllerImplTest {
         given(characterBO.save(character)).willReturn(character);
         mockMvc.perform(post("/api/characters")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(character)))
+                        .content(objectMapper.writeValueAsString(characterDTO)))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
