@@ -171,6 +171,10 @@ public class FriendControllerImpl implements FriendController {
             responseCode = "400",
             description = "Bad Request",
             content = {@Content(schema = @Schema(hidden = true))})
+    @ApiResponse(
+            responseCode = "404",
+            description = "Not Found",
+            content = {@Content(schema = @Schema(hidden = true))})
     @SecurityRequirement(name = "Authorization")
     @PostMapping
     public ResponseEntity<Friend> sendRequest(@RequestBody FriendInputDTO friendInputDTO) {
