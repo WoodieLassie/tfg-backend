@@ -3,7 +3,6 @@ package es.judith.controller.impl;
 import es.judith.bo.*;
 import es.judith.controller.FavouriteController;
 import es.judith.domain.Favourite;
-import es.judith.domain.Role;
 import es.judith.domain.Show;
 import es.judith.domain.user.User;
 import es.judith.dto.favourite.FavouriteDTO;
@@ -26,10 +25,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

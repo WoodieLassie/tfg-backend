@@ -383,21 +383,33 @@ class SeasonControllerImplTest {
     @Test
     @WithMockUser(authorities = "ADMIN")
     void deleteOk() throws Exception {
-
+        given(seasonBO.exists(1L)).willReturn(true);
+        mockMvc.perform(delete("/api/seasons/{id}", 1L))
+                .andExpect(status().isNoContent())
+                .andDo(print());
     }
     @Test
     @WithMockUser(authorities = "USER")
     void deleteForbiddenNotAdmin() throws Exception {
-
+        given(seasonBO.exists(1L)).willReturn(true);
+        mockMvc.perform(delete("/api/seasons/{id}", 1L))
+                .andExpect(status().isForbidden())
+                .andDo(print());
     }
     @Test
     @WithAnonymousUser
     void deleteForbiddenNotLoggedIn() throws Exception {
-
+        given(seasonBO.exists(2L)).willReturn(true);
+        mockMvc.perform(delete("/api/seasons/{id}", 2L))
+                .andExpect(status().isForbidden())
+                .andDo(print());
     }
     @Test
     @WithMockUser(authorities = "ADMIN")
     void deleteNotFound() throws Exception {
-
+        given(seasonBO.exists(1L)).willReturn(false);
+        mockMvc.perform(delete("/api/seasons/{id}", 1L))
+                .andExpect(status().isNotFound())
+                .andDo(print());
     }
 }

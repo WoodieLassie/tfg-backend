@@ -4,6 +4,7 @@ import es.judith.bo.UserBO;
 import es.judith.dao.UserRepository;
 import es.judith.domain.Role;
 import es.judith.domain.user.User;
+import es.judith.exceptions.BadInputException;
 import es.judith.utils.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +85,11 @@ public class UserBOImpl extends GenericBOImpl<User, Long, UserRepository> implem
     }
     if (Objects.equals(fieldType, "password")) {
       regex = Pattern.compile("[^A-Za-z0-9@_!#%&*¿?.]");
+    }
+    if (regex == null) {
+      throw new BadInputException(
+              "Invalid string"
+      );
     }
     Matcher matcher = regex.matcher(string);
     if (matcher.find()) {

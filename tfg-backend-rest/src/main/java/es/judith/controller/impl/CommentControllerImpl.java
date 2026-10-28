@@ -31,15 +31,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serial;
-import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
-// El endpoint de DELETE debe tener un sistema de seguridad similar al de favourite que no permita a
-// un usuario normal eliminar comentarios de otros
 @RestController
 @RequestMapping("/api/comments")
 @Tag(name = "comments")
