@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/messages")
+@RequestMapping("/api/messages")
 @Tag(name = "chats")
 //TODO: Autenticacion. currentUser, etc
 public class ChatControllerImpl implements ChatController {
