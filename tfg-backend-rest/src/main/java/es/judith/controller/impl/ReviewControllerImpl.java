@@ -51,15 +51,13 @@ public class ReviewControllerImpl implements ReviewController {
   private final transient AuthBO authBO;
   private final transient FriendBO friendBO;
   private final transient UserBO userBO;
-  private final ReviewBO reviewBO;
 
-  public ReviewControllerImpl(ReviewBO bo, ShowBO showBO, AuthBO authBO, FriendBO friendBO, UserBO userBO, ReviewBO reviewBO) {
+  public ReviewControllerImpl(ReviewBO bo, ShowBO showBO, AuthBO authBO, FriendBO friendBO, UserBO userBO) {
     this.bo = bo;
     this.showBO = showBO;
     this.authBO = authBO;
     this.friendBO = friendBO;
     this.userBO = userBO;
-    this.reviewBO = reviewBO;
   }
 
   @Override
@@ -80,7 +78,13 @@ public class ReviewControllerImpl implements ReviewController {
   @GetMapping("/show/{showId}")
   public ResponseEntity<HashMap<String, Double>> findAverageRatingByShow(@PathVariable Long showId) {
     LOG.debug("ReviewControllerImpl: Fetching average rating of show id {}", showId);
-    Double totalReviewScore = reviewBO.calculateAverageRating(showId);
+    Show show = showBO.findOne(showId);
+    if (show == null) {
+      throw new NotExistingIdException(
+              "Show with id " + showId + " does not exist"
+      );
+    }
+    Double totalReviewScore = bo.calculateAverageRating(showId);
     HashMap<String, Double> response = new HashMap<>();
     response.put("averageRating", totalReviewScore);
     return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -125,7 +129,7 @@ public class ReviewControllerImpl implements ReviewController {
       throw new ForbiddenException("Operation not allowed");
     }
     LOG.debug("ReviewControllerImpl: Finding all reviews by user id {}", userId);
-    List<Review> userReviews = reviewBO.findAllByUserId(userId);
+    List<Review> userReviews = bo.findAllByUserId(userId);
     List<ReviewDTO> convertedUserReviews = new ArrayList<>();
     for (Review userReview : userReviews) {
       convertedUserReviews.add(bo.convertToDTO(userReview));
