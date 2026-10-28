@@ -586,6 +586,27 @@ class UserControllerImplTest {
         mockMvc.perform(builder.file(newImage)).andDo(print()).andExpect(status().isForbidden());
     }
     @Test
+    @WithMockUser(authorities = "ADMIN")
+    void promoteUserOk() throws Exception {
+        mockMvc.perform(patch("/api/users/promote/{id}", 1L))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+    }
+    @Test
+    @WithAnonymousUser
+    void promoteUserForbiddenNotLoggedIn() throws Exception {
+        mockMvc.perform(patch("/api/users/promote/{id}", 1L))
+                .andExpect(status().isForbidden())
+                .andDo(print());
+    }
+    @Test
+    @WithMockUser(authorities = "USER")
+    void promoteUserForbiddenNotAdmin() throws Exception {
+        mockMvc.perform(patch("/api/users/promote/{id}", 1L))
+                .andExpect(status().isForbidden())
+                .andDo(print());
+    }
+    @Test
     @WithMockUser(authorities = "USER")
     void deleteOkIsCurrentUser() throws Exception {
         User user = new User();
